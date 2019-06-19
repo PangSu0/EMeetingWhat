@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+    <resources>
+
+        <string-array name="bankName">
+            <item>KDB산업은행</item>
+            <item>NH농협은행</item>
+            <item>신한은행</item>
+            <item>우리은행</item>
+            <item>SC제일은행</item>
+            <item>IBK기업은행</item>
+            <item>KB국민은행</item>
+            <item>KEB하나은행</item>
+            <item>씨티은행</item>
+            <item>수협은행</item>
+        </string-array>
+
+    <string-array name="paymentDate">
+        <item>5</item>
+        <item>10</item>
+        <item>15</item>
+        <item>20</item>
+        <item>25</item>
+    </string-array>
+
+</resources>

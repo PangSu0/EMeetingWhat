@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
+import com.example.emeetingwhat.createGroup.Create_AccountActivity;
 import com.kakao.auth.AuthType;
 import com.kakao.auth.ErrorCode;
 import com.kakao.auth.ISessionCallback;
@@ -29,6 +30,8 @@ import com.kakao.util.helper.log.Logger;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
     private Context mContext;
@@ -39,20 +42,16 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        mContext = getApplicationContext();
 
-
-
-        getHashKey(mContext);
-        /**카카오톡 로그아웃 요청**/
-        //한번 로그인이 성공하면 세션 정보가 남아있어서 로그인창이 뜨지 않고 바로 onSuccess()메서드를 호출합니다.
-        //테스트 하시기 편하라고 매번 로그아웃 요청을 수행하도록 코드를 넣었습니다 ^^
-        UserManagement.getInstance().requestLogout(new LogoutResponseCallback() {
-            @Override
-            public void onCompleteLogout() {
-                //로그아웃 성공 후 하고싶은 내용 코딩 ~
-            }
-        });
+//        /**카카오톡 로그아웃 요청**/
+//        //한번 로그인이 성공하면 세션 정보가 남아있어서 로그인창이 뜨지 않고 바로 onSuccess()메서드를 호출합니다.
+//        //테스트 하시기 편하라고 매번 로그아웃 요청을 수행하도록 코드를 넣었습니다 ^^
+//        UserManagement.getInstance().requestLogout(new LogoutResponseCallback() {
+//            @Override
+//            public void onCompleteLogout() {
+//                //로그아웃 성공 후 하고싶은 내용 코딩 ~
+//            }
+//        });
 
         callback = new SessionCallback();
         Session.getCurrentSession().addCallback(callback);
@@ -117,8 +116,15 @@ public class MainActivity extends AppCompatActivity {
                     //로그인에 성공하면 로그인한 사용자의 일련번호, 닉네임, 이미지url등을 리턴합니다.
                     //사용자 ID는 보안상의 문제로 제공하지 않고 일련번호는 제공합니다.
                     Log.e("UserProfile", userProfile.toString());
-                    //Intent intent = new Intent(MainActivity.this, Grouplist.class);
                     Intent intent = new Intent(MainActivity.this, MainPageActivity.class);
+
+                    final Map<String, String> properties = new HashMap<String, String>();
+                    properties.put("profile_image", userProfile.getProfileImagePath());
+                    properties.put("thumbnail_image", userProfile.getThumbnailImagePath());
+                    intent.putExtra("nickname", userProfile.getNickname());
+                    intent.putExtra("email", userProfile.getEmail());
+                    intent.putExtra("profileImg", userProfile.getThumbnailImagePath());
+
                     startActivity(intent);
                     finish();
                 }
@@ -132,74 +138,33 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-//    @Override
-//    protected void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_firstpage);
-//
-//    }
-//
-//    public void onImageButtonClicked(View v) {
-//        Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
-//        startActivity(intent);
-//    }
-    private void openCreateGroupActivity() {
-    Intent intent = new Intent(this, CreateGroupActivity.class);
-    startActivity(intent);
-    }
-
     private void openMainPageActivity() {
         Intent intent = new Intent(this, MainPageActivity.class);
         startActivity(intent);
     }
+
     @Nullable
-
     public static String getHashKey(Context context) {
-
         final String TAG = "KeyHash";
-
         String keyHash = null;
-
         try {
-
             PackageInfo info =
-
                     context.getPackageManager().getPackageInfo(context.getPackageName(), PackageManager.GET_SIGNATURES);
-
-
-
             for (Signature signature : info.signatures) {
-
                 MessageDigest md;
-
                 md = MessageDigest.getInstance("SHA");
-
                 md.update(signature.toByteArray());
-
                 keyHash = new String(Base64.encode(md.digest(), 0));
-
                 Log.d(TAG, keyHash);
-
             }
-
         } catch (Exception e) {
-
             Log.e("name not found", e.toString());
-
         }
-
-
 
         if (keyHash != null) {
-
             return keyHash;
-
         } else {
-
             return null;
-
         }
-
     }
-
 }

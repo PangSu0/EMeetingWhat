@@ -12,7 +12,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Grouplist"></activity>
         <activity android:name=".Step3Activity" />
         <activity android:name=".MainActivity">
             <intent-filter>
@@ -23,7 +22,11 @@
         </activity>
         <activity android:name=".FirstPageActivity" />
         <activity android:name=".LoginActivity" />
-        <activity android:name=".CreateGroupActivity" />
+        <activity android:name=".createGroup.Create_AccountActivity" />
+        <activity android:name=".createGroup.Create_NameActivity" />
+        <activity android:name=".createGroup.Create_FriendsActivity" />
+        <activity android:name=".createGroup.Create_DetailsActivity" />
+
         <activity android:name="MainPageActivity"
             android:theme="@style/AppTheme.NoActionBar"
             />
