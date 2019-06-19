@@ -1,8 +1,6 @@
 package com.example.emeetingwhat;
 
 public class GroupListData {
-
-
     private String title;
     private String accountOwner;
     private String groupThumbnailPath;
