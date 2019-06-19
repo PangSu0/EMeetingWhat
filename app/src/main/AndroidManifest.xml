@@ -24,10 +24,17 @@
         <activity android:name=".FirstPageActivity" />
         <activity android:name=".LoginActivity" />
         <activity android:name=".CreateGroupActivity" />
-        <activity android:name="MainPageActivity"
+        <activity android:name=".MainPageActivity"
             android:theme="@style/AppTheme.NoActionBar"
             />
 
+        <activity android:name=".GroupDetailActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            />
+
+        <activity android:name=".IndividualDetailActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            />
         <meta-data
             android:name="com.kakao.sdk.AppKey"
             android:value="@string/kakao_app_key" />

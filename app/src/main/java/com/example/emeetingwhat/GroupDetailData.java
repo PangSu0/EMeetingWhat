@@ -13,6 +13,15 @@ class GroupDetailData {
     private int monthlyPayment;
     private String groupType;
     private int accountHolderId;
+    private int paymentDay;
+
+    public int getPaymentDay() {
+        return paymentDay;
+    }
+
+    public void setPaymentDay(int paymentDay) {
+        this.paymentDay = paymentDay;
+    }
 
     public int getGroupId() {
         return groupId;

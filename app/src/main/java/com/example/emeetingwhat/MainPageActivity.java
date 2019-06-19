@@ -1,6 +1,8 @@
 package com.example.emeetingwhat;
 import android.app.Application;
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
@@ -10,8 +12,11 @@ import com.google.android.material.snackbar.Snackbar;
 
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.view.View;
 
+import androidx.annotation.NonNull;
 import androidx.core.view.GravityCompat;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 
@@ -24,6 +29,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -31,6 +37,7 @@ import android.view.Menu;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -46,6 +53,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Dictionary;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MainPageActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -59,6 +69,7 @@ public class MainPageActivity extends AppCompatActivity
     private RecyclerView mRecyclerView;
     private String mJsonString;
     private ListView m_group_listview = null;
+    private LinearLayoutManager mLinearLayoutManager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,24 +93,11 @@ public class MainPageActivity extends AppCompatActivity
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
 
-        String[] groupTitleStr = {"혼자 수령", "공동 수령"};
-        ArrayList<GroupListData> gData = new ArrayList<>();
-        for(int i = 0 ; i < groupTitleStr.length ; i++ ){
-            GroupListData gItem = new GroupListData();
-
-            gItem.setTitle(groupTitleStr[i]);
-            gItem.setAccountOwner("user" + i);
-            gData.add(gItem);
-        }
-        m_group_listview = (ListView) findViewById(R.id.group_list_listView);
-        ListAdapter gAdapter = new ListAdapter(gData);
-        m_group_listview.setAdapter(gAdapter);
-
-
         // 데이터베이스 테스트
         mTextViewResult = (TextView)findViewById(R.id.textView_main_result);
         mRecyclerView = (RecyclerView) findViewById(R.id.listView_main_list);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mLinearLayoutManager = new LinearLayoutManager(this);
+        mRecyclerView.setLayoutManager(mLinearLayoutManager);
 
         mTextViewResult.setMovementMethod(new ScrollingMovementMethod());
 
@@ -107,19 +105,39 @@ public class MainPageActivity extends AppCompatActivity
 
         mAdapter = new GroupsAdapter(this, mArrayList);
         mRecyclerView.setAdapter(mAdapter);
+        mArrayList.clear();
+        mAdapter.notifyDataSetChanged();
 
+        GetData task = new GetData();
+        task.execute( "http://" + IP_ADDRESS + "/selectGroupList.php", "");
+        // RecyclerView의 줄(row) 사이에 수평선을 넣기위해 사용됩니다.
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(mRecyclerView.getContext(),
+                mLinearLayoutManager.getOrientation());
+        mRecyclerView.addItemDecoration(dividerItemDecoration);
+        mRecyclerView.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext()
+                , mRecyclerView, new ClickListener()
+                {
 
-        Button button_all = (Button) findViewById(R.id.button_main_all);
-        button_all.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
+                    @Override
+                    public void onClick(View view, int position) {
+                        GroupDetailData groupData = mArrayList.get(position);
+                        Toast.makeText(getApplicationContext(), groupData.getGroupType(), Toast.LENGTH_SHORT).show();
+                        if( groupData.getGroupType().equals("group")){
+                            Intent intent = new Intent(MainPageActivity.this, GroupDetailActivity.class);
+                            startActivity(intent);
+                            finish();
+                        }else if( groupData.getGroupType().equals("individual")){
+                            Intent intent = new Intent(MainPageActivity.this, IndividualDetailActivity.class);
+                            startActivity(intent);
+                            finish();
+                        }
+                    }
 
-                mArrayList.clear();
-                mAdapter.notifyDataSetChanged();
+                    @Override
+                    public void onLongClick(View view, int position) {
 
-                GetData task = new GetData();
-                task.execute( "http://" + IP_ADDRESS + "/getjson.php", "");
-            }
-        });
+                    }
+                }));
 
     }
 
@@ -297,18 +315,25 @@ public class MainPageActivity extends AppCompatActivity
     }
 
     private void showResult() {
-        String TAG_JSON="groupSample";
+        String TAG_JSON = "groupList";
         String TAG_GROUPID = "GroupId";
         String TAG_USERID = "UserId";
         String TAG_NAME = "Name";
-        String TAG_CREATEDATE ="CreateDate";
+        String TAG_CREATEDATE = "CreateDate";
+        String TAG_ENDDATE = "EndDate";
+        String TAG_TARGETAMOUNT = "TargetAmount";
+        String TAG_PAYMENTDATE = "PaymentDate";
+        String TAG_MONTHLYPAYMENT = "MonthlyPayment";
+        String TAG_GROUPTYPE = "GroupType";
+        String TAG_ACCOUNTHOLDERID = "AccountHolderId";
+        String TAG_PAYMENTDAY = "PaymentDay";
 
 
         try {
             JSONObject jsonObject = new JSONObject(mJsonString);
             JSONArray jsonArray = jsonObject.getJSONArray(TAG_JSON);
 
-            for(int i=0;i<jsonArray.length();i++){
+            for (int i = 0; i < jsonArray.length(); i++) {
 
                 JSONObject item = jsonArray.getJSONObject(i);
 
@@ -316,10 +341,23 @@ public class MainPageActivity extends AppCompatActivity
                 int userId = item.getInt(TAG_USERID);
                 String name = item.getString(TAG_NAME);
                 String s_createDate = item.getString(TAG_CREATEDATE);
+                String s_endDate = item.getString(TAG_ENDDATE);
+                int targetAmount = item.getInt(TAG_TARGETAMOUNT);
+                String s_paymentDate = item.getString(TAG_PAYMENTDATE);
+                int monthlyPayment = item.getInt(TAG_MONTHLYPAYMENT);
+                String groupType = item.getString(TAG_GROUPTYPE);
+                int accountHolderId = item.getInt(TAG_ACCOUNTHOLDERID);
+                int paymentDay = item.getInt(TAG_PAYMENTDAY);
+
                 SimpleDateFormat transFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 Date createDate = null;
+                Date endDate = null;
+                Date paymentDate = null;
                 try {
                     createDate = transFormat.parse(s_createDate);
+                    endDate = transFormat.parse(s_endDate);
+                    paymentDate = transFormat.parse(s_paymentDate);
+
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
@@ -330,18 +368,71 @@ public class MainPageActivity extends AppCompatActivity
                 groupDetailData.setUserId(userId);
                 groupDetailData.setName(name);
                 groupDetailData.setCreateDate(createDate);
+                groupDetailData.setEndDate(endDate);
+                groupDetailData.setTargetAmount(targetAmount);
+                groupDetailData.setPaymentDate(paymentDate);
+                groupDetailData.setMonthlyPayment(monthlyPayment);
+                groupDetailData.setGroupType(groupType);
+                groupDetailData.setAccountHolderId(accountHolderId);
+                groupDetailData.setPaymentDay(paymentDay);
+
 
                 mArrayList.add(groupDetailData);
                 mAdapter.notifyDataSetChanged();
             }
 
 
-
         } catch (JSONException e) {
 
             Log.d(TAG, "showResult : ", e);
         }
+    }
 
+    public interface ClickListener {
+        void onClick(View view, int position);
+
+        void onLongClick(View view, int position);
+    }
+
+    public static class RecyclerTouchListener implements RecyclerView.OnItemTouchListener {
+
+        private GestureDetector gestureDetector;
+        private MainPageActivity.ClickListener clickListener;
+
+        public RecyclerTouchListener(Context context, final RecyclerView recyclerView, final MainPageActivity.ClickListener clickListener) {
+            this.clickListener = clickListener;
+            gestureDetector = new GestureDetector(context, new GestureDetector.SimpleOnGestureListener() {
+                @Override
+                public boolean onSingleTapUp(MotionEvent e) {
+                    return true;
+                }
+
+                @Override
+                public void onLongPress(MotionEvent e) {
+                    View child = recyclerView.findChildViewUnder(e.getX(), e.getY());
+                    if (child != null && clickListener != null) {
+                        clickListener.onLongClick(child, recyclerView.getChildAdapterPosition(child));
+                    }
+                }
+            });
+        }
+
+        @Override
+        public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
+            View child = rv.findChildViewUnder(e.getX(), e.getY());
+            if (child != null && clickListener != null && gestureDetector.onTouchEvent(e)) {
+                clickListener.onClick(child, rv.getChildAdapterPosition(child));
+            }
+            return false;
+        }
+
+        @Override
+        public void onTouchEvent(RecyclerView rv, MotionEvent e) {
+        }
+
+        @Override
+        public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
+        }
     }
 
 }
