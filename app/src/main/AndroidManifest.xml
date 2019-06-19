@@ -15,11 +15,13 @@
         <activity android:name=".Grouplist"></activity>
         <activity android:name=".Step3Activity" />
         <activity android:name=".MainActivity">
+            <!--
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            -->
         </activity>
         <activity android:name=".FirstPageActivity" />
         <activity android:name=".LoginActivity" />
@@ -28,6 +30,16 @@
             android:theme="@style/AppTheme.NoActionBar"
             />
         <activity android:name=".MainGroupList" />
+        <activity android:name=".Step5_2_RandomLadderActivity"/>
+        <activity android:name=".RandomSelectActivity"/>
+        <activity android:name=".ResultActivity"/>
+        <activity android:name=".TestActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
 
         <meta-data
             android:name="com.kakao.sdk.AppKey"
