@@ -16,26 +16,22 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.emeetingwhat.R;
-
 import java.util.ArrayList;
 
 public class Step5_2_RandomLadderActivity extends AppCompatActivity {
-    int mPeopleMax = 2;
-    //ArrayList<String> mArPeople = null;         // 사람 정보 배열
+    int mPeopleMax;
     ArrayList<PeopleInfo> mArPeople = null;         // 사람 정보 배열
-    ArrayList<Integer> mPersonNumber = null;        // 순번 정보 배열
     ArrayList<Point> mArHBar = null;            // 수평 사다리 정보 배열
     MainView mainView;
-    int mCanvasW = 200;         // 캔버스 넓이
-    int mCanvasH = 200;         // 캔버스 높이
+    int mCanvasW;         // 캔버스 넓이
+    int mCanvasH;         // 캔버스 높이
     int mMoveUnitH = 10;        // 수평 이동 단위
     int mMoveUnitV = 10;        // 수직 이동 단위
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_random_ladder);
+        setContentView(R.layout.activity_step5_2_random_ladder);
 
         mainView = new MainView(this);
         RelativeLayout layoutCanvas = (RelativeLayout)findViewById(R.id.layoutCanvas);
@@ -45,37 +41,33 @@ public class Step5_2_RandomLadderActivity extends AppCompatActivity {
         readIntent(getIntent());
 
     }
-
+    public ArrayList<String> setInitName() {
+        ArrayList<String> mTempName = new ArrayList<>();
+        mTempName.add("은지");
+        mTempName.add("수미");
+        mTempName.add("창수");
+        for (int i = 0; i < 7; i++) {
+            mTempName.add("사람" + (i + 1));
+        }
+        return mTempName;
+    }
     // Intent 에서 데이터를 읽는다
     public void readIntent(Intent intent) {
-        //mArPeople = new ArrayList<String>();
+        ArrayList<String> mTempName = setInitName();
+
         mArPeople = new ArrayList<>();
 
         // 최대 인원수
-        mPeopleMax = intent.getIntExtra("PeopleMax", 2);
+        mPeopleMax = mTempName.size();
 
         // '이름' 목록 추출
         for(int i=0; i < mPeopleMax; i++) {
-            String strName = intent.getStringExtra("Name" + i);
-            PeopleInfo pi = new PeopleInfo(strName, i);
+            PeopleInfo pi = new PeopleInfo(mTempName.get(i), i);
             mArPeople.add(pi);
             //mArPeople.add(strName);
         }
-
-        /* TODO : 삭제 필요
-        // '벌칙' 목록 추출
-        for(int i=0; i < mPeopleMax; i++) {
-            String strPresent = intent.getStringExtra("Present" + i);
-            mArPresent.add(strPresent);
-        }
-        */
-        //Toast.makeText(getApplicationContext(), mPeopleMax + " / " + mArPeople.get.toString() + " / " + mArPresent.toString(), Toast.LENGTH_SHORT).show();
     }
 
-    public void onBackPressed() {
-        //뒤로 가지 못하게 하기
-        //super.onBackPressed();
-    }
     // 버튼 클릭 이벤트 함수
     public void onClick(View v) {
         if(v.getId() == R.id.btnGameStart)
@@ -302,7 +294,7 @@ public class Step5_2_RandomLadderActivity extends AppCompatActivity {
     public Rect getLadderArea() {
         Rect rtPart = new Rect(0, 0, mCanvasW, mCanvasH);
         rtPart.top = (int)(mCanvasH * 0.08);
-        rtPart.bottom = (int)(mCanvasH - rtPart.top);
+        rtPart.bottom = (mCanvasH - rtPart.top);
         return rtPart;
     }
 

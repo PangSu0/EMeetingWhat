@@ -23,7 +23,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:layout_marginTop="20dp"
-        android:text="목표금액 및 상세 설정"
+        android:text="모임원 초대"
         android:textSize="30sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView6" />
@@ -61,6 +61,7 @@
         android:layout_height="48dp"
         android:layout_marginStart="20dp"
         android:layout_marginBottom="20dp"
+        android:onClick="onClick"
         android:text="prev"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -71,6 +72,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="20dp"
         android:layout_marginBottom="20dp"
+        android:onClick="onClick"
         android:text="next"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
@@ -81,6 +83,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:layout_marginEnd="50dp"
+        android:onClick="onClick"
         android:text="추가"
         app:layout_constraintBottom_toBottomOf="@+id/editName2"
         app:layout_constraintEnd_toEndOf="parent"
@@ -105,6 +108,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:onClick="onClick"
             android:text="순서대로 받을 거예요." />
 
         <RadioButton
@@ -112,6 +116,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:onClick="onClick"
             android:text="랜덤으로 결정할 거예요." />
     </RadioGroup>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -40,13 +40,15 @@
         app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
     <EditText
-        android:id="@+id/editName"
+        android:id="@+id/editTextStep3_2_EditName"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_marginStart="30dp"
         android:layout_weight="2"
         android:focusable="true"
+        android:gravity="right"
+        android:inputType="number"
         android:text=""
         app:layout_constraintBottom_toBottomOf="@+id/textView5"
         app:layout_constraintStart_toEndOf="@+id/textView5"
@@ -59,7 +61,7 @@
         android:layout_marginStart="10dp"
         android:text="원"
         android:textSize="20sp"
-        app:layout_constraintStart_toEndOf="@+id/editName"
+        app:layout_constraintStart_toEndOf="@+id/editTextStep3_2_EditName"
         app:layout_constraintTop_toTopOf="@+id/textView5" />
 
     <Button
@@ -83,4 +85,5 @@
         android:text="next"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -9,7 +9,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_toLeftOf="@+id/editName"
+        android:layout_toLeftOf="@id/spnFriend"
         android:layout_weight="1"
         android:text="X번"
         android:textColor="#000"
@@ -23,13 +23,9 @@
         android:layout_alignParentRight="true"
         android:focusable="true"/>-->
 
-    <EditText
-        android:id="@+id/editName"
+    <Spinner
+        android:id="@+id/spnFriend"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_weight="4"
-        android:focusable="true"
-        android:text="" />
-
+        android:layout_height="match_parent"
+        android:layout_weight="4" />
 </LinearLayout>

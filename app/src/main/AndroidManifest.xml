@@ -30,6 +30,9 @@
             android:theme="@style/AppTheme.NoActionBar"
             />
         <activity android:name=".MainGroupList" />
+        <activity android:name=".Step3_2_TargetAmountActivity"/>
+        <activity android:name=".Step4_2_InviteMemberActivity"/>
+        <activity android:name=".Step5_1_SelectTextActivity"/>
         <activity android:name=".Step5_2_RandomLadderActivity"/>
         <activity android:name=".RandomSelectActivity"/>
         <activity android:name=".ResultActivity"/>
