@@ -11,7 +11,7 @@
         android:layout_height="115dp" />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/textView_individualdetails_name"
         android:layout_width="match_parent"
         android:layout_height="61dp"
         android:fontFamily="casual"
@@ -67,4 +67,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="입금한 사람 리스트" />
+
+    <TextView
+        android:id="@+id/textView_result_test_i"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="TextView" />
 </LinearLayout>

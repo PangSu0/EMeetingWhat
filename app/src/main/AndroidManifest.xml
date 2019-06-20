@@ -12,9 +12,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Grouplist"></activity>
         <activity android:name=".Step3Activity" />
-        <activity android:name=".MainActivity">
+
+        <activity android:name=".SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -23,8 +23,8 @@
         </activity>
         <activity android:name=".FirstPageActivity" />
         <activity android:name=".LoginActivity" />
-        <activity android:name=".CreateGroupActivity" />
-        <activity android:name=".MainPageActivity"
+
+        <activity android:name=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar"
             />
 
@@ -35,6 +35,8 @@
         <activity android:name=".IndividualDetailActivity"
             android:theme="@style/AppTheme.NoActionBar"
             />
+
+        <activity android:name=".MyCalendarActivity"/>
         <meta-data
             android:name="com.kakao.sdk.AppKey"
             android:value="@string/kakao_app_key" />

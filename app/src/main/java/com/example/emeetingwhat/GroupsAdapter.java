@@ -24,7 +24,6 @@ class GroupsAdapter extends RecyclerView.Adapter<GroupsAdapter.CustomViewHolder>
 
     class CustomViewHolder extends RecyclerView.ViewHolder {
         protected TextView tv_groupId;
-        protected TextView tv_userId;
         protected TextView tv_name;
         protected TextView tv_createDate;
 
@@ -32,7 +31,6 @@ class GroupsAdapter extends RecyclerView.Adapter<GroupsAdapter.CustomViewHolder>
         public CustomViewHolder(View view) {
             super(view);
             this.tv_groupId = (TextView) view.findViewById(R.id.textView_list_groupId);
-            this.tv_userId = (TextView) view.findViewById(R.id.textView_list_userId);
             this.tv_name = (TextView) view.findViewById(R.id.textView_list_name);
             this.tv_createDate = (TextView) view.findViewById(R.id.textView_list_createDate);
         }
@@ -50,7 +48,6 @@ class GroupsAdapter extends RecyclerView.Adapter<GroupsAdapter.CustomViewHolder>
     public void onBindViewHolder(@NonNull CustomViewHolder viewholder, int position) {
 
         viewholder.tv_groupId.setText(" " + mList.get(position).getGroupId());
-        viewholder.tv_userId.setText(" " + mList.get(position).getUserId());
         viewholder.tv_name.setText(" " + mList.get(position).getName());
         viewholder.tv_createDate.setText(" " + mList.get(position).getCreateDate());
     }

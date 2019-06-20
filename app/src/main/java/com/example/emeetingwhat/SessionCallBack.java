@@ -1,5 +1,6 @@
 package com.example.emeetingwhat;
 
+import android.content.Intent;
 import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -56,6 +57,7 @@ public class SessionCallBack implements ISessionCallback {
                 Log.e("Profile : ", thumbnailImagePath + "");
                 Log.e("Profile : ", UUID + "");
                 Log.e("Profile : ", id + "");
+
             }
 
 

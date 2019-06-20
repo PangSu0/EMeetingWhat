@@ -4,7 +4,7 @@ import java.util.Date;
 
 class GroupDetailData {
     private int groupId;
-    private int userId;
+
     private String name;
     private Date createDate;
     private Date endDate;
@@ -15,6 +15,15 @@ class GroupDetailData {
     private int accountHolderId;
     private int paymentDay;
 
+    public int getOrderNumber() {
+        return orderNumber;
+    }
+
+    public void setOrderNumber(int orderNumber) {
+        this.orderNumber = orderNumber;
+    }
+
+    private int orderNumber;
     public int getPaymentDay() {
         return paymentDay;
     }
@@ -29,14 +38,6 @@ class GroupDetailData {
 
     public void setGroupId(int groupId) {
         this.groupId = groupId;
-    }
-
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
     }
 
     public String getName() {
