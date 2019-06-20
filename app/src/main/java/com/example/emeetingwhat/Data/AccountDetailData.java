@@ -1,6 +1,8 @@
 package com.example.emeetingwhat.Data;
 
-public class AccountDetailData {
+import java.io.Serializable;
+
+public class AccountDetailData implements Serializable {
 
     private int accountId;
     private int userId;

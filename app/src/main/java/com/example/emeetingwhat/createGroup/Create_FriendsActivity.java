@@ -17,42 +17,35 @@ public class Create_FriendsActivity extends AppCompatActivity {
     private Button btn4Prev;
     private Button btn4Next;
 
-    String bankName;
-    int paymentDay;
-    String groupName;
-    String groupType;
-    int targetMoney;
+    GroupDetailData groupDetailData = new GroupDetailData();
+    AccountDetailData accountDetailData = new AccountDetailData();
 
+    Intent intent_GroupFromPrevious;
+    Intent intent_AccountFromPrevious;
+
+    GroupDetailData groupDataFromPrev;
+    AccountDetailData accountDataFromPrev;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_friends);
 
+        intent_GroupFromPrevious = getIntent();
+        intent_AccountFromPrevious = getIntent();
+
+        groupDataFromPrev =  (GroupDetailData)intent_GroupFromPrevious.getSerializableExtra("groupDetailData");
+        accountDataFromPrev =  (AccountDetailData)intent_AccountFromPrevious.getSerializableExtra("accountDetailData");
 
         // 앞, 뒤로가기 버튼
         btn4Prev = (Button)findViewById(R.id.btn4Prev);
         btn4Next = (Button)findViewById(R.id.btn4Next);
 
-        Bundle valuesFromDetailActivity = getIntent().getExtras();
-
-        if (valuesFromDetailActivity != null) {
-            bankName = valuesFromDetailActivity.getString("selectedBankName");
-            paymentDay = valuesFromDetailActivity.getInt("selectedPaymentDay");
-            groupName = valuesFromDetailActivity.getString("ValueGroupName");
-            groupType = valuesFromDetailActivity.getString("selectedGroupType");
-            targetMoney = valuesFromDetailActivity.getInt("GroupMoney");
-        }
-
-        GroupDetailData groupDetailData = new GroupDetailData();
-        AccountDetailData accountDetailData = new AccountDetailData();
-
-        groupDetailData.setName(groupName);
-        groupDetailData.setPaymentDay(paymentDay);
-        groupDetailData.setTargetAmount(targetMoney);
-        groupDetailData.setGroupType(groupType);
-        accountDetailData.setBankName(bankName);
-
+        groupDetailData.setTargetAmount(groupDataFromPrev.getTargetAmount());
+        groupDetailData.setName(groupDataFromPrev.getName());
+        groupDetailData.setGroupType(groupDataFromPrev.getGroupType());
+        groupDetailData.setPaymentDay(groupDataFromPrev.getPaymentDay());
+        accountDetailData.setBankName(accountDataFromPrev.getBankName());
 
         btn4Prev.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -64,6 +57,7 @@ public class Create_FriendsActivity extends AppCompatActivity {
         // Prev 버튼을 눌렀을 때
         btn4Next.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                // TODO: 내가 참여하고 있는 모임 리스트로 보내기.
                 Intent intent = new Intent(Create_FriendsActivity.this, Create_DetailsActivity.class);
                 startActivity(intent);
             }

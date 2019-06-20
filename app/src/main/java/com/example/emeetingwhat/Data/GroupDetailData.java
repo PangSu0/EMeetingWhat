@@ -1,16 +1,23 @@
 package com.example.emeetingwhat.Data;
 
+
+import java.io.Serializable;
 import java.util.Date;
 
-public class GroupDetailData {
+public class GroupDetailData implements Serializable {
+
     private int groupId;
     private int userId;
     private String name;
     private Date createDate;
     private Date endDate;
     private int targetAmount;
-    // TODO: paymentDate Date -> int
     private Date paymentDate;
+    private int paymentDay;
+    private int monthlyPayment;
+    private String groupType;
+    private int accountHolderId;
+
 
     public int getPaymentDay() {
         return paymentDay;
@@ -19,11 +26,6 @@ public class GroupDetailData {
     public void setPaymentDay(int paymentDay) {
         this.paymentDay = paymentDay;
     }
-
-    private int paymentDay;
-    private int monthlyPayment;
-    private String groupType;
-    private int accountHolderId;
 
     public int getGroupId() {
         return groupId;
@@ -104,4 +106,5 @@ public class GroupDetailData {
     public void setAccountHolderId(int accountHolderId) {
         this.accountHolderId = accountHolderId;
     }
+
 }
