@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.toolbox.NetworkImageView;
 import com.kakao.friends.response.model.FriendInfo;
@@ -51,7 +52,8 @@ public class FriendsListAdapter extends BaseAdapter {
 
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
-        if (position == getCount() - 5) {
+
+        if (position == getCount() - 100) {
             if (listener != null) {
                 listener.onPreloadNext();
             }

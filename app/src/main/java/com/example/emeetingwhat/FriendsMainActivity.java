@@ -11,9 +11,11 @@ import com.example.emeetingwhat.common.log.Logger;
 import com.example.emeetingwhat.common.widget.KakaoDialogSpinner;
 import com.example.emeetingwhat.common.widget.KakaoToast;
 import com.kakao.auth.common.MessageSendable;
+import com.kakao.friends.AppFriendContext;
 import com.kakao.friends.FriendContext;
 import com.kakao.friends.FriendsService;
 import com.kakao.friends.request.FriendsRequest;
+import com.kakao.friends.response.AppFriendsResponse;
 import com.kakao.friends.response.FriendsResponse;
 import com.kakao.friends.response.model.FriendInfo;
 import com.kakao.kakaotalk.callback.TalkResponseCallback;
@@ -112,6 +114,8 @@ private static class FriendsInfo {
         Button talkButton = findViewById(R.id.all_talk_friends);
         Button storyButton = findViewById(R.id.all_story_friends);
         Button talkStoryButton = findViewById(R.id.all_talk_and_story_friends);
+
+
         msgType = findViewById(R.id.message_type);
 
         talkButton.setVisibility(View.GONE);
@@ -138,6 +142,8 @@ private static class FriendsInfo {
         if (friendTypeList.size() == 1) {
             friendsInfo = new FriendsInfo();
             requestFriends(friendTypeList.get(0));
+            //requestFriends();
+            KakaoToast.makeToast(getApplicationContext(), friendsInfo.getTotalCount() + " ", Toast.LENGTH_SHORT).show();
         }
 
         findViewById(R.id.title_back).setOnClickListener(v -> finish());
@@ -163,7 +169,7 @@ private static class FriendsInfo {
     private void requestFriends(FriendsRequest.FriendType type) {
         adapter = null;
         friendsInfo = new FriendsInfo();
-        friendContext = FriendContext.createContext(type, FriendsRequest.FriendFilter.NONE, FriendsRequest.FriendOrder.NICKNAME, false, 0, 100, "asc");
+        friendContext = FriendContext.createContext(type, FriendsRequest.FriendFilter.NONE, FriendsRequest.FriendOrder.NICKNAME, true, 0, 100, "asc");
         requestFriendsInner();
     }
 
