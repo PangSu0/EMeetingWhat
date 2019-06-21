@@ -9,7 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.emeetingwhat.Data.AccountDetailData;
 import com.example.emeetingwhat.Data.GroupDetailData;
-import com.example.emeetingwhat.MainPageActivity;
+import com.example.emeetingwhat.MainActivity;
 import com.example.emeetingwhat.R;
 
 public class Create_FriendsActivity extends AppCompatActivity {
@@ -49,7 +49,7 @@ public class Create_FriendsActivity extends AppCompatActivity {
 
         btn4Prev.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent intent = new Intent(Create_FriendsActivity.this, MainPageActivity.class);
+                Intent intent = new Intent(Create_FriendsActivity.this, MainActivity.class);
                 startActivity(intent);
             }
         });

@@ -3,6 +3,8 @@
     package="com.example.emeetingwhat">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
     <application
         android:name=".GlobalApplication"
@@ -12,7 +14,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Step3Activity" />
+
 
         <activity android:name=".SplashActivity">
             <intent-filter>
@@ -21,7 +23,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".FirstPageActivity" />
+
         <activity android:name=".LoginActivity" />
 
         <activity android:name=".MainActivity"
@@ -35,7 +37,10 @@
         <activity android:name=".IndividualDetailActivity"
             android:theme="@style/AppTheme.NoActionBar"
             />
-
+        <activity android:name=".createGroup.Create_AccountActivity" />
+        <activity android:name=".createGroup.Create_NameActivity" />
+        <activity android:name=".createGroup.Create_FriendsActivity" />
+        <activity android:name=".createGroup.Create_DetailsActivity" />
         <activity android:name=".MyCalendarActivity"/>
         <meta-data
             android:name="com.kakao.sdk.AppKey"

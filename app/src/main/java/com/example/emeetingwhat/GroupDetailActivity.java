@@ -49,6 +49,11 @@ public class GroupDetailActivity extends AppCompatActivity {
     private String TAG_ORDERNUMBER = "OrderNumber";
     private TextView mTextViewResult;
     private TextView mTextViewName;
+    private TextView mTextViewTargetAmount;
+    private TextView mTextViewPaymentDay;
+    private TextView mTextViewAccountHolderId;
+    private TextView mTextViewNickname;
+    private final UserProfile userProfile = UserProfile.loadFromCache();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,7 +61,7 @@ public class GroupDetailActivity extends AppCompatActivity {
         mTextViewResult = (TextView)findViewById(R.id.textView_result_test);
         mTextViewResult.setMovementMethod(new ScrollingMovementMethod());
 
-        final UserProfile userProfile = UserProfile.loadFromCache();
+
         GroupDetailActivity.GetData task = new GroupDetailActivity.GetData();
         String str_groupId;
         if( savedInstanceState == null ){
@@ -222,6 +227,16 @@ public class GroupDetailActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), groupDetailData.getName(), Toast.LENGTH_SHORT).show();
                 mTextViewName = (TextView)findViewById(R.id.textView_groupdetails_name);
                 mTextViewName.setText(groupDetailData.getName());
+
+                mTextViewTargetAmount = (TextView)findViewById(R.id.textView_groupdetails_targetamount);
+                mTextViewTargetAmount.setText(Integer.toString(targetAmount));
+
+                mTextViewPaymentDay = (TextView)findViewById(R.id.textView_groupdetails_paymentday);
+                mTextViewPaymentDay.setText(groupDetailData.getName());
+                mTextViewNickname = (TextView)findViewById(R.id.textView_groupdetails_nickname);
+                mTextViewNickname.setText(userProfile.getNickname());
+                mTextViewAccountHolderId = (TextView)findViewById(R.id.textView_groupdetails_accountholderid);
+                mTextViewAccountHolderId.setText(Integer.toString(accountHolderId));
                 // mArrayList.add(groupDetailData);
                 // mAdapter.notifyDataSetChanged();
             }
@@ -233,14 +248,8 @@ public class GroupDetailActivity extends AppCompatActivity {
         }
     }
 
-    private long time= 0;
     @Override
-    public void onBackPressed(){
-        if(System.currentTimeMillis()-time>=2000){
-            time=System.currentTimeMillis();
-            Toast.makeText(getApplicationContext(),"뒤로 버튼을 한번 더 누르면 종료합니다.",Toast.LENGTH_SHORT).show();
-        }else if(System.currentTimeMillis()-time<2000){
-            finish();
-        }
+    public void onBackPressed() {
+        super.onBackPressed();
     }
 }

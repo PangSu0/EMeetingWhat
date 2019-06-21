@@ -1,4 +1,4 @@
-package com.kakao.sdk.sample.common.widget;
+package com.example.emeetingwhat.common.widget;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -12,7 +12,8 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.kakao.sdk.sample.R;
+import com.example.emeetingwhat.R;
+
 
 /**
  * @author leo.shin

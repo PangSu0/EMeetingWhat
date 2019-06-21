@@ -1,4 +1,4 @@
-package com.kakao.sdk.sample.common.widget;
+package com.example.emeetingwhat.common.widget;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,7 +8,8 @@ import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
-import com.kakao.sdk.sample.R;
+
+import com.example.emeetingwhat.R;
 
 import java.util.List;
 

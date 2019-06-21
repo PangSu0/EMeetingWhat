@@ -1,4 +1,4 @@
-package com.kakao.sdk.sample.common.widget;
+package com.example.emeetingwhat.common.widget;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -12,9 +12,8 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.kakao.sdk.sample.R;
-import com.kakao.sdk.sample.common.widget.KakaoSpinnerAdapter.ISpinnerListener;
-import com.kakao.sdk.sample.common.widget.KakaoSpinnerAdapter.KakaoSpinnerItems;
+
+import com.example.emeetingwhat.R;
 
 import java.util.Arrays;
 import java.util.List;
@@ -33,7 +32,7 @@ public class KakaoDialogSpinner extends LinearLayout {
     private boolean showTitleDivider = false;
     private int titleBgResId = 0;
     private int titleTextColor = 0;
-    private ISpinnerListener listener;
+    private KakaoSpinnerAdapter.ISpinnerListener listener;
 
     public KakaoDialogSpinner(Context context) {
         super(context);
@@ -93,7 +92,7 @@ public class KakaoDialogSpinner extends LinearLayout {
             builder.setView(listView);
             dialog = builder.create();
 
-            adapter = new KakaoSpinnerAdapter(new KakaoSpinnerItems(iconResId, entryList), new ISpinnerListener() {
+            adapter = new KakaoSpinnerAdapter(new KakaoSpinnerAdapter.KakaoSpinnerItems(iconResId, entryList), new KakaoSpinnerAdapter.ISpinnerListener() {
                 @Override
                 public void onItemSelected(BaseAdapter adapter, int position) {
                     spinner.setText(entryList.get(position));
@@ -121,7 +120,7 @@ public class KakaoDialogSpinner extends LinearLayout {
         this.title = title;
     }
 
-    public void setOnListener(ISpinnerListener l) {
+    public void setOnListener(KakaoSpinnerAdapter.ISpinnerListener l) {
         this.listener = l;
     }
 

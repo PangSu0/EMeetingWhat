@@ -1,4 +1,4 @@
-package com.kakao.sdk.sample.common.log;
+package com.example.emeetingwhat.common.log;
 
 /**
  * @author leoshin

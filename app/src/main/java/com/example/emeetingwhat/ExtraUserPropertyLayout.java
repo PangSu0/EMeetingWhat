@@ -13,16 +13,13 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-package com.kakao.sdk.sample.usermgmt;
+package com.example.emeetingwhat;
 
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.FrameLayout;
-
-import com.kakao.sdk.sample.R;
-import com.kakao.sdk.sample.common.widget.KakaoDialogSpinner;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -34,14 +31,8 @@ import java.util.Map;
  */
 public class ExtraUserPropertyLayout extends FrameLayout {
     // property key
-    private  static final String NAME_KEY = "name";
-    private  static final String AGE_KEY = "age";
-    private  static final String GENDER_KEY = "gender";
-
-    private EditText name;
-    private EditText age;
-    private KakaoDialogSpinner gender;
-
+    private  static final String BIRTHDAY_KEY = "birthday";
+    private EditText birthday;
     public ExtraUserPropertyLayout(Context context) {
         super(context);
         initView();
@@ -58,42 +49,21 @@ public class ExtraUserPropertyLayout extends FrameLayout {
     }
 
     private void initView() {
-        final View view = inflate(getContext(), R.layout.layout_usermgmt_extra_user_property, this);
-        name = view.findViewById(R.id.name);
-        age = view.findViewById(R.id.age);
-        gender = view.findViewById(R.id.gender);
+        final View view = inflate(getContext(), R.layout.layout_extra_user_property, this);
+        birthday = view.findViewById(R.id.usermgmg_birthday);
     }
 
     public HashMap<String, String> getProperties(){
-        final String nickNameValue = name.getText().toString();
-        final String ageValue = age.getText().toString();
-        final String genderValue = String.valueOf(gender.getSelectedItem());
+        final String birthdayValue = birthday.getText().toString();
 
         HashMap<String, String> properties = new HashMap<>();
-        properties.put(NAME_KEY, nickNameValue);
-        properties.put(AGE_KEY, ageValue);
-        if(genderValue != null)
-            properties.put(GENDER_KEY, genderValue);
-
+        properties.put(BIRTHDAY_KEY, birthdayValue);
         return properties;
     }
 
     void showProperties(final Map<String, String> properties) {
-        final String nameValue = properties.get(NAME_KEY);
-        if (nameValue != null)
-            name.setText(nameValue);
-
-        final String ageValue = properties.get(AGE_KEY);
-        if (ageValue != null)
-            age.setText(ageValue);
-
-        final String genderValue = properties.get(GENDER_KEY);
-        if (genderValue != null) {
-            if (genderValue.equalsIgnoreCase(getContext().getString(R.string.female))) {
-                gender.setSelection(0);
-            } else {
-                gender.setSelection(1);
-            }
-        }
+        final String birthdayValue = properties.get(BIRTHDAY_KEY);
+        if (birthdayValue != null)
+            birthday.setText(birthdayValue);
     }
 }

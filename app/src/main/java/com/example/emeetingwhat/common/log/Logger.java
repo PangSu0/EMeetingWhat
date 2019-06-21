@@ -1,4 +1,4 @@
-package com.kakao.sdk.sample.common.log;
+package com.example.emeetingwhat.common.log;
 
 import android.util.Log;
 
@@ -103,7 +103,7 @@ public class Logger {
     }
 
     public static String getCallerTraceInfo(@SuppressWarnings("rawtypes")
-    Class klass) {
+                                                    Class klass) {
         if (!loggerConfig.isPrintLoggable(LoggerConfig.DEBUG)) {
             return "unknown caller";
         }

@@ -13,11 +13,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.emeetingwhat.Data.AccountDetailData;
 import com.example.emeetingwhat.Data.GroupDetailData;
-import com.example.emeetingwhat.MainPageActivity;
+import com.example.emeetingwhat.MainActivity;
 import com.example.emeetingwhat.R;
-
-import java.security.acl.Group;
-import java.util.ArrayList;
 
 public class Create_AccountActivity extends AppCompatActivity {
 
@@ -96,7 +93,7 @@ public class Create_AccountActivity extends AppCompatActivity {
         // Prev 버튼을 눌렀을 때
         btn1Prev.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent intent = new Intent(Create_AccountActivity.this, MainPageActivity.class);
+                Intent intent = new Intent(Create_AccountActivity.this, MainActivity.class);
                 // redirect로 보내기.
                 startActivity(intent);
             }

@@ -1,4 +1,4 @@
-package com.kakao.sdk.sample.common.widget;
+package com.example.emeetingwhat.common.widget;
 
 import android.content.Context;
 import android.view.Gravity;
@@ -7,7 +7,8 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.kakao.sdk.sample.R;
+import com.example.emeetingwhat.R;
+
 
 /**
  * @author leoshin

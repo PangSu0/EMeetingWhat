@@ -13,7 +13,7 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-package com.kakao.sdk.sample.common.widget;
+package com.example.emeetingwhat.common.widget;
 
 import android.app.Application;
 import android.content.Context;
@@ -24,8 +24,9 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.android.volley.toolbox.NetworkImageView;
-import com.kakao.sdk.sample.R;
-import com.kakao.sdk.sample.common.GlobalApplication;
+
+import com.example.emeetingwhat.GlobalApplication;
+import com.example.emeetingwhat.R;
 import com.kakao.usermgmt.UserManagement;
 import com.kakao.usermgmt.callback.MeV2ResponseCallback;
 import com.kakao.usermgmt.response.MeV2Response;
@@ -46,14 +47,10 @@ import com.kakao.util.OptionalBoolean;
 public class ProfileLayout extends FrameLayout {
     private MeV2ResponseCallback meV2ResponseCallback;
 
-    private String email;
-    private String phoneNumber;
     private String nickname;
     private String userId;
     private String birthDay;
-    private String ageRange;
-    private String gender;
-    private String countryIso;
+
     private NetworkImageView profile;
     private NetworkImageView background;
     private TextView profileDescription;
@@ -86,34 +83,19 @@ public class ProfileLayout extends FrameLayout {
      * @param userProfile 화면에 반영할 사용자 정보
      */
     public void setUserProfile(final UserProfile userProfile) {
-        setEmail(userProfile.getEmail());
         setProfileURL(userProfile.getProfileImagePath());
         setNickname(userProfile.getNickname());
         setUserId(String.valueOf(userProfile.getId()));
     }
 
     public void setUserInfo(final MeV2Response response) {
-        if (response.getKakaoAccount().hasEmail() == OptionalBoolean.TRUE && response.getKakaoAccount().getEmail() == null) {
-            setEmail(getContext().getString(R.string.needs_account_email_scope));
-        } else {
-            setEmail(response.getKakaoAccount().getEmail());
-        }
-        if (response.getKakaoAccount().hasPhoneNumber() == OptionalBoolean.TRUE && response.getKakaoAccount().getPhoneNumber() == null) {
-            setPhoneNumber(getContext().getString(R.string.needs_phone_number_scope));
-        } else {
-            setPhoneNumber(response.getKakaoAccount().getPhoneNumber());
-        }
+
+
         if (response.getKakaoAccount().getBirthday() != null) {
             setBirthDay(response.getKakaoAccount().getBirthday());
         }
         if (response.getProperties() != null && response.getProperties().containsKey(MeV2Response.KEY_PROFILE_IMAGE)) {
             setProfileURL(response.getProperties().get(MeV2Response.KEY_PROFILE_IMAGE));
-        }
-        if (response.getKakaoAccount().getAgeRange() != null) {
-            setAgeRange(response.getKakaoAccount().getAgeRange());
-        }
-        if (response.getKakaoAccount().getGender() != null) {
-            setGender(response.getKakaoAccount().getGender());
         }
 
         if (response.getProperties() != null) {
@@ -123,15 +105,6 @@ public class ProfileLayout extends FrameLayout {
         updateLayout();
     }
 
-    public void setEmail(final String email) {
-        this.email = email;
-        updateLayout();
-    }
-
-    public void setPhoneNumber(final String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-        updateLayout();
-    }
     /**
      * 프로필 이미지에 대해 view를 update한다.
      * @param profileImageURL 화면에 반영할 프로필 이미지
@@ -166,10 +139,6 @@ public class ProfileLayout extends FrameLayout {
         }
     }
 
-    public void setCountryIso(String countryIso) {
-        this.countryIso = countryIso;
-        updateLayout();
-    }
 
     /**
      * 별명 view를 update한다.
@@ -183,18 +152,6 @@ public class ProfileLayout extends FrameLayout {
     public void setBirthDay(final String birthDay) {
         this.birthDay = birthDay;
         updateLayout();
-    }
-
-    public void setAgeRange(AgeRange ageRange) {
-        if (ageRange != null) {
-            this.ageRange = ageRange.getValue();
-        }
-    }
-
-    public void setGender(Gender gender) {
-        if (gender != null) {
-            this.gender = gender.getValue();
-        }
     }
 
     public void setBackground(NetworkImageView background) {
@@ -213,12 +170,6 @@ public class ProfileLayout extends FrameLayout {
     private void updateLayout() {
         StringBuilder builder = new StringBuilder();
 
-        if (!TextUtils.isEmpty(email)) {
-            builder.append(getResources().getString(R.string.com_kakao_profile_email)).append('\n').append(email).append('\n');
-        }
-        if (!TextUtils.isEmpty(phoneNumber)) {
-            builder.append(getResources().getString(R.string.com_kakao_profile_phone_number)).append('\n').append(phoneNumber).append('\n');
-        }
         if (nickname != null && nickname.length() > 0) {
             builder.append(getResources().getString(R.string.com_kakao_profile_nickname)).append("\n").append(nickname).append("\n");
         }
@@ -226,18 +177,11 @@ public class ProfileLayout extends FrameLayout {
         if (userId != null && userId.length() > 0) {
             builder.append(getResources().getString(R.string.com_kakao_profile_userId)).append("\n").append(userId).append("\n");
         }
-        if (gender != null) {
-            builder.append(getResources().getString(R.string.com_kakao_profile_gender)).append(" ").append(gender).append("\n");
-        }
-        if (ageRange != null) {
-            builder.append(getResources().getString(R.string.com_kakao_profile_age_range)).append(" ").append(ageRange).append("\n");
-        }
+
         if (birthDay != null && birthDay.length() > 0) {
             builder.append(getResources().getString(R.string.com_kakao_profile_birthday)).append(" ").append(birthDay);
         }
-        if (countryIso != null) {
-            builder.append(getResources().getString(R.string.kakaotalk_country_label)).append("\n").append(countryIso);
-        }
+
         if (profileDescription != null) {
             profileDescription.setText(builder.toString());
         }

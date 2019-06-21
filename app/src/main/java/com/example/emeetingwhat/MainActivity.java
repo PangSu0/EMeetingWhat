@@ -82,6 +82,7 @@ public class MainActivity extends BaseActivity
     private RecyclerView mRecyclerView;
     private String mJsonString;
     private LinearLayoutManager mLinearLayoutManager;
+    public  final UserProfile userProfile = UserProfile.loadFromCache();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -104,7 +105,7 @@ public class MainActivity extends BaseActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
-        final UserProfile userProfile = UserProfile.loadFromCache();
+
 
         Toast.makeText(getApplicationContext(), " 유저 아이디 " + userProfile.getId(), Toast.LENGTH_SHORT).show();
         // 데이터베이스 테스트
@@ -139,7 +140,6 @@ public class MainActivity extends BaseActivity
                 if( groupData.getGroupType().equals("group")){
                     Intent intent = new Intent(MainActivity.this, GroupDetailActivity.class);
                     intent.putExtra("groupId", groupData.getGroupId());
-
                     startActivity(intent);
                     finish();
                 }else if( groupData.getGroupType().equals("individual")){
@@ -157,7 +157,7 @@ public class MainActivity extends BaseActivity
         }));
 
     }
-
+    private long time= 0;
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -165,7 +165,12 @@ public class MainActivity extends BaseActivity
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+            if(System.currentTimeMillis()-time>=2000){
+                time=System.currentTimeMillis();
+                Toast.makeText(getApplicationContext(),"뒤로 버튼을 한번 더 누르면 종료합니다.",Toast.LENGTH_SHORT).show();
+            }else if(System.currentTimeMillis()-time<2000){
+                finish();
+            }
         }
     }
 
