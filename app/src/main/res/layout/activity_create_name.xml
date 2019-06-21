@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="35dp"
+        android:layout_marginTop="35dp">
+
+        <TextView
+            android:id="@+id/txt2Header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="STEP 2"
+            android:textSize="40dp" />
+
+        <TextView
+            android:id="@+id/txt2Title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/txt2Header"
+            android:paddingTop="10dp"
+            android:text="모임 세부 설정"
+            android:textSize="30dp" />
+
+        <TextView
+            android:id="@+id/txt2GroupInfo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/txt2Title"
+            android:paddingTop="50dp"
+            android:text="1) 모임명"
+            android:textSize="24dp" />
+    </RelativeLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="25dp"
+        android:orientation="vertical">
+
+        <EditText
+            android:id="@+id/et_GroupName"
+            android:layout_width="280dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="35dp"
+            android:hint="모임 이름을 입력하세요"
+            android:inputType="textCapWords"
+            android:paddingTop="30dp"
+            android:textSize="24dp" />
+
+        <TextView
+            android:id="@+id/tv_GroupNameInfo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="35dp"
+            android:textSize="20dp"
+            android:textColor="#FF0000"/>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/txtGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="35dp"
+        android:paddingTop="30dp"
+        android:text="2) 모임 타입을 선택하세요"
+        android:textSize="25dp" />
+
+    <RadioGroup
+        android:id="@+id/radioGroupType"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="50dp"
+        android:paddingTop="30dp">
+
+        <RadioButton
+            android:id="@+id/radioIndividual"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="개별 수령"
+            android:textSize="24dp" />
+
+        <RadioButton
+            android:id="@+id/radioGroup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/radioGroupType"
+            android:layout_marginTop="20dp"
+            android:text="공동 사용"
+            android:textSize="24dp" />
+    </RadioGroup>
+
+    <RelativeLayout
+        android:id="@+id/btnGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp">
+
+        <Button
+            android:id="@+id/btn2Prev"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:text="Prev" />
+
+        <Button
+            android:id="@+id/btn2Next"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="190dp"
+            android:layout_toEndOf="@id/btn2Prev"
+            android:text="Next" />
+
+    </RelativeLayout>
+
+</LinearLayout>

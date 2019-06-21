@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".createGroup.Create_DetailsActivity">
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="35dp"
+        android:layout_marginTop="35dp">
+
+        <TextView
+            android:id="@+id/txtHeader3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="STEP 3"
+            android:textSize="40dp"/>
+
+        <TextView
+            android:id="@+id/txt3Detail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="목표 금액 및 상세 설정"
+            android:textSize="30dp"
+            android:paddingTop="10dp"
+            android:layout_below="@+id/txtHeader3"/>
+
+        <TextView
+            android:id="@+id/txt3GroupName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="모임명"
+            android:textSize="28dp"
+            android:textStyle="bold"
+            android:paddingTop="50dp"
+            android:layout_below="@id/txt3Detail"/>
+
+        <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginBottom="-200dp"-->
+            <!--android:layout_toEndOf="@id/txt3GroupName"-->
+            <!--android:text="! 목표 달성을 기원합니다."-->
+            <!--android:textSize="20dp" />-->
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="모임 기간"
+            android:textSize="24dp"
+            android:paddingTop="20dp"
+            android:layout_below="@id/txt3GroupName"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+        <!--<Button-->
+            <!--android:id="@+id/btnStartDate"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="이 날 "-->
+            <!--android:layout_marginLeft="20dp"/>-->
+
+        <!--<TextView-->
+            <!--android:id="@+id/txt3Date"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="30dp"-->
+            <!--android:layout_marginStart="107dp"-->
+            <!--android:layout_marginTop="10dp"-->
+            <!--android:layout_toEndOf="@id/btnStartDate"-->
+            <!--android:text="부터"-->
+            <!--android:textSize="24dp" />-->
+
+        <!--<Button-->
+            <!--android:id="@+id/btnEndDate"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginStart="0dp"-->
+            <!--android:layout_marginLeft="20dp"-->
+            <!--android:layout_toEndOf="@id/txt3Date"-->
+            <!--android:text="이 날 " />-->
+
+        <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="30dp"-->
+            <!--android:layout_marginStart="0dp"-->
+            <!--android:layout_marginTop="10dp"-->
+            <!--android:layout_toEndOf="@id/btnEndDate"-->
+            <!--android:text="까지"-->
+            <!--android:textSize="24dp" />-->
+
+        <EditText
+            android:id="@+id/et_StartDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="mm/dd/yyyy"
+            android:layout_marginLeft="35dp"
+            android:ems="10"
+            android:inputType="date" />
+
+        <TextView
+            android:id="@+id/txt3From"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_toEndOf="@id/et_StartDate"
+            android:text="부터"
+            android:textSize="24dp" />
+
+        <EditText
+            android:id="@+id/et_EndDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="mm/dd/yyyy"
+            android:layout_marginLeft="35dp"
+            android:ems="10"
+            android:layout_below="@id/et_StartDate"
+            android:inputType="date" />
+
+        <TextView
+            android:id="@+id/txt3Upto"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_toRightOf="@id/et_EndDate"
+            android:layout_below="@+id/txt3From"
+            android:layout_marginTop="20dp"
+            android:text="까지"
+            android:textSize="24dp" />
+
+    </RelativeLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="35dp"
+            android:layout_marginTop="20dp"
+            android:text="목표 금액"
+            android:textSize="24dp" />
+
+
+        <EditText
+            android:id="@+id/et_Amount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="35dp"
+            android:hint="목표 금액을 설정하세요 (원)"
+            android:inputType="textCapWords"
+            android:paddingTop="20dp"
+            android:textSize="24dp" />
+
+    </LinearLayout>
+
+
+
+    <RelativeLayout
+        android:id="@+id/btnGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp">
+
+        <Button
+            android:id="@+id/btn3Prev"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Prev"
+            android:layout_marginLeft="20dp"/>
+
+        <Button
+            android:id="@+id/btn3Next"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@id/btn3Prev"
+            android:layout_marginLeft="190dp"
+            android:text="Next"/>
+
+    </RelativeLayout>
+
+</LinearLayout>
