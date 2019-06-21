@@ -20,4 +20,15 @@
     <string name="usermgmg_birthday">Write Your Birthday</string>
     <string name="cancel">Cancel</string>
     <string name="ok">OK</string>
+
+    <string name="text_kakaostory">KakaoStory</string>
+    <string name="text_kakaotalk">KakaoTalk</string>
+    <string name="text_talk_story">Talk | Story</string>
+    <string name="message_type">Choose a message type</string>
+    <string-array name="message_types">
+        <item>FEED TEMPLATE</item>
+        <item>LIST TEMPLATE</item>
+        <item>DEFAULT TEMPLATE</item>
+    </string-array>
+
 </resources>

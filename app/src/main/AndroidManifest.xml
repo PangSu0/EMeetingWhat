@@ -33,7 +33,17 @@
         <activity android:name=".GroupDetailActivity"
             android:theme="@style/AppTheme.NoActionBar"
             />
-
+        <activity
+            android:name=".KakaoTalkFriendListActivity"
+            android:configChanges="screenSize|orientation"
+            android:launchMode="singleTop"
+            android:windowSoftInputMode="adjustResize">
+        </activity>
+        <activity
+            android:name=".FriendsMainActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:launchMode="singleTop"
+            android:windowSoftInputMode="adjustResize|stateHidden"/>
         <activity android:name=".IndividualDetailActivity"
             android:theme="@style/AppTheme.NoActionBar"
             />

@@ -48,5 +48,9 @@
         <item name="android:layout_height">57dp</item>
         <item name="android:layout_width">fill_parent</item>
     </style>
-
+    <style name="spinner" parent="@android:style/Widget.TextView">
+        <item name="android:background">@drawable/selector_item_bg</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">72dp</item>
+    </style>
 </resources>
