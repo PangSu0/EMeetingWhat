@@ -18,14 +18,17 @@ import com.example.emeetingwhat.GroupType;
 import com.example.emeetingwhat.R;
 import com.example.emeetingwhat.Validator;
 
-import java.security.acl.Group;
-
 public class Create_NameActivity extends AppCompatActivity {
 
     private Button btn2Next;
     private Button btn2Prev;
+
+    private RadioButton individual;
+    private RadioButton group;
+
     private EditText groupName;
     private TextView groupNameInfo;
+
     String groupNameInput;
 
     GroupDetailData groupDetailData = new GroupDetailData();
@@ -42,63 +45,46 @@ public class Create_NameActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_name);
 
-        final RadioButton individual = (RadioButton) findViewById(R.id.radioIndividual);
-        final RadioButton group = (RadioButton) findViewById(R.id.radioGroup);
+        individual = (RadioButton) findViewById(R.id.radioIndividual);
+        group = (RadioButton) findViewById(R.id.radioGroup);
 
         btn2Next = (Button)findViewById(R.id.btn2Next);
         btn2Prev = (Button)findViewById(R.id.btn2Prev);
+
         groupName = findViewById(R.id.et_GroupName);
         groupNameInfo = findViewById(R.id.tv_GroupNameInfo);
 
-        intent_GroupFromPrevious = getIntent();
-        intent_AccountFromPrevious = getIntent();
-
-        groupDataFromPrev =  (GroupDetailData)intent_GroupFromPrevious.getSerializableExtra("groupDetailData");
-        accountDataFromPrev =  (AccountDetailData)intent_AccountFromPrevious.getSerializableExtra("accountDetailData");
+        getGroupDetailData();
+        getAccountDetailData();
 
         btn2Next.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
                 // groupName validation check
                 if (Validator.isEmpty(groupName)) {
-                    Toast.makeText(getApplicationContext(), "그룹명을 입력하세요",Toast.LENGTH_LONG).show();
                     groupNameInfo.setText("그룹명을 입력하세요");
                 } else {
                     // radioButton validation check
                     if(individual.isChecked()) {
                         groupNameInfo.setText("");
+
+                        fillGroupDetailData(groupName);
+
                         Intent intent = new Intent(Create_NameActivity.this, Create_DetailsActivity.class);
-                        groupNameInput = groupName.getText().toString();
-
-                        // 개인 수령일 때: 사용자가 입력한 모임명과 모임 유형을 Name으로 세팅한다.
-                        groupDetailData.setName(groupNameInput);
-                        groupDetailData.setGroupType(GroupType.Individual.name());
-                        groupDetailData.setPaymentDay(groupDataFromPrev.getPaymentDay());
-                        accountDetailData.setBankName(accountDataFromPrev.getBankName());
-
                         intent.putExtra("groupDetailData", groupDetailData);
                         intent.putExtra("accountDetailData", accountDataFromPrev);
-
                         startActivity(intent);
-                        finish();
+
                     } else if (group.isChecked()){
                         groupNameInfo.setText("");
+                        fillGroupDetailData(groupName);
+
                         // TODO: 그룹을 선택했을 때 다른  activity로 넘겨준다. (Create_DetailsActivity 자리에 넣어줌)
                         Intent intent = new Intent(Create_NameActivity.this, Create_DetailsActivity.class);
-
-                        groupNameInput = groupName.getText().toString();
-
-                        Toast.makeText(getApplicationContext(), "공동 사용 선택",Toast.LENGTH_LONG).show();
-
-                        groupDetailData.setName(groupNameInput);
-                        groupDetailData.setGroupType(GroupType.Group.name());
-                        groupDetailData.setPaymentDay(groupDataFromPrev.getPaymentDay());
-                        accountDetailData.setBankName(accountDataFromPrev.getBankName());
-
                         intent.putExtra("groupDetailData", groupDetailData);
                         intent.putExtra("accountDetailData", accountDataFromPrev);
-
                         startActivity(intent);
+
                     } else {
                         Toast.makeText(getApplicationContext(), "모임 타입을 선택하세요.",Toast.LENGTH_LONG).show();
                     }
@@ -111,6 +97,26 @@ public class Create_NameActivity extends AppCompatActivity {
                 openCreateAccount();
             }
         });
+    }
+
+    private void fillGroupDetailData(TextView groupName) {
+        // 개인 수령일 때: 사용자가 입력한 모임명과 모임 유형을 Name으로 세팅한다.
+        groupNameInput = groupName.getText().toString();
+
+        groupDetailData.setName(groupNameInput);
+        groupDetailData.setGroupType(GroupType.Individual.name());
+        groupDetailData.setPaymentDay(groupDataFromPrev.getPaymentDay());
+        accountDetailData.setBankName(accountDataFromPrev.getBankName());
+    }
+
+    private void getGroupDetailData() {
+        Intent intent_GroupFromPrevious = getIntent();
+        groupDataFromPrev = (GroupDetailData)intent_GroupFromPrevious.getSerializableExtra("groupDetailData");
+    }
+
+    private void getAccountDetailData() {
+        Intent intent_AccountFromPrevious = getIntent();
+        accountDataFromPrev = (AccountDetailData)intent_AccountFromPrevious.getSerializableExtra("accountDetailData");
     }
 
     private void openCreateAccount() {
