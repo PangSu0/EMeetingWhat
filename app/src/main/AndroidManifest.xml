@@ -51,7 +51,7 @@
         <activity android:name=".createGroup.Create_NameActivity" />
         <activity android:name=".createGroup.Create_FriendsActivity" />
         <activity android:name=".createGroup.Create_DetailsActivity" />
-        <activity android:name=".MyCalendarActivity"/>
+
         <meta-data
             android:name="com.kakao.sdk.AppKey"
             android:value="@string/kakao_app_key" />

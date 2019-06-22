@@ -26,10 +26,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class LoginActivity  extends BaseActivity  {
-    private Context mContext;
+    // private Context mContext;
 
     SessionCallBack callback;
-    private LoginButton btn_custom_login;
+    // private LoginButton btn_custom_login;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

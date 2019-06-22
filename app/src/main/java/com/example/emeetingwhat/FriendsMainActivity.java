@@ -112,29 +112,14 @@ private static class FriendsInfo {
 
         list = findViewById(R.id.friend_list);
         Button talkButton = findViewById(R.id.all_talk_friends);
-        Button storyButton = findViewById(R.id.all_story_friends);
-        Button talkStoryButton = findViewById(R.id.all_talk_and_story_friends);
-
-
-        msgType = findViewById(R.id.message_type);
 
         talkButton.setVisibility(View.GONE);
-        storyButton.setVisibility(View.GONE);
-        talkStoryButton.setVisibility(View.GONE);
 
         for(FriendsRequest.FriendType friendType : friendTypeList) {
             switch (friendType) {
                 case KAKAO_TALK:
                     talkButton.setVisibility(View.VISIBLE);
                     talkButton.setOnClickListener(this);
-                    break;
-                case KAKAO_STORY:
-                    storyButton.setVisibility(View.VISIBLE);
-                    storyButton.setOnClickListener(this);
-                    break;
-                case KAKAO_TALK_AND_STORY:
-                    talkStoryButton.setVisibility(View.VISIBLE);
-                    talkStoryButton.setOnClickListener(this);
                     break;
             }
         }
@@ -155,12 +140,6 @@ private static class FriendsInfo {
         switch (v.getId()) {
             case R.id.all_talk_friends:
                 type = FriendsRequest.FriendType.KAKAO_TALK;
-                break;
-            case R.id.all_story_friends:
-                type = FriendsRequest.FriendType.KAKAO_STORY;
-                break;
-            case R.id.all_talk_and_story_friends:
-                type = FriendsRequest.FriendType.KAKAO_TALK_AND_STORY;
                 break;
         }
         requestFriends(type);

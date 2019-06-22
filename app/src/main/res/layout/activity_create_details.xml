@@ -157,7 +157,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="35dp"
             android:hint="목표 금액을 설정하세요 (원)"
-            android:inputType="textCapWords"
+            android:inputType="number"
             android:paddingTop="20dp"
             android:textSize="24dp" />
 
