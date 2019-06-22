@@ -6,9 +6,6 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.recyclerview.widget.DividerItemDecoration;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.AlertDialog;
 import android.app.Application;
@@ -159,7 +156,7 @@ public class MainActivity extends BaseActivity
         if (id == R.id.nav_home) {
             fragment = new MainPageFragment();
         } else if (id == R.id.nav_gallery) {
-
+            fragment = new MyFriendsListFragment();
         } else if (id == R.id.nav_friendslist) {
             showTalkFriendListActivity();
         } else if (id == R.id.nav_calendar) {

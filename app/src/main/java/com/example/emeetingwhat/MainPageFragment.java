@@ -3,6 +3,7 @@ package com.example.emeetingwhat;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
@@ -16,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -39,6 +41,8 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class MainPageFragment extends Fragment {
+    private static final String ARG_PARAM1 = "param1";
+    private static final String ARG_PARAM2 = "param2";
     private static String IP_ADDRESS = "61.108.100.36";
     private static String TAG = "phptest";
     private TextView mTextViewResult;
@@ -48,6 +52,7 @@ public class MainPageFragment extends Fragment {
     private String mJsonString;
     private LinearLayoutManager mLinearLayoutManager;
     public  final UserProfile userProfile = UserProfile.loadFromCache();
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -81,6 +86,32 @@ public class MainPageFragment extends Fragment {
 
             @Override
             public void onClick(View view, int position) {
+
+                GroupDetailData groupData = mArrayList.get(position);
+                Toast.makeText(getActivity(), "  "+groupData.getGroupId(), Toast.LENGTH_SHORT).show();
+                if( groupData.getGroupType().equals("group")){
+                    Fragment fragment = new GroupDetailFragment();
+                    if( fragment != null){
+                        FragmentTransaction ft = getFragmentManager().beginTransaction();
+                        Bundle bundle = new Bundle();
+                        bundle.putString("groupId", Integer.toString(groupData.getGroupId()));
+                        fragment.setArguments(bundle);
+                        ft.replace(R.id.content_fragment_layout, fragment);
+                        ft.commit();
+                    }
+                }else if( groupData.getGroupType().equals("individual")){
+                    Fragment fragment = new IndividualDetailFragment();
+                    if( fragment != null){
+                        FragmentTransaction ft = getFragmentManager().beginTransaction();
+                        Bundle bundle = new Bundle();
+                        bundle.putString("groupId", Integer.toString(groupData.getGroupId()));
+                        fragment.setArguments(bundle);
+                        ft.replace(R.id.content_fragment_layout, fragment);
+                        ft.commit();
+                    }
+                }
+
+
 
             }
 
@@ -231,8 +262,8 @@ public class MainPageFragment extends Fragment {
                     e.printStackTrace();
                 }
 
-                GroupDetailData groupDetailData = new GroupDetailData();
 
+                GroupDetailData groupDetailData = new GroupDetailData();
                 groupDetailData.setGroupId(groupId);
                 groupDetailData.setName(name);
                 groupDetailData.setCreateDate(createDate);
@@ -300,6 +331,14 @@ public class MainPageFragment extends Fragment {
         @Override
         public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
         }
+    }
+    public static MainPageFragment newInstance(String param1, String param2) {
+        MainPageFragment fragment = new MainPageFragment();
+        Bundle args = new Bundle();
+        args.putString("groupId", param1);
+        args.putString(ARG_PARAM2, param2);
+        fragment.setArguments(args);
+        return fragment;
     }
 
 }
