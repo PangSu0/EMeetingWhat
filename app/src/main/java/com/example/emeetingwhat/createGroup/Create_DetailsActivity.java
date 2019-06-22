@@ -25,6 +25,7 @@ public class Create_DetailsActivity extends AppCompatActivity {
     private Button btn3Next;
     private Button btn3Prev;
     private EditText et_amount;
+    private EditText editText_monthlyPayment;
 
     private Calendar calendar;
 
@@ -44,6 +45,7 @@ public class Create_DetailsActivity extends AppCompatActivity {
     TextView txt_GroupName;
     String groupName;
     int targetAmount;
+    int monthlyPayment;
 
     GroupDetailData groupDetailData = new GroupDetailData();
     AccountDetailData accountDetailData = new AccountDetailData();
@@ -66,6 +68,9 @@ public class Create_DetailsActivity extends AppCompatActivity {
         // 목표 금액
         et_amount = (EditText)findViewById(R.id.et_Amount);
 
+        // 월별 입금 금액
+        editText_monthlyPayment = (EditText) findViewById(R.id.editText_monthlyPayment);
+
         intent_GroupFromPrevious = getIntent();
         intent_AccountFromPrevious = getIntent();
 
@@ -80,10 +85,11 @@ public class Create_DetailsActivity extends AppCompatActivity {
                 // TODO: 친구 초대 페이지로 이동 (수정 필요)
                 Intent intent = new Intent(Create_DetailsActivity.this, Create_FriendsActivity.class);
                 targetAmount = Integer.parseInt(et_amount.getText().toString());
-
+                monthlyPayment = Integer.parseInt(editText_monthlyPayment.getText().toString());
                 groupDetailData.setCreateDate(startDate);
                 groupDetailData.setEndDate(endDate);
                 groupDetailData.setTargetAmount(targetAmount);
+                groupDetailData.setMonthlyPayment(monthlyPayment);
                 groupDetailData.setName(groupDataFromPrev.getName());
                 groupDetailData.setGroupType(groupDataFromPrev.getGroupType());
                 groupDetailData.setPaymentDay(groupDataFromPrev.getPaymentDay());
@@ -111,7 +117,7 @@ public class Create_DetailsActivity extends AppCompatActivity {
         startMonth = calendar.get(Calendar.MONTH);
         startYear = calendar.get(Calendar.YEAR);
 
-        et_StartDate.setText(startYear + " /" + (startMonth + 1) + " /" + startDay);
+        et_StartDate.setText(startYear + "/" + (startMonth + 1) + "/" + startDay);
 
         et_StartDate.setOnClickListener(new View.OnClickListener() {
             @Override

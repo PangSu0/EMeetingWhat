@@ -39,7 +39,6 @@ public class IndividualDetailActivity extends AppCompatActivity {
     private String TAG_CREATEDATE = "CreateDate";
     private String TAG_ENDDATE = "EndDate";
     private String TAG_TARGETAMOUNT = "TargetAmount";
-    private String TAG_PAYMENTDATE = "PaymentDate";
     private String TAG_MONTHLYPAYMENT = "MonthlyPayment";
     private String TAG_GROUPTYPE = "GroupType";
     private String TAG_ACCOUNTHOLDERID = "AccountHolderId";
@@ -187,7 +186,6 @@ public class IndividualDetailActivity extends AppCompatActivity {
                 String s_createDate = item.getString(TAG_CREATEDATE);
                 String s_endDate = item.getString(TAG_ENDDATE);
                 int targetAmount = item.getInt(TAG_TARGETAMOUNT);
-                String s_paymentDate = item.getString(TAG_PAYMENTDATE);
                 int monthlyPayment = item.getInt(TAG_MONTHLYPAYMENT);
                 String groupType = item.getString(TAG_GROUPTYPE);
                 int accountHolderId = item.getInt(TAG_ACCOUNTHOLDERID);
@@ -201,7 +199,6 @@ public class IndividualDetailActivity extends AppCompatActivity {
                 try {
                     createDate = transFormat.parse(s_createDate);
                     endDate = transFormat.parse(s_endDate);
-                    paymentDate = transFormat.parse(s_paymentDate);
 
                 } catch (ParseException e) {
                     e.printStackTrace();
@@ -212,7 +209,6 @@ public class IndividualDetailActivity extends AppCompatActivity {
                 groupDetailData.setCreateDate(createDate);
                 groupDetailData.setEndDate(endDate);
                 groupDetailData.setTargetAmount(targetAmount);
-                groupDetailData.setPaymentDate(paymentDate);
                 groupDetailData.setMonthlyPayment(monthlyPayment);
                 groupDetailData.setGroupType(groupType);
                 groupDetailData.setAccountHolderId(accountHolderId);

@@ -53,7 +53,7 @@ public class FriendsListAdapter extends BaseAdapter {
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
 
-        if (position == getCount() - 100) {
+        if (position == getCount() - 5) {
             if (listener != null) {
                 listener.onPreloadNext();
             }

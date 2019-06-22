@@ -161,8 +161,21 @@
             android:paddingTop="20dp"
             android:textSize="24dp" />
 
-    </LinearLayout>
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="월별 입금금액" />
 
+        <EditText
+            android:id="@+id/editText_monthlyPayment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="월별 입금 금액을 설정하세요 (원)"
+            android:inputType="number" />
+
+    </LinearLayout>
 
 
     <RelativeLayout

@@ -9,7 +9,6 @@ class GroupDetailData {
     private Date createDate;
     private Date endDate;
     private int targetAmount;
-    private Date paymentDate;
     private int monthlyPayment;
     private String groupType;
     private int accountHolderId;
@@ -70,14 +69,6 @@ class GroupDetailData {
 
     public void setTargetAmount(int targetAmount) {
         this.targetAmount = targetAmount;
-    }
-
-    public Date getPaymentDate() {
-        return paymentDate;
-    }
-
-    public void setPaymentDate(Date paymentDate) {
-        this.paymentDate = paymentDate;
     }
 
     public int getMonthlyPayment() {
