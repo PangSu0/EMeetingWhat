@@ -34,6 +34,7 @@
         <activity android:name=".Step4_2_InviteMemberActivity"/>
         <activity android:name=".Step5_1_SelectTextActivity"/>
         <activity android:name=".Step5_2_RandomLadderActivity"/>
+        <activity android:name=".Step5_1_SubListViewActivity"/>
         <activity android:name=".RandomSelectActivity"/>
         <activity android:name=".ResultActivity"/>
         <activity android:name=".TestActivity">
