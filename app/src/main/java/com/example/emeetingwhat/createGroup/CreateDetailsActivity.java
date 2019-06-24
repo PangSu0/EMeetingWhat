@@ -13,14 +13,12 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.emeetingwhat.Data.AccountDetailData;
 import com.example.emeetingwhat.Data.GroupDetailData;
-import com.example.emeetingwhat.GroupType;
 import com.example.emeetingwhat.R;
 
-import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-public class Create_DetailsActivity extends AppCompatActivity {
+public class CreateDetailsActivity extends AppCompatActivity {
 
     private Button btn3Next;
     private Button btn3Prev;
@@ -83,7 +81,7 @@ public class Create_DetailsActivity extends AppCompatActivity {
         btn3Next.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 // TODO: 친구 초대 페이지로 이동 (수정 필요)
-                Intent intent = new Intent(Create_DetailsActivity.this, Create_FriendsActivity.class);
+                Intent intent = new Intent(CreateDetailsActivity.this, CreateFriendsActivity.class);
                 targetAmount = Integer.parseInt(et_amount.getText().toString());
                 monthlyPayment = Integer.parseInt(editText_monthlyPayment.getText().toString());
                 groupDetailData.setCreateDate(startDate);
@@ -105,7 +103,7 @@ public class Create_DetailsActivity extends AppCompatActivity {
         // Prev 버튼을 눌렀을 때
         btn3Prev.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent intent = new Intent(Create_DetailsActivity.this, Create_NameActivity.class);
+                Intent intent = new Intent(CreateDetailsActivity.this, CreateNameActivity.class);
                 startActivity(intent);
             }
         });

@@ -36,21 +36,6 @@ import com.kakao.usermgmt.callback.UnLinkResponseCallback;
 import com.kakao.usermgmt.response.model.UserProfile;
 import com.kakao.util.helper.log.Logger;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-
 public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -155,9 +140,10 @@ public class MainActivity extends BaseActivity
 
         if (id == R.id.nav_home) {
             fragment = new MainPageFragment();
-        } else if (id == R.id.nav_gallery) {
-            fragment = new MyFriendsListFragment();
+        } else if (id == R.id.nav_bankaccount) {
+            fragment = new MyBankAccountFragment();
         } else if (id == R.id.nav_friendslist) {
+            // fragment = new MyFriendsListFragment();
             showTalkFriendListActivity();
         } else if (id == R.id.nav_calendar) {
             fragment = new MyCalendarFragment();

@@ -2,17 +2,9 @@ package com.example.emeetingwhat;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.text.method.ScrollingMovementMethod;
-import android.util.Log;
-import android.view.GestureDetector;
-import android.view.LayoutInflater;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -20,6 +12,19 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.text.method.ScrollingMovementMethod;
+import android.util.Log;
+import android.view.GestureDetector;
+import android.view.LayoutInflater;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.example.emeetingwhat.Data.AccountDetailData;
+import com.example.emeetingwhat.common.widget.KakaoToast;
 import com.kakao.usermgmt.response.model.UserProfile;
 
 import org.json.JSONArray;
@@ -37,84 +42,113 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class MainPageFragment extends Fragment {
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+public class MyBankAccountFragment extends Fragment {
     private static String IP_ADDRESS = "61.108.100.36";
-    private static String TAG = "phptest";
-    private TextView mTextViewResult;
-    private ArrayList<GroupDetailData> mArrayList;
-    private GroupsAdapter mAdapter;
+    private static String TAG = "banktest";
+    private TextView tv_nickname;
+    private ArrayList<AccountDetailData> mArrayList;
+    private BanksAdapter mAdapter;
     private RecyclerView mRecyclerView;
     private String mJsonString;
+    private Button btn_newAccount;
     private LinearLayoutManager mLinearLayoutManager;
+    // TODO: Rename parameter arguments, choose names that match
+    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+    private static final String ARG_PARAM1 = "param1";
+    private static final String ARG_PARAM2 = "param2";
     public  final UserProfile userProfile = UserProfile.loadFromCache();
+    // TODO: Rename and change types of parameters
+    private String mParam1;
+    private String mParam2;
+
+    public MyBankAccountFragment() {
+        // Required empty public constructor
+    }
+
+    /**
+     * Use this factory method to create a new instance of
+     * this fragment using the provided parameters.
+     *
+     * @param param1 Parameter 1.
+     * @param param2 Parameter 2.
+     * @return A new instance of fragment MyBankAccountFragment.
+     */
+    // TODO: Rename and change types and number of parameters
+    public static MyBankAccountFragment newInstance(String param1, String param2) {
+        MyBankAccountFragment fragment = new MyBankAccountFragment();
+        Bundle args = new Bundle();
+        args.putString(ARG_PARAM1, param1);
+        args.putString(ARG_PARAM2, param2);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            mParam1 = getArguments().getString(ARG_PARAM1);
+            mParam2 = getArguments().getString(ARG_PARAM2);
+        }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_mainpage_fragment, container, false);
-
-        Toast.makeText(getActivity(), " 유저 아이디 " + userProfile.getId(), Toast.LENGTH_SHORT).show();
-        // 데이터베이스 테스트
-        mTextViewResult = (TextView)view.findViewById(R.id.textView_main_result);
-        mRecyclerView = (RecyclerView) view.findViewById(R.id.listView_main_list);
+        // Inflate the layout for this fragment
+        View view = inflater.inflate(R.layout.fragment_my_bank_account, container, false);
+        tv_nickname = (TextView) view.findViewById(R.id.textView_bankAccount_UserNickName);
+        tv_nickname.setText(userProfile.getNickname());
+        mRecyclerView = (RecyclerView) view.findViewById(R.id.recyclerView_bankList);
         mLinearLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
 
-        mTextViewResult.setMovementMethod(new ScrollingMovementMethod());
-
         mArrayList = new ArrayList<>();
 
-        mAdapter = new GroupsAdapter(getActivity(), mArrayList);
+        mAdapter = new BanksAdapter(getActivity(), mArrayList);
         mRecyclerView.setAdapter(mAdapter);
         mArrayList.clear();
         mAdapter.notifyDataSetChanged();
 
-        MainPageFragment.GetData task = new MainPageFragment.GetData();
-        task.execute( "http://" + IP_ADDRESS + "/selectGroupList.php", Long.toString(userProfile.getId()));
+        MyBankAccountFragment.GetData task = new MyBankAccountFragment.GetData();
+        task.execute( "http://" + IP_ADDRESS + "/selectBankList.php", Long.toString(userProfile.getId()));
         // RecyclerView의 줄(row) 사이에 수평선을 넣기위해 사용됩니다.
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(mRecyclerView.getContext(),
                 mLinearLayoutManager.getOrientation());
         mRecyclerView.addItemDecoration(dividerItemDecoration);
-        mRecyclerView.addOnItemTouchListener(new MainPageFragment.RecyclerTouchListener(getActivity()
-                , mRecyclerView, new MainPageFragment.ClickListener()
+        mRecyclerView.addOnItemTouchListener(new MyBankAccountFragment.RecyclerTouchListener(getActivity()
+                , mRecyclerView, new MyBankAccountFragment.ClickListener()
         {
 
             @Override
             public void onClick(View view, int position) {
-
-                GroupDetailData groupData = mArrayList.get(position);
-                Toast.makeText(getActivity(), "  "+groupData.getGroupId(), Toast.LENGTH_SHORT).show();
-                if( groupData.getGroupType().equals("group")){
-                    Fragment fragment = new GroupDetailFragment();
-                    if( fragment != null){
-                        FragmentTransaction ft = getFragmentManager().beginTransaction();
-                        Bundle bundle = new Bundle();
-                        bundle.putString("groupId", Integer.toString(groupData.getGroupId()));
-                        fragment.setArguments(bundle);
-                        ft.replace(R.id.content_fragment_layout, fragment);
-                        ft.commit();
-                    }
-                }else if( groupData.getGroupType().equals("individual")){
-                    Fragment fragment = new IndividualDetailFragment();
-                    if( fragment != null){
-                        FragmentTransaction ft = getFragmentManager().beginTransaction();
-                        Bundle bundle = new Bundle();
-                        bundle.putString("groupId", Integer.toString(groupData.getGroupId()));
-                        fragment.setArguments(bundle);
-                        ft.replace(R.id.content_fragment_layout, fragment);
-                        ft.commit();
-                    }
-                }
+                Fragment fragment = new BankDetailFragment();
+                AccountDetailData bankData = mArrayList.get(position);
+                FragmentTransaction ft = getFragmentManager().beginTransaction();
+                Bundle bundle = new Bundle();
+                bundle.putInt("accountId", bankData.getAccountId());
+                fragment.setArguments(bundle);
+                ft.replace(R.id.content_fragment_layout, fragment);
+                ft.commit();
             }
             @Override
             public void onLongClick(View view, int position) {
             }
         }));
+
+        btn_newAccount = (Button) view.findViewById(R.id.button_newaccount);
+        btn_newAccount.setOnClickListener(new Button.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // TODO : click event
+                Fragment fragment = new BankRegisterFragment();
+                FragmentTransaction ft = getFragmentManager().beginTransaction();
+                ft.replace(R.id.content_fragment_layout, fragment);
+                ft.commit();
+            }
+        });
         return view;
     }
-
     private class GetData extends AsyncTask<String, Void, String> {
 
         ProgressDialog progressDialog;
@@ -133,12 +167,12 @@ public class MainPageFragment extends Fragment {
             super.onPostExecute(result);
 
             progressDialog.dismiss();
-            mTextViewResult.setText(result);
+            // mTextViewResult.setText(result);
             Log.d(TAG, "response - " + result);
 
             if (result == null){
-
-                mTextViewResult.setText(errorString);
+                KakaoToast.makeToast(getActivity(), errorString, Toast.LENGTH_SHORT).show();
+                // mTextViewResult.setText(errorString);
             }
             else {
 
@@ -212,16 +246,10 @@ public class MainPageFragment extends Fragment {
     }
 
     private void showResult() {
-        String TAG_JSON = "groupList";
-        String TAG_GROUPID = "GroupId";
-        String TAG_NAME = "Name";
-        String TAG_CREATEDATE = "CreateDate";
-        String TAG_ENDDATE = "EndDate";
-        String TAG_TARGETAMOUNT = "TargetAmount";
-        String TAG_MONTHLYPAYMENT = "MonthlyPayment";
-        String TAG_GROUPTYPE = "GroupType";
-        String TAG_ACCOUNTHOLDERID = "AccountHolderId";
-        String TAG_PAYMENTDAY = "PaymentDay";
+        String TAG_JSON = "bankList";
+        String TAG_ACCOUNTID = "AccountId";
+        String TAG_ACCOUNTNUMBER = "AccountNumber";
+        String TAG_BANKNAME = "BankName";
 
 
         try {
@@ -232,41 +260,16 @@ public class MainPageFragment extends Fragment {
 
                 JSONObject item = jsonArray.getJSONObject(i);
 
-                int groupId = item.getInt(TAG_GROUPID);
-                String name = item.getString(TAG_NAME);
-                String s_createDate = item.getString(TAG_CREATEDATE);
-                String s_endDate = item.getString(TAG_ENDDATE);
-                int targetAmount = item.getInt(TAG_TARGETAMOUNT);
-                int monthlyPayment = item.getInt(TAG_MONTHLYPAYMENT);
-                String groupType = item.getString(TAG_GROUPTYPE);
-                int accountHolderId = item.getInt(TAG_ACCOUNTHOLDERID);
-                int paymentDay = item.getInt(TAG_PAYMENTDAY);
+                int accountId = item.getInt(TAG_ACCOUNTID);
+                String bankName = item.getString(TAG_BANKNAME);
+                String accountNumber = item.getString(TAG_ACCOUNTNUMBER);
 
-                SimpleDateFormat transFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                Date createDate = null;
-                Date endDate = null;
-                try {
-                    createDate = transFormat.parse(s_createDate);
-                    endDate = transFormat.parse(s_endDate);
+                AccountDetailData bankData = new AccountDetailData();
+                bankData.setAccountId(accountId);
+                bankData.setBankName(bankName);
+                bankData.setAccountNumber(accountNumber);
 
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-
-
-                GroupDetailData groupDetailData = new GroupDetailData();
-                groupDetailData.setGroupId(groupId);
-                groupDetailData.setName(name);
-                groupDetailData.setCreateDate(createDate);
-                groupDetailData.setEndDate(endDate);
-                groupDetailData.setTargetAmount(targetAmount);
-                groupDetailData.setMonthlyPayment(monthlyPayment);
-                groupDetailData.setGroupType(groupType);
-                groupDetailData.setAccountHolderId(accountHolderId);
-                groupDetailData.setPaymentDay(paymentDay);
-
-
-                mArrayList.add(groupDetailData);
+                mArrayList.add(bankData);
                 mAdapter.notifyDataSetChanged();
             }
 
@@ -286,9 +289,9 @@ public class MainPageFragment extends Fragment {
     public static class RecyclerTouchListener implements RecyclerView.OnItemTouchListener {
 
         private GestureDetector gestureDetector;
-        private MainPageFragment.ClickListener clickListener;
+        private MyBankAccountFragment.ClickListener clickListener;
 
-        public RecyclerTouchListener(Context context, final RecyclerView recyclerView, final MainPageFragment.ClickListener clickListener) {
+        public RecyclerTouchListener(Context context, final RecyclerView recyclerView, final MyBankAccountFragment.ClickListener clickListener) {
             this.clickListener = clickListener;
             gestureDetector = new GestureDetector(context, new GestureDetector.SimpleOnGestureListener() {
                 @Override
@@ -322,14 +325,6 @@ public class MainPageFragment extends Fragment {
         @Override
         public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
         }
-    }
-    public static MainPageFragment newInstance(String param1, String param2) {
-        MainPageFragment fragment = new MainPageFragment();
-        Bundle args = new Bundle();
-        args.putString("groupId", param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
     }
 
 }

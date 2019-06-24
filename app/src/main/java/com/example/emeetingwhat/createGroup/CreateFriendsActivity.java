@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -33,7 +32,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-public class Create_FriendsActivity extends AppCompatActivity {
+public class CreateFriendsActivity extends AppCompatActivity {
     private static String IP_ADDRESS = "61.108.100.36";
     private static String TAG = "inserttest";
     private Button btn4Prev;
@@ -74,7 +73,7 @@ public class Create_FriendsActivity extends AppCompatActivity {
 
         btn4Prev.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent intent = new Intent(Create_FriendsActivity.this, Create_DetailsActivity.class);
+                Intent intent = new Intent(CreateFriendsActivity.this, CreateDetailsActivity.class);
                 startActivity(intent);
             }
         });
@@ -93,7 +92,7 @@ public class Create_FriendsActivity extends AppCompatActivity {
                         , Integer.toString(groupDetailData.getMonthlyPayment()), Long.toString(userProfile.getId())
                         , Integer.toString(groupDetailData.getPaymentDay()));
 
-                Intent intent = new Intent(Create_FriendsActivity.this, MainActivity.class);
+                Intent intent = new Intent(CreateFriendsActivity.this, MainActivity.class);
                 startActivity(intent);
             }
         });
@@ -120,7 +119,7 @@ public class Create_FriendsActivity extends AppCompatActivity {
         protected void onPreExecute() {
             super.onPreExecute();
 
-            progressDialog = ProgressDialog.show(Create_FriendsActivity.this,
+            progressDialog = ProgressDialog.show(CreateFriendsActivity.this,
                     "Please Wait", null, true, true);
         }
 

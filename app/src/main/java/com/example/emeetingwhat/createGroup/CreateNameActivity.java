@@ -18,9 +18,7 @@ import com.example.emeetingwhat.GroupType;
 import com.example.emeetingwhat.R;
 import com.example.emeetingwhat.Validator;
 
-import java.security.acl.Group;
-
-public class Create_NameActivity extends AppCompatActivity {
+public class CreateNameActivity extends AppCompatActivity {
 
     private Button btn2Next;
     private Button btn2Prev;
@@ -67,7 +65,7 @@ public class Create_NameActivity extends AppCompatActivity {
                     // radioButton validation check
                     if(individual.isChecked()) {
                         groupNameInfo.setText("");
-                        Intent intent = new Intent(Create_NameActivity.this, Create_DetailsActivity.class);
+                        Intent intent = new Intent(CreateNameActivity.this, CreateDetailsActivity.class);
                         groupNameInput = groupName.getText().toString();
 
                         // 개인 수령일 때: 사용자가 입력한 모임명과 모임 유형을 Name으로 세팅한다.
@@ -83,8 +81,8 @@ public class Create_NameActivity extends AppCompatActivity {
                         finish();
                     } else if (group.isChecked()){
                         groupNameInfo.setText("");
-                        // TODO: 그룹을 선택했을 때 다른  activity로 넘겨준다. (Create_DetailsActivity 자리에 넣어줌)
-                        Intent intent = new Intent(Create_NameActivity.this, Create_DetailsActivity.class);
+                        // TODO: 그룹을 선택했을 때 다른  activity로 넘겨준다. (CreateDetailsActivity 자리에 넣어줌)
+                        Intent intent = new Intent(CreateNameActivity.this, CreateDetailsActivity.class);
 
                         groupNameInput = groupName.getText().toString();
 
@@ -114,7 +112,7 @@ public class Create_NameActivity extends AppCompatActivity {
     }
 
     private void openCreateAccount() {
-        Intent intent = new Intent(this, Create_AccountActivity.class);
+        Intent intent = new Intent(this, CreateAccountActivity.class);
         startActivity(intent);
     }
 }

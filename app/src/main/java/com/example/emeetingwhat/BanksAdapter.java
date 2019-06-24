@@ -9,36 +9,35 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.emeetingwhat.Data.AccountDetailData;
+
 import java.util.ArrayList;
 
-class GroupsAdapter extends RecyclerView.Adapter<GroupsAdapter.CustomViewHolder> {
+public class BanksAdapter extends RecyclerView.Adapter<BanksAdapter.CustomViewHolder> {
 
-    private ArrayList<GroupDetailData> mList = null;
+    private ArrayList<AccountDetailData> mList = null;
     private Activity context = null;
 
-
-    public GroupsAdapter(Activity context, ArrayList<GroupDetailData> list) {
+    public BanksAdapter(Activity context, ArrayList<AccountDetailData> list) {
         this.context = context;
         this.mList = list;
     }
 
     class CustomViewHolder extends RecyclerView.ViewHolder {
-        protected TextView tv_groupId;
-        protected TextView tv_name;
-        protected TextView tv_createDate;
+        protected TextView tv_bankName;
+        protected TextView tv_accountNumber;
 
 
         public CustomViewHolder(View view) {
             super(view);
-            this.tv_groupId = (TextView) view.findViewById(R.id.textView_list_groupId);
-            this.tv_name = (TextView) view.findViewById(R.id.textView_list_name);
-            this.tv_createDate = (TextView) view.findViewById(R.id.textView_list_createDate);
+            this.tv_bankName = (TextView) view.findViewById(R.id.textView_list_bankName);
+            this.tv_accountNumber = (TextView) view.findViewById(R.id.textView_list_accountNumber);
         }
     }
 
     @Override
     public CustomViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
-        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.view_grouplist_item, null);
+        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.view_banklist_item, null);
         CustomViewHolder viewHolder = new CustomViewHolder(view);
 
         return viewHolder;
@@ -46,10 +45,8 @@ class GroupsAdapter extends RecyclerView.Adapter<GroupsAdapter.CustomViewHolder>
 
     @Override
     public void onBindViewHolder(@NonNull CustomViewHolder viewholder, int position) {
-
-        viewholder.tv_groupId.setText(" " + mList.get(position).getGroupId());
-        viewholder.tv_name.setText(" " + mList.get(position).getName());
-        viewholder.tv_createDate.setText(" " + mList.get(position).getCreateDate());
+        viewholder.tv_bankName.setText(" " + mList.get(position).getBankName());
+        viewholder.tv_accountNumber.setText(" " + mList.get(position).getAccountNumber());
     }
 
     @Override

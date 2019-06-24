@@ -4,7 +4,6 @@ import java.util.Date;
 
 class GroupDetailData {
     private int groupId;
-
     private String name;
     private Date createDate;
     private Date endDate;

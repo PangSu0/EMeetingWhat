@@ -30,9 +30,6 @@
             android:theme="@style/AppTheme.NoActionBar"
             />
 
-        <activity android:name=".GroupDetailActivity"
-            android:theme="@style/AppTheme.NoActionBar"
-            />
         <activity
             android:name=".KakaoTalkFriendListActivity"
             android:configChanges="screenSize|orientation"
@@ -44,13 +41,10 @@
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:launchMode="singleTop"
             android:windowSoftInputMode="adjustResize|stateHidden"/>
-        <activity android:name=".IndividualDetailActivity"
-            android:theme="@style/AppTheme.NoActionBar"
-            />
-        <activity android:name=".createGroup.Create_AccountActivity" />
-        <activity android:name=".createGroup.Create_NameActivity" />
-        <activity android:name=".createGroup.Create_FriendsActivity" />
-        <activity android:name=".createGroup.Create_DetailsActivity" />
+        <activity android:name=".createGroup.CreateAccountActivity" />
+        <activity android:name=".createGroup.CreateNameActivity" />
+        <activity android:name=".createGroup.CreateFriendsActivity" />
+        <activity android:name=".createGroup.CreateDetailsActivity" />
 
         <meta-data
             android:name="com.kakao.sdk.AppKey"
