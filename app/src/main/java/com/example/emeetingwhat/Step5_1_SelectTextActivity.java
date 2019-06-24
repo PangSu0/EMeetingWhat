@@ -54,6 +54,24 @@ public class Step5_1_SelectTextActivity extends AppCompatActivity {
             int index = data.getIntExtra("index", -1);
             int selectIndex = data.getIntExtra("selectIndex", -1);
             Toast.makeText(getApplicationContext(), index + " " + selectIndex ,Toast.LENGTH_SHORT).show();
+            if(selectIndex >= 0)
+            {
+                MyItem mi = mMyItem.get(index);
+                if(mi.mIndex!=-1)
+                    mNameTable.isUsedList[mi.mIndex] = false;
+                if(selectIndex > 0) {
+                    mi.mIndex=mNameTable.getIndex(selectIndex);
+                    mNameTable.isUsedList[mNameTable.getIndex(selectIndex)] = true;
+                }
+                else
+                    mi.mIndex= -1;
+                mNameTable.refreshList();
+                if(mi.mIndex!=-1)
+                    mMyItem.get(index).textView.setText(mDatabase.get(mi.mIndex));
+                else
+                    mMyItem.get(index).textView.setText("");
+                Toast.makeText(getApplicationContext(), mMyItem.get(index).textView.getText().toString() ,Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
@@ -81,8 +99,10 @@ public class Step5_1_SelectTextActivity extends AppCompatActivity {
     }
     public void nextPage()  //다음페이지
     {
-        Toast.makeText(getApplicationContext(), mMyItem.get(0).textView.getText().toString(),Toast.LENGTH_SHORT).show();
-
+        if(mNameTable.mNameList.length > 1)
+            Toast.makeText(getApplicationContext(), "순서를 모두 설정해 주십시오.",Toast.LENGTH_SHORT).show();
+        else
+            Toast.makeText(getApplicationContext(), "다음 페이지로",Toast.LENGTH_SHORT).show();
         /*
         Intent intent = new Intent(getApplicationContext(), XXXXXXXXX.class);
         startActivity(intent);
@@ -163,7 +183,10 @@ public class Step5_1_SelectTextActivity extends AppCompatActivity {
             MyItem mi = mArSrc.get(position);
             // EditText 의 핸들을 ArrayList 에 저장
             mi.textView = convertView.findViewById(R.id.itemTextView);
-            mi.textView.setText("");
+            if(mi.mIndex!=-1)
+                mi.textView.setText(mDatabase.get(mi.mIndex));
+            else
+                mi.textView.setText("");
 
             convertView.findViewById(R.id.btnItem).setTag(position);
 

@@ -20,6 +20,7 @@ public class NameTable implements Serializable {
         indexList = new int[notUsedCount()+1];
         int index = 0;
         mNameList[index++] = "";
+        indexList[0]=-1;
         for(int i = 0 ; i < database.size(); i ++) {
             if(isUsedList[i] == false) {
                 mNameList[index] = database.get(i);
@@ -44,5 +45,8 @@ public class NameTable implements Serializable {
     public void unUseName(int index)
     {
         isUsedList[indexList[index]] = false;
+    }
+    public int getIndex(int index){
+        return indexList[index];
     }
 }
