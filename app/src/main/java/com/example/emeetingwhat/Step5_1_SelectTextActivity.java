@@ -31,7 +31,6 @@ public class Step5_1_SelectTextActivity extends AppCompatActivity {
 
         initListView();
         // ListView 위젯에 10개의 텍스트 항목을 추가
-        refreshList();
 
     }
     public class NameTable {
@@ -77,7 +76,11 @@ public class Step5_1_SelectTextActivity extends AppCompatActivity {
 
     public class MyItem{
         TextView textView = null;
-        int mIndex = -1;
+        int mIndex;
+        MyItem()
+        {
+            mIndex = -1;
+        }
     }
 
     public void onClick(View v)
@@ -94,6 +97,8 @@ public class Step5_1_SelectTextActivity extends AppCompatActivity {
     }
     public void nextPage()  //다음페이지
     {
+        Toast.makeText(getApplicationContext(), mMyItem.get(0).textView.getText().toString(),Toast.LENGTH_SHORT).show();
+
         /*
         Intent intent = new Intent(getApplicationContext(), XXXXXXXXX.class);
         startActivity(intent);
@@ -109,9 +114,9 @@ public class Step5_1_SelectTextActivity extends AppCompatActivity {
         mDatabase.add("은지");
         mDatabase.add("수미");
         mDatabase.add("팡수");
-        for (int i = 0; i < 1; i++) {
-            mDatabase.add("태엽" + (i + 1));
-        }
+        //for (int i = 0; i < 1; i++) {
+        //  mDatabase.add("태엽" + (i + 1));
+        //}
         mPeopleMax = mDatabase.size();
         mMyItem = new ArrayList<>();
         for(int i = 0 ; i < mPeopleMax ; i++)
@@ -139,6 +144,8 @@ public class Step5_1_SelectTextActivity extends AppCompatActivity {
         int layout;
         Context mContext;
         ArrayList<MyItem> arSrc;
+        boolean[] isNotFirstStartList;
+
         // 생성자 함수에서 멤버변수 초기화
         MyListAdapter(Context context, int aLayout, ArrayList<MyItem> aarSrc) {
             super(context,aLayout,aarSrc);
@@ -146,6 +153,7 @@ public class Step5_1_SelectTextActivity extends AppCompatActivity {
             layout = aLayout;
             mContext = context;
             arSrc = aarSrc;
+            isNotFirstStartList = new boolean[mPeopleMax];
         }
 
         public View getView(final int position, View convertView, ViewGroup parent) {
@@ -171,39 +179,41 @@ public class Step5_1_SelectTextActivity extends AppCompatActivity {
             spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                    if(i>0) {
-                        if(arSrc.get(position).mIndex != -1)
-                            mNameTable.isUsedList[arSrc.get(position).mIndex] = false;
-
-                        arSrc.get(position).mIndex = mNameTable.indexList[i];
-                        mNameTable.useName(i);
+                    Toast.makeText(getApplicationContext(), position + "실행" + i, Toast.LENGTH_SHORT).show();
+                    if (isNotFirstStartList[position] == true) {
+                        if (i > 0) {
+                            if (arSrc.get(position).mIndex != -1)
+                                mNameTable.isUsedList[arSrc.get(position).mIndex] = false;
+                            arSrc.get(position).mIndex = mNameTable.indexList[i];
+                            mNameTable.useName(i);
+                        }
+                        else if (i == 0)
+                        {
+                            if(arSrc.get(position).mIndex != -1){
+                                mNameTable.isUsedList[arSrc.get(position).mIndex] = false;
+                                arSrc.get(position).mIndex = -1;
+                            }
+                        }
                         mNameTable.refreshList();
-                        adapterSet();
-
+                        for(int j = 0 ; j < mPeopleMax ; j++)
+                            isNotFirstStartList[j] = false;
                         refreshList();
-                        //Toast.makeText(getApplicationContext(),str,Toast.LENGTH_SHORT).show();
                     }
                     else
-                    {
-
-                    }
+                        isNotFirstStartList[position] = true;
                 }
 
                 @Override
                 public void onNothingSelected(AdapterView<?> adapterView) {
-
+                    Toast.makeText(getApplicationContext(), "가 선택되었습니다.",Toast.LENGTH_SHORT).show();
                 }
             });
             return row;
         }
     }
 
-    public void adapterSet(){
-        arrayAdapter = new ArrayAdapter(this,android.R.layout.simple_spinner_item, mNameTable.mNameList);
-    }
-
     public void refreshList() {
-
+        arrayAdapter = new ArrayAdapter(this,android.R.layout.simple_spinner_item, mNameTable.mNameList);
         MyListAdapter MyAdapter = (MyListAdapter)mListMember.getAdapter();
         MyAdapter.notifyDataSetChanged();
     }
