@@ -3,17 +3,25 @@ package com.example.emeetingwhat;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.emeetingwhat.Data.GroupDetailData;
+
 public class Step4_2_InviteMemberActivity extends AppCompatActivity {
     int mSelectRadioButton;
+    Intent intent_GroupFromPrevious;
+    GroupDetailData groupDataFromPrev;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_step4_2_invite_member);
 
+        intent_GroupFromPrevious = getIntent();
+        groupDataFromPrev =  (GroupDetailData)intent_GroupFromPrevious.getSerializableExtra("groupDetailData");
+
+        setContentView(R.layout.activity_step4_2_invite_member);
     }
 
     public  void onClick(View v)
@@ -34,7 +42,7 @@ public class Step4_2_InviteMemberActivity extends AppCompatActivity {
                 break;
         }
     }
-    public  void nextPage()
+    public void nextPage()
     {
         Intent intent;
         if(mSelectRadioButton == 1)
@@ -42,7 +50,11 @@ public class Step4_2_InviteMemberActivity extends AppCompatActivity {
         else if(mSelectRadioButton == 2 )
             intent = new Intent(getApplicationContext(), Step5_2_RandomLadderActivity.class);
         else    //버튼이 안 눌린경우
+        {
+            Toast.makeText(getApplicationContext(), "수령 순서를 결정해 주세요.",Toast.LENGTH_LONG).show();
             return;
+        }
+        intent.putExtra("groupDetailData", groupDataFromPrev);
         startActivity(intent);
     }
 }
