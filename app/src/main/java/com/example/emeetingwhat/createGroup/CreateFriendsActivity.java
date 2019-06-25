@@ -12,7 +12,7 @@ import com.example.emeetingwhat.Data.GroupDetailData;
 import com.example.emeetingwhat.MainPageActivity;
 import com.example.emeetingwhat.R;
 
-public class Create_FriendsActivity extends AppCompatActivity {
+public class CreateFriendsActivity extends AppCompatActivity {
 
     private Button btn4Prev;
     private Button btn4Next;
@@ -45,11 +45,14 @@ public class Create_FriendsActivity extends AppCompatActivity {
         groupDetailData.setName(groupDataFromPrev.getName());
         groupDetailData.setGroupType(groupDataFromPrev.getGroupType());
         groupDetailData.setPaymentDay(groupDataFromPrev.getPaymentDay());
+        groupDetailData.setCreateDate(groupDataFromPrev.getCreateDate());
+        groupDetailData.setEndDate(groupDataFromPrev.getEndDate());
         accountDetailData.setBankName(accountDataFromPrev.getBankName());
+
 
         btn4Prev.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent intent = new Intent(Create_FriendsActivity.this, MainPageActivity.class);
+                Intent intent = new Intent(CreateFriendsActivity.this, MainPageActivity.class);
                 startActivity(intent);
             }
         });
@@ -58,7 +61,7 @@ public class Create_FriendsActivity extends AppCompatActivity {
         btn4Next.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 // TODO: 내가 참여하고 있는 모임 리스트로 보내기.
-                Intent intent = new Intent(Create_FriendsActivity.this, Create_DetailsActivity.class);
+                Intent intent = new Intent(CreateFriendsActivity.this, CreateDetailsActivity.class);
                 startActivity(intent);
             }
         });

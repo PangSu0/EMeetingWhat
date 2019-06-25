@@ -16,10 +16,7 @@ import com.example.emeetingwhat.Data.GroupDetailData;
 import com.example.emeetingwhat.MainPageActivity;
 import com.example.emeetingwhat.R;
 
-import java.security.acl.Group;
-import java.util.ArrayList;
-
-public class Create_AccountActivity extends AppCompatActivity {
+public class CreateAccountActivity extends AppCompatActivity {
 
     private Spinner bankSpinner;
     private ArrayAdapter<CharSequence> bankAdapter;
@@ -49,7 +46,7 @@ public class Create_AccountActivity extends AppCompatActivity {
         // Prev 버튼을 눌렀을 때
         btn1Prev.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent intent = new Intent(Create_AccountActivity.this, MainPageActivity.class);
+                Intent intent = new Intent(CreateAccountActivity.this, MainPageActivity.class);
                 // redirect로 보내기.
                 startActivity(intent);
             }
@@ -57,7 +54,7 @@ public class Create_AccountActivity extends AppCompatActivity {
 
         btn1Next.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent intent = new Intent(Create_AccountActivity.this, Create_NameActivity.class);
+                Intent intent = new Intent(CreateAccountActivity.this, CreateNameActivity.class);
 
                 // Data 클래스 넘기기.
                 intent.putExtra("groupDetailData", groupDetailData);
@@ -80,7 +77,7 @@ public class Create_AccountActivity extends AppCompatActivity {
         paymentDateSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?>  parent, View view, int position, long id) {
                 // 확인용
-                Toast.makeText(Create_AccountActivity.this,
+                Toast.makeText(CreateAccountActivity.this,
                         paymentDateAdapter.getItem(position) + "을 선택했습니다.", Toast.LENGTH_SHORT).show();
 
                 // 사용자가 선택한 입금날짜로 paymentDay를 세팅한다.
@@ -88,7 +85,7 @@ public class Create_AccountActivity extends AppCompatActivity {
                 fillGroupDetailData(selectedPaymentDay);
             }
             public void onNothingSelected(AdapterView  parent) {
-                Toast.makeText(Create_AccountActivity.this, "입금날짜를 선택하세요.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(CreateAccountActivity.this, "입금날짜를 선택하세요.", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -105,7 +102,7 @@ public class Create_AccountActivity extends AppCompatActivity {
         bankSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?>  parent, View view, int position, long id) {
                 // 확인용
-                Toast.makeText(Create_AccountActivity.this,
+                Toast.makeText(CreateAccountActivity.this,
                         bankAdapter.getItem(position) + "을 선택했습니다.", Toast.LENGTH_SHORT).show();
 
                 // 사용자가 선택한 은행명으로 BankName을 세팅한다.
@@ -114,7 +111,7 @@ public class Create_AccountActivity extends AppCompatActivity {
                 fillAccountDetailData(selectedBankName);
             }
             public void onNothingSelected(AdapterView  parent) {
-                Toast.makeText(Create_AccountActivity.this, "은행을 선택하세요.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(CreateAccountActivity.this, "은행을 선택하세요.", Toast.LENGTH_SHORT).show();
             }
         });
     }

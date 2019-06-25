@@ -20,10 +20,10 @@
             </intent-filter>
         </activity>
         <activity android:name=".LoginActivity" />
-        <activity android:name=".createGroup.Create_AccountActivity" />
-        <activity android:name=".createGroup.Create_NameActivity" />
-        <activity android:name=".createGroup.Create_FriendsActivity" />
-        <activity android:name=".createGroup.Create_DetailsActivity" />
+        <activity android:name=".createGroup.CreateAccountActivity" />
+        <activity android:name=".createGroup.CreateNameActivity" />
+        <activity android:name=".createGroup.CreateFriendsActivity" />
+        <activity android:name=".createGroup.CreateDetailsActivity" />
 
         <activity android:name="MainPageActivity"
             android:theme="@style/AppTheme.NoActionBar"

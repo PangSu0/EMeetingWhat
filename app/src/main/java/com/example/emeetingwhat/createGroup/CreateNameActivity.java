@@ -18,7 +18,7 @@ import com.example.emeetingwhat.GroupType;
 import com.example.emeetingwhat.R;
 import com.example.emeetingwhat.Validator;
 
-public class Create_NameActivity extends AppCompatActivity {
+public class CreateNameActivity extends AppCompatActivity {
 
     private Button btn2Next;
     private Button btn2Prev;
@@ -70,7 +70,7 @@ public class Create_NameActivity extends AppCompatActivity {
 
                         fillGroupDetailData(groupName);
 
-                        Intent intent = new Intent(Create_NameActivity.this, Create_DetailsActivity.class);
+                        Intent intent = new Intent(CreateNameActivity.this, CreateDetailsActivity.class);
                         intent.putExtra("groupDetailData", groupDetailData);
                         intent.putExtra("accountDetailData", accountDataFromPrev);
                         startActivity(intent);
@@ -79,8 +79,8 @@ public class Create_NameActivity extends AppCompatActivity {
                         groupNameInfo.setText("");
                         fillGroupDetailData(groupName);
 
-                        // TODO: 그룹을 선택했을 때 다른  activity로 넘겨준다. (Create_DetailsActivity 자리에 넣어줌)
-                        Intent intent = new Intent(Create_NameActivity.this, Create_DetailsActivity.class);
+                        // TODO: 그룹을 선택했을 때 다른  activity로 넘겨준다. (CreateDetailsActivity 자리에 넣어줌)
+                        Intent intent = new Intent(CreateNameActivity.this, CreateDetailsActivity.class);
                         intent.putExtra("groupDetailData", groupDetailData);
                         intent.putExtra("accountDetailData", accountDataFromPrev);
                         startActivity(intent);
@@ -120,7 +120,7 @@ public class Create_NameActivity extends AppCompatActivity {
     }
 
     private void openCreateAccount() {
-        Intent intent = new Intent(this, Create_AccountActivity.class);
+        Intent intent = new Intent(this, CreateAccountActivity.class);
         startActivity(intent);
     }
 }

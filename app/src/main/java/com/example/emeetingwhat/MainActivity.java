@@ -12,9 +12,7 @@ import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 
-import com.example.emeetingwhat.createGroup.Create_AccountActivity;
 import com.kakao.auth.AuthType;
 import com.kakao.auth.ErrorCode;
 import com.kakao.auth.ISessionCallback;
@@ -22,14 +20,12 @@ import com.kakao.auth.Session;
 import com.kakao.network.ErrorResult;
 import com.kakao.usermgmt.LoginButton;
 import com.kakao.usermgmt.UserManagement;
-import com.kakao.usermgmt.callback.LogoutResponseCallback;
 import com.kakao.usermgmt.callback.MeResponseCallback;
 import com.kakao.usermgmt.response.model.UserProfile;
 import com.kakao.util.exception.KakaoException;
 import com.kakao.util.helper.log.Logger;
 
 import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Map;
 

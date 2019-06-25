@@ -1,13 +1,11 @@
 package com.example.emeetingwhat;
-import android.app.Application;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 
 import com.android.volley.toolbox.NetworkImageView;
-import com.example.emeetingwhat.createGroup.Create_AccountActivity;
+import com.example.emeetingwhat.createGroup.CreateAccountActivity;
+import com.example.emeetingwhat.openAPI.FetchData;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 
 import android.view.View;
 
@@ -25,16 +23,37 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.view.Menu;
-import android.widget.ImageView;
+import android.widget.Button;
 import android.widget.TextView;
 
 public class MainPageActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    //
+    Button click;
+    public static TextView data;
+    //
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mainpage);
+
+//
+        click = (Button) findViewById(R.id.button);
+        data = (TextView) findViewById(R.id.fetchedData);
+
+        click.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FetchData process = new FetchData();
+                process.execute();
+            }
+        });
+  //
+
+
+
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -45,7 +64,7 @@ public class MainPageActivity extends AppCompatActivity
                 openCreateActivity();
             }
             private void openCreateActivity() {
-                Intent intent = new Intent(MainPageActivity.this, Create_AccountActivity.class);
+                Intent intent = new Intent(MainPageActivity.this, CreateAccountActivity.class);
                 startActivity(intent);
             }
         });

@@ -13,19 +13,19 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.emeetingwhat.Data.AccountDetailData;
 import com.example.emeetingwhat.Data.GroupDetailData;
-import com.example.emeetingwhat.GroupType;
 import com.example.emeetingwhat.R;
 import com.example.emeetingwhat.Validator;
 
-import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
-public class Create_DetailsActivity extends AppCompatActivity {
+public class CreateDetailsActivity extends AppCompatActivity {
 
     private Button btn3Next;
     private Button btn3Prev;
-    private EditText et_Targetamount;
+    private EditText et_TargetAmount;
     private TextView tv_TargetAmountInfo;
 
     private Calendar calendar;
@@ -43,6 +43,11 @@ public class Create_DetailsActivity extends AppCompatActivity {
 
     private Date startDate;
     private Date endDate;
+
+    // 처음 보여지는 날짜를 Korea Locale로 세팅.
+    SimpleDateFormat transFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.KOREA);
+    Date currentTime = new Date();
+    String getCurrentTime = transFormat.format(currentTime);
 
     TextView txt_GroupName;
     String groupName;
@@ -64,7 +69,7 @@ public class Create_DetailsActivity extends AppCompatActivity {
         btn3Prev = (Button)findViewById(R.id.btn3Prev);
 
         // 목표 금액
-        et_Targetamount = (EditText)findViewById(R.id.et_TargetAmount);
+        et_TargetAmount = (EditText)findViewById(R.id.et_TargetAmount);
         tv_TargetAmountInfo = (TextView)findViewById(R.id.tv_TargetAmountInfo);
 
         getGroupDetailData();
@@ -77,13 +82,13 @@ public class Create_DetailsActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 // 목표 금액 Validation Check
-                if (Validator.isEmpty(et_Targetamount)) {
+                if (Validator.isEmpty(et_TargetAmount)) {
                     tv_TargetAmountInfo.setText("목표금액을 입력하세요");
 
                 } else {
-                    fillGroupDetailData(startDate, endDate, et_Targetamount);
+                    fillGroupDetailData(startDate, endDate, et_TargetAmount);
 
-                    Intent intent = new Intent(Create_DetailsActivity.this, Create_FriendsActivity.class);
+                    Intent intent = new Intent(CreateDetailsActivity.this, CreateFriendsActivity.class);
                     intent.putExtra("groupDetailData", groupDetailData);
                     intent.putExtra("accountDetailData", accountDataFromPrev);
                     startActivity(intent);
@@ -94,7 +99,7 @@ public class Create_DetailsActivity extends AppCompatActivity {
         // Prev 버튼을 눌렀을 때
         btn3Prev.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent intent = new Intent(Create_DetailsActivity.this, Create_NameActivity.class);
+                Intent intent = new Intent(CreateDetailsActivity.this, CreateNameActivity.class);
                 startActivity(intent);
             }
         });
@@ -102,11 +107,12 @@ public class Create_DetailsActivity extends AppCompatActivity {
 
         // 모임 기간 세팅 (시작일)
         et_StartDate = (EditText) findViewById(R.id.et_StartDate);
+        et_StartDate.setText(getCurrentTime);
+
         calendar = Calendar.getInstance();
         startDay = calendar.get(Calendar.DAY_OF_MONTH);
         startMonth = calendar.get(Calendar.MONTH);
         startYear = calendar.get(Calendar.YEAR);
-        et_StartDate.setText(startYear + "/" + (startMonth + 1) + "/" + startDay);
 
         et_StartDate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -117,10 +123,11 @@ public class Create_DetailsActivity extends AppCompatActivity {
 
         // 모임 기간 세팅(마지막일)
         et_EndDate = (EditText) findViewById(R.id.et_EndDate);
+        et_EndDate.setText(getCurrentTime);
+
         endDay = calendar.get(Calendar.DAY_OF_MONTH);
         endMonth = calendar.get(Calendar.MONTH);
         endYear = calendar.get(Calendar.YEAR);
-        et_EndDate.setText(endYear + "/" + (endMonth + 1) + "/" + endDay);
 
         et_EndDate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -134,9 +141,12 @@ public class Create_DetailsActivity extends AppCompatActivity {
         DatePickerDialog.OnDateSetListener listener = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                et_StartDate.setText(year + "/" + (monthOfYear + 1) + "/" + dayOfMonth);
                 calendar.set(year, monthOfYear, dayOfMonth);
                 startDate = calendar.getTime();
+
+                String dateSelected = transFormat.format(startDate);
+                et_StartDate.setText(dateSelected);
+
             }};
         DatePickerDialog dpDialog = new DatePickerDialog(this, listener, startYear, startMonth, startDay);
         dpDialog.show();
@@ -146,17 +156,25 @@ public class Create_DetailsActivity extends AppCompatActivity {
         DatePickerDialog.OnDateSetListener listener = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                et_EndDate.setText(year + "/" + (monthOfYear + 1) + "/" + dayOfMonth);
                 calendar.set(year, monthOfYear, dayOfMonth);
                 endDate = calendar.getTime();
+
+                String dateSelected = transFormat.format(endDate);
+                et_EndDate.setText(dateSelected);
             }};
         DatePickerDialog dpDialog = new DatePickerDialog(this, listener, endYear, endMonth, endDay);
         dpDialog.show();
     }
 
-    private void fillGroupDetailData(Date startDate, Date endDate, EditText et_Targetamount) {
+    private void fillGroupDetailData(Date startDate, Date endDate, EditText et_TargetAmount) {
         // 개인 수령일 때: 사용자가 입력한 모임명과 모임 유형을 Name으로 세팅한다.
-        targetAmount = Integer.parseInt(et_Targetamount.getText().toString());
+        targetAmount = Integer.parseInt(et_TargetAmount.getText().toString());
+
+        if (startDate == null)
+            startDate = currentTime;
+
+        if (endDate == null)
+            endDate = currentTime;
 
         groupDetailData.setCreateDate(startDate);
         groupDetailData.setEndDate(endDate);
