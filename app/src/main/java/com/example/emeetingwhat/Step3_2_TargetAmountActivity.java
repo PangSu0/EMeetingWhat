@@ -9,28 +9,38 @@ import android.widget.EditText;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.emeetingwhat.Data.AccountDetailData;
+import com.example.emeetingwhat.Data.GroupDetailData;
+
 public class Step3_2_TargetAmountActivity extends AppCompatActivity {
     EditText editName;
+    Intent intent_GroupFromPrevious;
+    Intent intent_AccountFromPrevious;
+    GroupDetailData groupDataFromPrev;
+    AccountDetailData accountDataFromPrev;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_step3_2_target_amount);
+
+        intent_GroupFromPrevious = getIntent();
+        intent_AccountFromPrevious = getIntent();
+
+        groupDataFromPrev =  (GroupDetailData)intent_GroupFromPrevious.getSerializableExtra("groupDetailData");
+        accountDataFromPrev =  (AccountDetailData)intent_AccountFromPrevious.getSerializableExtra("accountDetailData");
 
         setEnterKey();
     }
     public  void setEnterKey()
     {
         editName = findViewById(R.id.editTextStep3_2_EditName);
-        editName.setOnKeyListener(new View.OnKeyListener() {
-            @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                //Enter key Action
-                if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
-                    nextPage();
-                    return true;
-                }
-                return false;
+        editName.setOnKeyListener((v, keyCode, event) -> {
+            //Enter key Action
+            if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                nextPage();
+                return true;
             }
+            return false;
         });
     }
     public void onClick(View v)
