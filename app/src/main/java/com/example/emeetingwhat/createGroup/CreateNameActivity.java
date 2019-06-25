@@ -63,7 +63,7 @@ public class CreateNameActivity extends AppCompatActivity {
                     groupNameInfo.setText("그룹명을 입력하세요");
                 } else {
                     // radioButton validation check
-                    if(individual.isChecked()) {
+                    if(group.isChecked()) {
                         groupNameInfo.setText("");
                         Intent intent = new Intent(CreateNameActivity.this, CreateDetailsActivity.class);
                         groupNameInput = groupName.getText().toString();
@@ -80,8 +80,7 @@ public class CreateNameActivity extends AppCompatActivity {
                         // intent.putExtra("accountDetailData", accountDataFromPrev);
 
                         startActivity(intent);
-                        finish();
-                    } else if (group.isChecked()){
+                    } else if (individual.isChecked()){
                         groupNameInfo.setText("");
                         Intent intent = new Intent(CreateNameActivity.this, CreateDetailsActivity.class);
 

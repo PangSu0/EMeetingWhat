@@ -82,17 +82,18 @@ public class CreateFriendsActivity extends AppCompatActivity {
             }
         });
 
-        // Prev 버튼을 눌렀을 때
         btn4Next.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 // TODO: 내가 참여하고 있는 모임 리스트로 보내기.
                 InsertData task = new InsertData();
-                SimpleDateFormat transFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.KOREA);
+                SimpleDateFormat transFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 Date currentTime = new Date();
-                String endDate = transFormat.format(currentTime);
-                KakaoToast.makeToast(getApplicationContext(), Long.toString(userProfile.getId()), Toast.LENGTH_SHORT).show();
+                String createDate = transFormat.format(groupDetailData.getCreateDate());
+                String endDate = transFormat.format(groupDetailData.getEndDate());
+                KakaoToast.makeToast(getApplicationContext(), groupDetailData.getCreateDate().toString(), Toast.LENGTH_SHORT).show();
                 task.execute("http://" + IP_ADDRESS + "/insertGroupIndividualMode.php"
                         , groupDetailData.getName()
+                        , createDate
                         , endDate
                         , Integer.toString(groupDetailData.getTargetAmount())
                         , Integer.toString(groupDetailData.getMonthlyPayment())
@@ -147,20 +148,17 @@ public class CreateFriendsActivity extends AppCompatActivity {
         @Override
         protected String doInBackground(String... params) {
             String name = (String)params[1];
-            String endDate = (String)params[2];
-            String targetAmount = (String)params[3];
-            String monthlyPayment = (String)params[4];
-            int accountholderId = Integer.parseInt((String)params[5]);
-            int paymentDay = Integer.parseInt((String)params[6]);
-            String bankName = (String)params[7];
-            String accountNumber = (String)params[8];
-            String from = "2013-04-08 10:10:10";
-            SimpleDateFormat transFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
+            String createDate = (String)params[2];
+            String endDate = (String)params[3];
+            String targetAmount = (String)params[4];
+            String monthlyPayment = (String)params[5];
+            int accountholderId = Integer.parseInt((String)params[6]);
+            int paymentDay = Integer.parseInt((String)params[7]);
+            String bankName = (String)params[8];
+            String accountNumber = (String)params[9];
             try {
-                Date to = transFormat.parse(endDate);
                 String serverURL = (String)params[0];
-                String postParameters = "name=" + name + "&endDate=" + from + "&targetAmount=" +targetAmount +
+                String postParameters = "name=" + name + "&createDate=" + createDate + "&endDate=" + endDate + "&targetAmount=" +targetAmount +
                         "&monthlyPayment=" +monthlyPayment + "&accountHolderId=" +accountholderId + "&paymentDay=" + paymentDay +
                         "&bankName=" +bankName + "&accountNumber=" +accountNumber;
                 URL url = new URL(serverURL);
@@ -208,10 +206,7 @@ public class CreateFriendsActivity extends AppCompatActivity {
                 return sb.toString();
 
 
-            }  catch (ParseException e) {
-                e.printStackTrace();
-                return new String("Error: " + e.getMessage());
-            } catch (Exception e) {
+            }  catch (Exception e) {
 
                 Log.d(TAG, "InsertData: Error ", e);
 
