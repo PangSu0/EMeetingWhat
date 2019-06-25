@@ -19,6 +19,7 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager.widget.ViewPager;
 
 import com.example.emeetingwhat.Data.GroupDetailData;
 import com.kakao.usermgmt.response.model.UserProfile;
@@ -37,6 +38,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+
+import me.relex.circleindicator.CircleIndicator;
 
 public class MainPageFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";

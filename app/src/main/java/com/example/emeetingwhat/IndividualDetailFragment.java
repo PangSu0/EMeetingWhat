@@ -53,12 +53,14 @@ public class IndividualDetailFragment extends Fragment {
     private String TAG_PAYMENTDAY = "PaymentDay";
     private String TAG_USERID = "UserId";
     private String TAG_ORDERNUMBER = "OrderNumber";
+    private String TAG_COMPONENTID = "UserId";
     private TextView mTextViewResult;
     private TextView mTextViewName;
     private TextView mTextViewTargetAmount;
     private TextView mTextViewPaymentDay;
     private TextView mTextViewAccountHolderId;
     private TextView mTextViewNickname;
+
     private final UserProfile userProfile = UserProfile.loadFromCache();
     public IndividualDetailFragment() {
         // Required empty public constructor
@@ -89,8 +91,9 @@ public class IndividualDetailFragment extends Fragment {
         }
 
         task.execute( "http://" + IP_ADDRESS + "/selectIndividualDetail.php", str_groupId, Long.toString(userProfile.getId()));
-
-
+//
+//        IndividualDetailFragment.GetData task2 = new IndividualDetailFragment.GetData();
+//        task2.execute( "http://" + IP_ADDRESS + "/selectGroupComponent.php", str_groupId);
         mTextViewName = (TextView)view.findViewById(R.id.textView_individualdetails_name);
         mTextViewName.setText(groupDetailData.getName());
 
@@ -133,7 +136,6 @@ public class IndividualDetailFragment extends Fragment {
                 mTextViewResult.setText(errorString);
             }
             else {
-
                 mJsonString = result;
                 showResult();
             }
@@ -144,8 +146,10 @@ public class IndividualDetailFragment extends Fragment {
         protected String doInBackground(String... params) {
 
             String serverURL = params[0];
-            String postParameters = "GroupId=" + params[1]+"&UserId="+ params[2];
-
+            String postParameters = "GroupId=" + params[1];
+            if(params[2] != null){
+                postParameters +="&UserId="+params[2];
+            }
             try {
 
                 URL url = new URL(serverURL);
@@ -258,5 +262,4 @@ public class IndividualDetailFragment extends Fragment {
             Log.d(TAG, "showResult : ", e);
         }
     }
-
 }

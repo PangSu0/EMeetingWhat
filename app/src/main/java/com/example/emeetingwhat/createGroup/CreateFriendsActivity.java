@@ -90,8 +90,8 @@ public class CreateFriendsActivity extends AppCompatActivity {
                 Date currentTime = new Date();
                 String createDate = transFormat.format(groupDetailData.getCreateDate());
                 String endDate = transFormat.format(groupDetailData.getEndDate());
-                KakaoToast.makeToast(getApplicationContext(), groupDetailData.getCreateDate().toString(), Toast.LENGTH_SHORT).show();
-                task.execute("http://" + IP_ADDRESS + "/insertGroupIndividualMode.php"
+                KakaoToast.makeToast(getApplicationContext(), userProfile.getNickname(), Toast.LENGTH_SHORT).show();
+                task.execute("http://" + IP_ADDRESS + "/insertGroupGroupMode.php"
                         , groupDetailData.getName()
                         , createDate
                         , endDate
@@ -100,7 +100,11 @@ public class CreateFriendsActivity extends AppCompatActivity {
                         , Long.toString(userProfile.getId())
                         , Integer.toString(groupDetailData.getPaymentDay())
                         , groupDetailData.getBankName()
-                        , groupDetailData.getAccountNumber());
+                        , groupDetailData.getAccountNumber()
+                        , userProfile.getNickname()
+                        , userProfile.getThumbnailImagePath()
+                        , userProfile.getProfileImagePath()
+                        );
 
                 Intent intent = new Intent(CreateFriendsActivity.this, MainActivity.class);
                 startActivity(intent);
@@ -156,11 +160,15 @@ public class CreateFriendsActivity extends AppCompatActivity {
             int paymentDay = Integer.parseInt((String)params[7]);
             String bankName = (String)params[8];
             String accountNumber = (String)params[9];
+            String nickname = (String)params[10];
+            String thumbnailPath = (String)params[11];
+            String profilePath = (String)params[12];
             try {
                 String serverURL = (String)params[0];
                 String postParameters = "name=" + name + "&createDate=" + createDate + "&endDate=" + endDate + "&targetAmount=" +targetAmount +
                         "&monthlyPayment=" +monthlyPayment + "&accountHolderId=" +accountholderId + "&paymentDay=" + paymentDay +
-                        "&bankName=" +bankName + "&accountNumber=" +accountNumber;
+                        "&bankName=" +bankName + "&accountNumber=" +accountNumber + "&nickName=" +nickname +
+                        "&thumbnailImagePath=" +thumbnailPath+ "&profileImagePath=" +profilePath;
                 URL url = new URL(serverURL);
                 HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
 

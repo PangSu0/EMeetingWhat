@@ -7,6 +7,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.viewpager.widget.ViewPager;
 
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
@@ -17,6 +18,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.emeetingwhat.Data.GroupDetailData;
+import com.example.emeetingwhat.common.log.Logger;
+import com.example.emeetingwhat.common.widget.KakaoToast;
+import com.kakao.friends.FriendContext;
+import com.kakao.friends.FriendsService;
+import com.kakao.friends.request.FriendsRequest;
+import com.kakao.friends.response.FriendsResponse;
+import com.kakao.friends.response.model.FriendInfo;
+import com.kakao.kakaotalk.callback.TalkResponseCallback;
+import com.kakao.network.ErrorResult;
 import com.kakao.usermgmt.response.model.UserProfile;
 
 import org.json.JSONArray;
@@ -31,9 +41,16 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
-public class GroupDetailFragment extends Fragment {
+import me.relex.circleindicator.CircleIndicator;
+
+import static com.example.emeetingwhat.WaitingDialog.cancelWaitingDialog;
+import static com.example.emeetingwhat.WaitingDialog.showWaitingDialog;
+
+public class GroupDetailFragment extends Fragment implements View.OnClickListener{
     private String mParam1;
     private String mParam2;
     private static final String ARG_PARAM1 = "param1";
@@ -65,6 +82,11 @@ public class GroupDetailFragment extends Fragment {
     private TextView mTextViewAccountHolderId;
     private TextView mTextViewNickname;
     private final UserProfile userProfile = UserProfile.loadFromCache();
+    private ViewPager viewPager;
+    private CircleIndicator circleIndicator;
+    private FriendsPager myPager;
+    private FriendContext friendContext = null;
+    private ArrayList<MyFriendsInfo> myFriendsInfo;
     public GroupDetailFragment() {
         // Required empty public constructor
     }
@@ -84,7 +106,19 @@ public class GroupDetailFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_group_detail, container, false);
         mTextViewResult = (TextView)view.findViewById(R.id.textView_result_test);
         mTextViewResult.setMovementMethod(new ScrollingMovementMethod());
-
+//        myPager = new FriendsPager(getActivity());
+//        myFriendsInfo = new ArrayList<>();
+//        myPager.setItem(myFriendsInfo);
+//        if( myPager.getCount() < 1 ){
+//            MyFriendsInfo m = new MyFriendsInfo();
+//            m.setProfileImagePath("http://k.kakaocdn.net/dn/txOR1/btqv8mslkzp/KkshSfg7gsFnn3esY0y5Z0/profile_640x640s.jpg");
+//            m.setThumbnailImagePath("http://k.kakaocdn.net/dn/txOR1/btqv8mslkzp/KkshSfg7gsFnn3esY0y5Z0/profile_640x640s.jpg");
+//            myFriendsInfo.add(m);
+//        }
+//        viewPager = view.findViewById(R.id.view_pager);
+//        viewPager.setAdapter(myPager);
+//        circleIndicator = view.findViewById(R.id.circle);
+//        circleIndicator.setViewPager(viewPager);
 
         GroupDetailFragment.GetData task = new GroupDetailFragment.GetData();
         String str_groupId = "";
@@ -93,9 +127,10 @@ public class GroupDetailFragment extends Fragment {
             str_groupId = getArguments().getString("groupId");
         }
 
-        task.execute( "http://" + IP_ADDRESS + "/selectGroupDetail.php", str_groupId, Long.toString(userProfile.getId()));
-
-
+        task.execute( "http://" + IP_ADDRESS + "/selectGroupTest.php", str_groupId, Long.toString(userProfile.getId()));
+//
+//        GroupDetailFragment.GetData task2 = new GroupDetailFragment.GetData();
+//        task.execute( "http://" + IP_ADDRESS + "/selectGroupComponent.php", str_groupId);
         mTextViewName = (TextView)view.findViewById(R.id.textView_groupdetails_name);
         mTextViewName.setText(groupDetailData.getName());
 
@@ -110,6 +145,11 @@ public class GroupDetailFragment extends Fragment {
         mTextViewAccountHolderId.setText(Integer.toString(groupDetailData.getAccountHolderId()));
         // Inflate the layout for this fragment
         return view;
+    }
+
+    @Override
+    public void onClick(View view) {
+
     }
 
     private class GetData extends AsyncTask<String, Void, String> {
@@ -260,11 +300,24 @@ public class GroupDetailFragment extends Fragment {
                 // mAdapter.notifyDataSetChanged();
             }
 
+            jsonArray = jsonObject.getJSONArray("groupComponents");
+
+            for (int i = 0; i < jsonArray.length(); i++) {
+
+                JSONObject item = jsonArray.getJSONObject(i);
+
+                int groupId = item.getInt(TAG_GROUPID);
+                int orderNumber = item.getInt(TAG_ORDERNUMBER);
+
+
+                // mArrayList.add(groupDetailData);
+                // mAdapter.notifyDataSetChanged();
+            }
+
 
         } catch (JSONException e) {
 
             Log.d(TAG, "showResult : ", e);
         }
     }
-
 }
