@@ -1,5 +1,6 @@
 package com.example.emeetingwhat.createGroup;
 
+import android.accounts.Account;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -16,15 +17,15 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.emeetingwhat.BankSpinnerAdapter;
 import com.example.emeetingwhat.BanksAdapter;
 import com.example.emeetingwhat.Data.AccountDetailData;
 import com.example.emeetingwhat.Data.GroupDetailData;
 import com.example.emeetingwhat.MainActivity;
-import com.example.emeetingwhat.MyBankAccountFragment;
 import com.example.emeetingwhat.R;
 import com.example.emeetingwhat.common.widget.KakaoToast;
+import com.kakao.usermgmt.response.model.UserProfile;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -41,49 +42,67 @@ import java.util.ArrayList;
 public class CreateAccountActivity extends AppCompatActivity {
     private static String IP_ADDRESS = "61.108.100.36";
     private static String TAG = "inserttest";
-    private ArrayList<AccountDetailData> mArrayList;
-    private BanksAdapter mAdapter;
+    protected ArrayList<AccountDetailData> mArrayList;
+    protected BanksAdapter mAdapter;
     private Spinner bankSpinner;
-    private ArrayAdapter<CharSequence> bankAdapter;
+    // private ArrayAdapter<CharSequence> bankAdapter;
     private String mJsonString;
     private Spinner paymentDateSpinner;
+    BankSpinnerAdapter bankAdapter;
+    // private ArrayList<String> bankList;
     private ArrayAdapter<CharSequence> paymentDateAdapter;
-
+    public  final UserProfile userProfile = UserProfile.loadFromCache();
     Button btn1Prev;
     Button btn1Next;
     String selectedBankName;
+    String selectedAccountNumber;
+
     int selectedPaymentDay;
 
-    GroupDetailData groupDetailData;
+    GroupDetailData groupDetailData =new GroupDetailData();
     AccountDetailData accountDetailData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_account);
-
+        CreateAccountActivity.GetData task = new CreateAccountActivity.GetData();
+        task.execute( "http://" + IP_ADDRESS + "/selectBankList.php", Long.toString(userProfile.getId()));
         // 1. bankName Spinner
         bankSpinner = (Spinner)findViewById(R.id.sp_bank);
         bankSpinner.setPrompt("은행 계좌를 선택하세요.");
-        bankAdapter = ArrayAdapter.createFromResource(this, R.array.bankName, android.R.layout.simple_spinner_item);
 
-            bankAdapter.setDropDownViewResource(android.R.layout.select_dialog_item);
-            bankSpinner.setAdapter(bankAdapter);
+        mArrayList = new ArrayList<>();
+
+        mAdapter = new BanksAdapter(this, mArrayList);
+
+        bankAdapter = new BankSpinnerAdapter(this, mArrayList);
+        bankSpinner.setAdapter(bankAdapter);
 
             bankSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 public void onItemSelected(AdapterView<?>  parent, View view, int position, long id) {
 //                // 확인용
-//                Toast.makeText(Create_AccountActivity.this,
-//                        bankAdapter.getItem(position) + "을 선택했습니다.", Toast.LENGTH_LONG).show();
+
 
                     // 사용자가 선택한 은행명으로 BankName을 세팅한다.
-                    selectedBankName = bankAdapter.getItem(position).toString();
+                    accountDetailData = (AccountDetailData) bankAdapter.getItem(position);
+                    selectedBankName = accountDetailData.getBankName();
+                    selectedAccountNumber = accountDetailData.getAccountNumber();
+                    Toast.makeText(CreateAccountActivity.this,
+                            selectedBankName + "의 "  + selectedAccountNumber + "을 선택했습니다.", Toast.LENGTH_LONG).show();
 
-                    accountDetailData = new AccountDetailData();
-                    accountDetailData.setBankName(selectedBankName);
+                    groupDetailData.setBankName(selectedBankName);
+                    groupDetailData.setAccountNumber(selectedAccountNumber);
                 }
                 public void onNothingSelected(AdapterView  parent) {
                     // TODO: validation check (반드시 선택하도록 한다).
+                    accountDetailData = (AccountDetailData) bankAdapter.getItem(0);
+                    selectedBankName = accountDetailData.getBankName();
+                    selectedAccountNumber = accountDetailData.getAccountNumber();
+                    Toast.makeText(CreateAccountActivity.this,
+                            selectedBankName + "의 "  + selectedAccountNumber + "을 선택했습니다.", Toast.LENGTH_LONG).show();
+                    groupDetailData.setBankName(selectedBankName);
+                    groupDetailData.setAccountNumber(selectedAccountNumber);
                 }
             });
 
@@ -103,7 +122,7 @@ public class CreateAccountActivity extends AppCompatActivity {
 //                // 사용자가 선택한 입금날짜로 paymentDate를 세팅한다.
                 selectedPaymentDay = Integer.parseInt(paymentDateAdapter.getItem(position).toString());
 
-                groupDetailData = new GroupDetailData();
+
                 groupDetailData.setPaymentDay(selectedPaymentDay);
             }
             public void onNothingSelected(AdapterView  parent) {
@@ -150,7 +169,7 @@ public class CreateAccountActivity extends AppCompatActivity {
         protected void onPreExecute() {
             super.onPreExecute();
 
-            progressDialog = ProgressDialog.show(getApplicationContext(),
+            progressDialog = ProgressDialog.show(CreateAccountActivity.this,
                     "Please Wait", null, true, true);
         }
 
@@ -260,9 +279,10 @@ public class CreateAccountActivity extends AppCompatActivity {
                 bankData.setAccountId(accountId);
                 bankData.setBankName(bankName);
                 bankData.setAccountNumber(accountNumber);
-
+                // bankList.add(accountNumber);
                 mArrayList.add(bankData);
-                mAdapter.notifyDataSetChanged();
+                // mAdapter.notifyDataSetChanged();
+                bankAdapter.notifyDataSetChanged();
             }
 
 
@@ -277,46 +297,4 @@ public class CreateAccountActivity extends AppCompatActivity {
 
         void onLongClick(View view, int position);
     }
-
-    public static class RecyclerTouchListener implements RecyclerView.OnItemTouchListener {
-
-        private GestureDetector gestureDetector;
-        private MyBankAccountFragment.ClickListener clickListener;
-
-        public RecyclerTouchListener(Context context, final RecyclerView recyclerView, final MyBankAccountFragment.ClickListener clickListener) {
-            this.clickListener = clickListener;
-            gestureDetector = new GestureDetector(context, new GestureDetector.SimpleOnGestureListener() {
-                @Override
-                public boolean onSingleTapUp(MotionEvent e) {
-                    return true;
-                }
-
-                @Override
-                public void onLongPress(MotionEvent e) {
-                    View child = recyclerView.findChildViewUnder(e.getX(), e.getY());
-                    if (child != null && clickListener != null) {
-                        clickListener.onLongClick(child, recyclerView.getChildAdapterPosition(child));
-                    }
-                }
-            });
-        }
-
-        @Override
-        public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
-            View child = rv.findChildViewUnder(e.getX(), e.getY());
-            if (child != null && clickListener != null && gestureDetector.onTouchEvent(e)) {
-                clickListener.onClick(child, rv.getChildAdapterPosition(child));
-            }
-            return false;
-        }
-
-        @Override
-        public void onTouchEvent(RecyclerView rv, MotionEvent e) {
-        }
-
-        @Override
-        public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
-        }
-    }
-
 }

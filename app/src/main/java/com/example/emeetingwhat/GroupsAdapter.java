@@ -9,6 +9,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.emeetingwhat.Data.GroupDetailData;
+
 import java.util.ArrayList;
 
 class GroupsAdapter extends RecyclerView.Adapter<GroupsAdapter.CustomViewHolder> {

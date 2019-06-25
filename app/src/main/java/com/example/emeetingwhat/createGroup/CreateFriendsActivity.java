@@ -55,10 +55,10 @@ public class CreateFriendsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_create_friends);
 
         intent_GroupFromPrevious = getIntent();
-        intent_AccountFromPrevious = getIntent();
+        // intent_AccountFromPrevious = getIntent();
 
         groupDataFromPrev =  (GroupDetailData)intent_GroupFromPrevious.getSerializableExtra("groupDetailData");
-        accountDataFromPrev =  (AccountDetailData)intent_AccountFromPrevious.getSerializableExtra("accountDetailData");
+        // accountDataFromPrev =  (AccountDetailData)intent_AccountFromPrevious.getSerializableExtra("accountDetailData");
 
         // 앞, 뒤로가기 버튼
         btn4Prev = (Button)findViewById(R.id.btn4Prev);
@@ -69,7 +69,9 @@ public class CreateFriendsActivity extends AppCompatActivity {
         groupDetailData.setName(groupDataFromPrev.getName());
         groupDetailData.setGroupType(groupDataFromPrev.getGroupType());
         groupDetailData.setPaymentDay(groupDataFromPrev.getPaymentDay());
-        accountDetailData.setBankName(accountDataFromPrev.getBankName());
+        groupDetailData.setBankName(groupDataFromPrev.getBankName());
+        groupDetailData.setAccountNumber(groupDataFromPrev.getAccountNumber());
+        // accountDetailData.setBankName(accountDataFromPrev.getBankName());
 
         btn4Prev.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -88,9 +90,14 @@ public class CreateFriendsActivity extends AppCompatActivity {
                 String endDate = transFormat.format(currentTime);
                 KakaoToast.makeToast(getApplicationContext(), Long.toString(userProfile.getId()), Toast.LENGTH_SHORT).show();
                 task.execute("http://" + IP_ADDRESS + "/insertGroupIndividualMode.php"
-                        , groupDetailData.getName(), endDate, Integer.toString(groupDetailData.getTargetAmount())
-                        , Integer.toString(groupDetailData.getMonthlyPayment()), Long.toString(userProfile.getId())
-                        , Integer.toString(groupDetailData.getPaymentDay()));
+                        , groupDetailData.getName()
+                        , endDate
+                        , Integer.toString(groupDetailData.getTargetAmount())
+                        , Integer.toString(groupDetailData.getMonthlyPayment())
+                        , Long.toString(userProfile.getId())
+                        , Integer.toString(groupDetailData.getPaymentDay())
+                        , groupDetailData.getBankName()
+                        , groupDetailData.getAccountNumber());
 
                 Intent intent = new Intent(CreateFriendsActivity.this, MainActivity.class);
                 startActivity(intent);
@@ -142,7 +149,9 @@ public class CreateFriendsActivity extends AppCompatActivity {
             String targetAmount = (String)params[3];
             String monthlyPayment = (String)params[4];
             int accountholderId = Integer.parseInt((String)params[5]);
-            String paymentDay = (String)params[6];
+            int paymentDay = Integer.parseInt((String)params[6]);
+            String bankName = (String)params[7];
+            String accountNumber = (String)params[8];
             String from = "2013-04-08 10:10:10";
             SimpleDateFormat transFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
@@ -150,7 +159,8 @@ public class CreateFriendsActivity extends AppCompatActivity {
                 Date to = transFormat.parse(endDate);
                 String serverURL = (String)params[0];
                 String postParameters = "name=" + name + "&endDate=" + from + "&targetAmount=" +targetAmount +
-                        "&monthlyPayment=" +monthlyPayment + "&accountHolderId=" +accountholderId + "&paymentDay=" + paymentDay;
+                        "&monthlyPayment=" +monthlyPayment + "&accountHolderId=" +accountholderId + "&paymentDay=" + paymentDay +
+                        "&bankName=" +bankName + "&accountNumber=" +accountNumber;
                 URL url = new URL(serverURL);
                 HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
 

@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.emeetingwhat.Data.GroupDetailData;
 import com.kakao.usermgmt.response.model.UserProfile;
 
 import org.json.JSONArray;
@@ -222,7 +223,8 @@ public class MainPageFragment extends Fragment {
         String TAG_GROUPTYPE = "GroupType";
         String TAG_ACCOUNTHOLDERID = "AccountHolderId";
         String TAG_PAYMENTDAY = "PaymentDay";
-
+        String TAG_BANKNAME = "BankName";
+        String TAG_ACCOUNTNUMBER = "AccountNumber";
 
         try {
             JSONObject jsonObject = new JSONObject(mJsonString);
@@ -241,6 +243,8 @@ public class MainPageFragment extends Fragment {
                 String groupType = item.getString(TAG_GROUPTYPE);
                 int accountHolderId = item.getInt(TAG_ACCOUNTHOLDERID);
                 int paymentDay = item.getInt(TAG_PAYMENTDAY);
+                String bankName = item.getString(TAG_BANKNAME);
+                String accountNumber = item.getString(TAG_ACCOUNTNUMBER);
 
                 SimpleDateFormat transFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 Date createDate = null;
@@ -264,7 +268,8 @@ public class MainPageFragment extends Fragment {
                 groupDetailData.setGroupType(groupType);
                 groupDetailData.setAccountHolderId(accountHolderId);
                 groupDetailData.setPaymentDay(paymentDay);
-
+                groupDetailData.setBankName(bankName);
+                groupDetailData.setAccountNumber(accountNumber);
 
                 mArrayList.add(groupDetailData);
                 mAdapter.notifyDataSetChanged();

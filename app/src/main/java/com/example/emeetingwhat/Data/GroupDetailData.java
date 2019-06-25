@@ -12,12 +12,21 @@ public class GroupDetailData implements Serializable {
     private Date createDate;
     private Date endDate;
     private int targetAmount;
-    private Date paymentDate;
     private int paymentDay;
     private int monthlyPayment;
     private String groupType;
     private int accountHolderId;
+    private String bankName;
+    private String accountNumber;
+    private int orderNumber;
 
+    public int getOrderNumber() {
+        return orderNumber;
+    }
+
+    public void setOrderNumber(int orderNumber) {
+        this.orderNumber = orderNumber;
+    }
 
     public int getPaymentDay() {
         return paymentDay;
@@ -75,14 +84,6 @@ public class GroupDetailData implements Serializable {
         this.targetAmount = targetAmount;
     }
 
-    public Date getPaymentDate() {
-        return paymentDate;
-    }
-
-    public void setPaymentDate(Date paymentDate) {
-        this.paymentDate = paymentDate;
-    }
-
     public int getMonthlyPayment() {
         return monthlyPayment;
     }
@@ -107,4 +108,19 @@ public class GroupDetailData implements Serializable {
         this.accountHolderId = accountHolderId;
     }
 
+    public String getBankName() {
+        return bankName;
+    }
+
+    public void setBankName(String bankName) {
+        this.bankName = bankName;
+    }
+
+    public String getAccountNumber() {
+        return accountNumber;
+    }
+
+    public void setAccountNumber(String accountNumber) {
+        this.accountNumber = accountNumber;
+    }
 }

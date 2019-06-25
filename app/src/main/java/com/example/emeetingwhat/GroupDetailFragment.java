@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.emeetingwhat.Data.GroupDetailData;
 import com.kakao.usermgmt.response.model.UserProfile;
 
 import org.json.JSONArray;
@@ -55,6 +56,8 @@ public class GroupDetailFragment extends Fragment {
     private String TAG_PAYMENTDAY = "PaymentDay";
     private String TAG_USERID = "UserId";
     private String TAG_ORDERNUMBER = "OrderNumber";
+    private String TAG_BANKNAME = "BankName";
+    private String TAG_ACCOUNTNUMBER = "AccountNumber";
     private TextView mTextViewResult;
     private TextView mTextViewName;
     private TextView mTextViewTargetAmount;
@@ -225,7 +228,8 @@ public class GroupDetailFragment extends Fragment {
                 int accountHolderId = item.getInt(TAG_ACCOUNTHOLDERID);
                 int paymentDay = item.getInt(TAG_PAYMENTDAY);
                 int orderNumber = item.getInt(TAG_ORDERNUMBER);
-
+                String bankName = item.getString(TAG_BANKNAME);
+                String accountNumber = item.getString(TAG_ACCOUNTNUMBER);
                 SimpleDateFormat transFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 Date createDate = null;
                 Date endDate = null;
@@ -248,6 +252,8 @@ public class GroupDetailFragment extends Fragment {
                 groupDetailData.setAccountHolderId(accountHolderId);
                 groupDetailData.setPaymentDay(paymentDay);
                 groupDetailData.setOrderNumber(orderNumber);
+                groupDetailData.setBankName(bankName);
+                groupDetailData.setAccountNumber(accountNumber);
                 Toast.makeText(getActivity(), groupDetailData.getName(), Toast.LENGTH_SHORT).show();
 
                 // mArrayList.add(groupDetailData);

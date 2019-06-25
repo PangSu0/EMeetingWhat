@@ -91,10 +91,12 @@ public class CreateDetailsActivity extends AppCompatActivity {
                 groupDetailData.setName(groupDataFromPrev.getName());
                 groupDetailData.setGroupType(groupDataFromPrev.getGroupType());
                 groupDetailData.setPaymentDay(groupDataFromPrev.getPaymentDay());
-                accountDetailData.setBankName(accountDataFromPrev.getBankName());
+                groupDetailData.setBankName(groupDataFromPrev.getBankName());
+                groupDetailData.setAccountNumber(groupDataFromPrev.getAccountNumber());
+                // accountDetailData.setBankName(accountDataFromPrev.getBankName());
 
                 intent.putExtra("groupDetailData", groupDetailData);
-                intent.putExtra("accountDetailData", accountDataFromPrev);
+                // intent.putExtra("accountDetailData", accountDataFromPrev);
 
                 startActivity(intent);
             }

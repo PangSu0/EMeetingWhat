@@ -72,10 +72,12 @@ public class CreateNameActivity extends AppCompatActivity {
                         groupDetailData.setName(groupNameInput);
                         groupDetailData.setGroupType(GroupType.Individual.name());
                         groupDetailData.setPaymentDay(groupDataFromPrev.getPaymentDay());
-                        accountDetailData.setBankName(accountDataFromPrev.getBankName());
+                        groupDetailData.setBankName(groupDataFromPrev.getBankName());
+                        groupDetailData.setAccountNumber(groupDataFromPrev.getAccountNumber());
+                        // accountDetailData.setBankName(accountDataFromPrev.getBankName());
 
                         intent.putExtra("groupDetailData", groupDetailData);
-                        intent.putExtra("accountDetailData", accountDataFromPrev);
+                        // intent.putExtra("accountDetailData", accountDataFromPrev);
 
                         startActivity(intent);
                         finish();

@@ -9,23 +9,16 @@ import androidx.fragment.app.FragmentTransaction;
 
 import android.app.AlertDialog;
 import android.app.Application;
-import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.text.method.ScrollingMovementMethod;
-import android.util.Log;
-import android.view.GestureDetector;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.toolbox.NetworkImageView;
-import com.example.emeetingwhat.createGroup.Create_AccountActivity;
+import com.example.emeetingwhat.createGroup.CreateAccountActivity;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.kakao.friends.request.FriendsRequest;
@@ -54,7 +47,7 @@ public class MainActivity extends BaseActivity
                 openCreateActivity();
             }
             private void openCreateActivity() {
-                Intent intent = new Intent(MainActivity.this, Create_AccountActivity.class);
+                Intent intent = new Intent(MainActivity.this, CreateAccountActivity.class);
                 startActivity(intent);
             }
         });

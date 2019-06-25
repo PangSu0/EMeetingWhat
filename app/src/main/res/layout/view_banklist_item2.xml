@@ -22,4 +22,13 @@
         android:layout_margin="5dp"
         android:padding="5dp"
         android:textColor="@color/color3" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        app:srcCompat="@android:drawable/arrow_down_float" />
+
+
 </LinearLayout>

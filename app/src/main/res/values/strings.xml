@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">My Application Test</string>
     <string name="kakao_app_key">3b9daf57e29d8706044bd38e85702034</string>
+    <string name="kftc_app_key">l7xx38448ff49931488e8a170895031ca6ca</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">Android Studio</string>
