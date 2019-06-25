@@ -16,6 +16,7 @@ import com.example.emeetingwhat.Data.AccountDetailData;
 import com.example.emeetingwhat.Data.GroupDetailData;
 import com.example.emeetingwhat.GroupType;
 import com.example.emeetingwhat.R;
+import com.example.emeetingwhat.Step3_2_TargetAmountActivity;
 import com.example.emeetingwhat.Validator;
 
 public class CreateNameActivity extends AppCompatActivity {
@@ -63,7 +64,7 @@ public class CreateNameActivity extends AppCompatActivity {
                     groupNameInfo.setText("그룹명을 입력하세요");
                 } else {
                     // radioButton validation check
-                    if(individual.isChecked()) {
+                    if(group.isChecked()) {
                         groupNameInfo.setText("");
                         Intent intent = new Intent(CreateNameActivity.this, CreateDetailsActivity.class);
                         groupNameInput = groupName.getText().toString();
@@ -81,13 +82,11 @@ public class CreateNameActivity extends AppCompatActivity {
 
                         startActivity(intent);
                         finish();
-                    } else if (group.isChecked()){
+                    } else if (individual.isChecked()){
                         groupNameInfo.setText("");
-                        Intent intent = new Intent(CreateNameActivity.this, CreateDetailsActivity.class);
+                        Intent intent = new Intent(CreateNameActivity.this, Step3_2_TargetAmountActivity.class);
 
                         groupNameInput = groupName.getText().toString();
-
-                        Toast.makeText(getApplicationContext(), "공동 사용 선택",Toast.LENGTH_LONG).show();
 
                         groupDetailData.setName(groupNameInput);
                         groupDetailData.setGroupType(GroupType.Group.name());
