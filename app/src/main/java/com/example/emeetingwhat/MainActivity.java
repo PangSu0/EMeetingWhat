@@ -1,166 +1,228 @@
 package com.example.emeetingwhat;
 
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
-import android.content.Context;
+import android.app.AlertDialog;
+import android.app.Application;
 import android.content.Intent;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.Signature;
 import android.os.Bundle;
-import android.util.Base64;
-import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
 import com.kakao.auth.AuthType;
 import com.kakao.auth.ErrorCode;
 import com.kakao.auth.ISessionCallback;
 import com.kakao.auth.Session;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.android.volley.toolbox.NetworkImageView;
+import com.example.emeetingwhat.createGroup.CreateAccountActivity;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.navigation.NavigationView;
+import com.kakao.friends.request.FriendsRequest;
 import com.kakao.network.ErrorResult;
-import com.kakao.usermgmt.LoginButton;
 import com.kakao.usermgmt.UserManagement;
 import com.kakao.usermgmt.callback.MeResponseCallback;
+import com.kakao.usermgmt.callback.LogoutResponseCallback;
+import com.kakao.usermgmt.callback.UnLinkResponseCallback;
 import com.kakao.usermgmt.response.model.UserProfile;
-import com.kakao.util.exception.KakaoException;
 import com.kakao.util.helper.log.Logger;
 
-import java.security.MessageDigest;
-import java.util.HashMap;
-import java.util.Map;
+public class MainActivity extends BaseActivity
+        implements NavigationView.OnNavigationItemSelectedListener {
 
-public class MainActivity extends AppCompatActivity {
-    private Context mContext;
-    SessionCallback callback;
-    private LoginButton btn_custom_login;
-
+    public  final UserProfile userProfile = UserProfile.loadFromCache();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        setContentView(R.layout.activity_mainpage);
 
-//        /**카카오톡 로그아웃 요청**/
-//        //한번 로그인이 성공하면 세션 정보가 남아있어서 로그인창이 뜨지 않고 바로 onSuccess()메서드를 호출합니다.
-//        //테스트 하시기 편하라고 매번 로그아웃 요청을 수행하도록 코드를 넣었습니다 ^^
-//        UserManagement.getInstance().requestLogout(new LogoutResponseCallback() {
-//            @Override
-//            public void onCompleteLogout() {
-//                //로그아웃 성공 후 하고싶은 내용 코딩 ~
-//            }
-//        });
-
-        callback = new SessionCallback();
-        Session.getCurrentSession().addCallback(callback);
-
-        btn_custom_login = (LoginButton) findViewById(R.id.btn_custom_login);
-        btn_custom_login.setOnClickListener(new View.OnClickListener() {
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        FloatingActionButton fab = findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.e("SessionClicked :: ", "Clicked : ");
-                Session session = Session.getCurrentSession();
-                session.addCallback(new SessionCallBack());
-                session.open(AuthType.KAKAO_LOGIN_ALL, MainActivity.this);
-
-                //openCreateGroupActivity();
-                openMainPageActivity();
+                openCreateActivity();
+            }
+            private void openCreateActivity() {
+                Intent intent = new Intent(MainActivity.this, CreateAccountActivity.class);
+                startActivity(intent);
             }
         });
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+        navigationView.setNavigationItemSelectedListener(this);
 
+        Fragment fragment = new MainPageFragment();
+        if( fragment != null){
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            ft.replace(R.id.content_fragment_layout, fragment);
+            ft.commit();
+        }
+    }
+    private long time= 0;
+    @Override
+    public void onBackPressed() {
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            if(System.currentTimeMillis()-time>=2000){
+                time=System.currentTimeMillis();
+                Toast.makeText(getApplicationContext(),"뒤로 버튼을 한번 더 누르면 종료합니다.",Toast.LENGTH_SHORT).show();
+            }else if(System.currentTimeMillis()-time<2000){
+                finish();
+            }
+        }
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        //간편로그인시 호출 ,없으면 간편로그인시 로그인 성공화면으로 넘어가지 않음
-        if (Session.getCurrentSession().handleActivityResult(requestCode, resultCode, data)) {
-            return;
-        }
-
-        super.onActivityResult(requestCode, resultCode, data);
-    }
-
-    private class SessionCallback implements ISessionCallback {
-
-        @Override
-        public void onSessionOpened() {
-            Log.e("SessionOpened :: ", "onSessionOpened : ");
-
-            UserManagement.getInstance().requestMe(new MeResponseCallback() {
-
-                @Override
-                public void onFailure(ErrorResult errorResult) {
-                    String message = "failed to get user info. msg=" + errorResult;
-                    Logger.d(message);
-
-                    ErrorCode result = ErrorCode.valueOf(errorResult.getErrorCode());
-                    if (result == ErrorCode.CLIENT_ERROR_CODE) {
-                        finish();
-                    } else {
-                        //redirectMainActivity();
-                    }
-                }
-
-                @Override
-                public void onSessionClosed(ErrorResult errorResult) {
-                }
-
-                @Override
-                public void onNotSignedUp() {
-                }
-
-                @Override
-                public void onSuccess(UserProfile userProfile) {
-                    //로그인에 성공하면 로그인한 사용자의 일련번호, 닉네임, 이미지url등을 리턴합니다.
-                    //사용자 ID는 보안상의 문제로 제공하지 않고 일련번호는 제공합니다.
-                    Log.e("UserProfile", userProfile.toString());
-                    Intent intent = new Intent(MainActivity.this, MainPageActivity.class);
-
-                    final Map<String, String> properties = new HashMap<String, String>();
-                    properties.put("profile_image", userProfile.getProfileImagePath());
-                    properties.put("thumbnail_image", userProfile.getThumbnailImagePath());
-                    intent.putExtra("nickname", userProfile.getNickname());
-                    intent.putExtra("email", userProfile.getEmail());
-                    intent.putExtra("profileImg", userProfile.getThumbnailImagePath());
-
-                    startActivity(intent);
-                    finish();
-                }
-            });
-
-        }
-
-        @Override
-        public void onSessionOpenFailed(KakaoException exception) {
-            Log.e("SessionCallback :: ", "onSessionOpenFailed : " + exception.getMessage());
-        }
-    }
-
-    private void openMainPageActivity() {
-        Intent intent = new Intent(this, MainPageActivity.class);
-        startActivity(intent);
-    }
-
-    @Nullable
-    public static String getHashKey(Context context) {
-        final String TAG = "KeyHash";
-        String keyHash = null;
-        try {
-            PackageInfo info =
-                    context.getPackageManager().getPackageInfo(context.getPackageName(), PackageManager.GET_SIGNATURES);
-            for (Signature signature : info.signatures) {
-                MessageDigest md;
-                md = MessageDigest.getInstance("SHA");
-                md.update(signature.toByteArray());
-                keyHash = new String(Base64.encode(md.digest(), 0));
-                Log.d(TAG, keyHash);
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        final UserProfile userProfile = UserProfile.loadFromCache();
+        TextView tv_nickname = (TextView) findViewById(R.id.profileTextView);
+        TextView tv_email = (TextView) findViewById(R.id.emailTextView);
+        tv_nickname.setText(userProfile.getNickname());
+        tv_email.setText(userProfile.getEmail());
+        if (userProfile != null) {
+            NetworkImageView im_profile = (NetworkImageView) findViewById(R.id.profileImageView);
+            String profileUrl = userProfile.getThumbnailImagePath();
+            Application app  = GlobalApplication.getGlobalApplicationContext();
+            if (profileUrl != null && profileUrl.length() > 0) {
+                im_profile.setImageUrl(profileUrl, ((GlobalApplication) app).getImageLoader());
+            } else {
+                im_profile.setImageResource(R.drawable.thumb_story);
             }
-        } catch (Exception e) {
-            Log.e("name not found", e.toString());
         }
 
-        if (keyHash != null) {
-            return keyHash;
-        } else {
-            return null;
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
+            return true;
         }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @SuppressWarnings("StatementWithEmptyBody")
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+
+        // Handle navigation view item clicks here.
+        int id = item.getItemId();
+
+        Fragment fragment = null;
+        String title = getString(R.string.app_name);
+
+        if (id == R.id.nav_home) {
+            fragment = new MainPageFragment();
+        } else if (id == R.id.nav_bankaccount) {
+            fragment = new MyBankAccountFragment();
+        } else if (id == R.id.nav_friendslist) {
+            // fragment = new MyFriendsListFragment();
+            showTalkFriendListActivity();
+        } else if (id == R.id.nav_calendar) {
+            fragment = new MyCalendarFragment();
+            title = "My Calendar";
+
+        } else if (id == R.id.nav_logout) {
+            /**카카오톡 로그아웃 요청**/
+            //한번 로그인이 성공하면 세션 정보가 남아있어서 로그인창이 뜨지 않고 바로 onSuccess()메서드를 호출합니다.
+            onClickLogout();
+        } else if (id == R.id.nav_unlink) {
+
+            /**카카오톡 탈퇴 요청**/
+            onClickUnlink();
+        }
+
+        if( fragment != null){
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            ft.replace(R.id.content_fragment_layout, fragment);
+            ft.commit();
+        }
+
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle(title);
+        }
+
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
+    }
+
+
+    private void onClickLogout() {
+        UserManagement.getInstance().requestLogout(new LogoutResponseCallback() {
+            @Override
+            public void onCompleteLogout() {
+                redirectLoginActivity();
+            }
+        });
+    }
+
+    private void onClickUnlink() {
+        final String appendMessage = getString(R.string.com_kakao_confirm_unlink);
+        new AlertDialog.Builder(this)
+                .setMessage(appendMessage)
+                .setPositiveButton(getString(R.string.com_kakao_ok_button),
+                        (dialog, which) -> {
+                            UserManagement.getInstance().requestUnlink(new UnLinkResponseCallback() {
+                                @Override
+                                public void onFailure(ErrorResult errorResult) {
+                                    Logger.e(errorResult.toString());
+                                }
+
+                                @Override
+                                public void onSessionClosed(ErrorResult errorResult) {
+                                    redirectLoginActivity();
+                                }
+
+                                @Override
+                                public void onNotSignedUp() {
+                                    // redirectSignupActivity();
+                                    redirectLoginActivity();
+                                }
+
+                                @Override
+                                public void onSuccess(Long result) {
+                                    redirectLoginActivity();
+                                }
+                            });
+                            dialog.dismiss();
+                        })
+                .setNegativeButton(getString(R.string.com_kakao_cancel_button),
+                        (dialog, which) -> dialog.dismiss()).show();
+
+    }
+
+    private void showTalkFriendListActivity() {
+        Intent intent = new Intent(this, KakaoTalkFriendListActivity.class);
+
+        String[] friendType = {FriendsRequest.FriendType.KAKAO_TALK.name()};
+        intent.putExtra(FriendsMainActivity.EXTRA_KEY_SERVICE_TYPE, friendType);
+        startActivity(intent);
     }
 }

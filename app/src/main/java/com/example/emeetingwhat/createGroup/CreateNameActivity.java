@@ -69,15 +69,37 @@ public class CreateNameActivity extends AppCompatActivity {
                         groupNameInfo.setText("");
 
                         fillGroupDetailData(groupName);
+                        Intent intent = new Intent(CreateNameActivity.this, CreateDetailsActivity.class);
+                        groupNameInput = groupName.getText().toString();
+
+                        // 개인 수령일 때: 사용자가 입력한 모임명과 모임 유형을 Name으로 세팅한다.
+                        groupDetailData.setName(groupNameInput);
+                        groupDetailData.setGroupType(GroupType.Individual.name());
+                        groupDetailData.setPaymentDay(groupDataFromPrev.getPaymentDay());
+                        groupDetailData.setBankName(groupDataFromPrev.getBankName());
+                        groupDetailData.setAccountNumber(groupDataFromPrev.getAccountNumber());
+                        // accountDetailData.setBankName(accountDataFromPrev.getBankName());
 
                         Intent intent = new Intent(CreateNameActivity.this, CreateDetailsActivity.class);
                         intent.putExtra("groupDetailData", groupDetailData);
-                        intent.putExtra("accountDetailData", accountDataFromPrev);
+                        // intent.putExtra("accountDetailData", accountDataFromPrev);
+
                         startActivity(intent);
 
                     } else if (group.isChecked()){
                         groupNameInfo.setText("");
                         fillGroupDetailData(groupName);
+                        // TODO: 그룹을 선택했을 때 다른  activity로 넘겨준다. (CreateDetailsActivity 자리에 넣어줌)
+                        Intent intent = new Intent(CreateNameActivity.this, CreateDetailsActivity.class);
+
+                        groupNameInput = groupName.getText().toString();
+
+                        Toast.makeText(getApplicationContext(), "공동 사용 선택",Toast.LENGTH_LONG).show();
+
+                        groupDetailData.setName(groupNameInput);
+                        groupDetailData.setGroupType(GroupType.Group.name());
+                        groupDetailData.setPaymentDay(groupDataFromPrev.getPaymentDay());
+                        accountDetailData.setBankName(accountDataFromPrev.getBankName());
 
                         // TODO: 그룹을 선택했을 때 다른  activity로 넘겨준다. (CreateDetailsActivity 자리에 넣어줌)
                         Intent intent = new Intent(CreateNameActivity.this, CreateDetailsActivity.class);

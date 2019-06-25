@@ -6,7 +6,7 @@ public class AccountDetailData implements Serializable {
 
     private int accountId;
     private int userId;
-    private int AccountNumber;
+    private String AccountNumber;
     private String bankName;
 
     public int getAccountId() {
@@ -25,11 +25,11 @@ public class AccountDetailData implements Serializable {
         this.userId = userId;
     }
 
-    public int getAccountNumber() {
+    public String getAccountNumber() {
         return AccountNumber;
     }
 
-    public void setAccountNumber(int accountNumber) {
+    public void setAccountNumber(String accountNumber) {
         AccountNumber = accountNumber;
     }
 

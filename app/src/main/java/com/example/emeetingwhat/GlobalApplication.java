@@ -15,7 +15,6 @@ public class GlobalApplication extends Application {
     private static volatile GlobalApplication obj = null;
     private static volatile Activity currentActivity = null;
     private ImageLoader imageLoader;
-
     @Override
     public void onCreate() {
         super.onCreate();
@@ -42,33 +41,34 @@ public class GlobalApplication extends Application {
 
     }
 
-        public static GlobalApplication getGlobalApplicationContext() {
-            return obj;
-        }
+    public static GlobalApplication getGlobalApplicationContext() {
+        return obj;
+    }
 
-        public static Activity getCurrentActivity() {
-            return currentActivity;
-        }
+    public static Activity getCurrentActivity() {
+        return currentActivity;
+    }
 
-        // Activity가 올라올때마다 Activity의 onCreate에서 호출해줘야한다.
-        public static void setCurrentActivity(Activity currentActivity) {
-            GlobalApplication.currentActivity = currentActivity;
-        }
-        /**
-         * 이미지 로더를 반환한다.
-         * @return 이미지 로더
-         */
-        public ImageLoader getImageLoader() {
-            return imageLoader;
-        }
+    // Activity가 올라올때마다 Activity의 onCreate에서 호출해줘야한다.
+    public static void setCurrentActivity(Activity currentActivity) {
+        GlobalApplication.currentActivity = currentActivity;
+    }
 
-        /**
-         * 애플리케이션 종료시 singleton 어플리케이션 객체 초기화한다.
-         */
-        @Override
-        public void onTerminate() {
-            super.onTerminate();
-            obj = null;
-        }
+    /**
+     * 이미지 로더를 반환한다.
+     * @return 이미지 로더
+     */
+    public ImageLoader getImageLoader() {
+        return imageLoader;
+    }
+
+    /**
+     * 애플리케이션 종료시 singleton 어플리케이션 객체 초기화한다.
+     */
+    @Override
+    public void onTerminate() {
+        super.onTerminate();
+        obj = null;
+    }
 }
 

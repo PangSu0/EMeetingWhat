@@ -16,7 +16,6 @@ import com.example.emeetingwhat.Data.GroupDetailData;
 import com.example.emeetingwhat.R;
 import com.example.emeetingwhat.Validator;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
@@ -27,6 +26,8 @@ public class CreateDetailsActivity extends AppCompatActivity {
     private Button btn3Prev;
     private EditText et_TargetAmount;
     private TextView tv_TargetAmountInfo;
+    private EditText et_amount;
+    private EditText editText_monthlyPayment;
 
     private Calendar calendar;
 
@@ -52,6 +53,7 @@ public class CreateDetailsActivity extends AppCompatActivity {
     TextView txt_GroupName;
     String groupName;
     int targetAmount;
+    int monthlyPayment;
 
     GroupDetailData groupDetailData = new GroupDetailData();
     AccountDetailData accountDetailData = new AccountDetailData();
@@ -71,6 +73,13 @@ public class CreateDetailsActivity extends AppCompatActivity {
         // 목표 금액
         et_TargetAmount = (EditText)findViewById(R.id.et_TargetAmount);
         tv_TargetAmountInfo = (TextView)findViewById(R.id.tv_TargetAmountInfo);
+        et_amount = (EditText)findViewById(R.id.et_Amount);
+
+        // 월별 입금 금액
+        editText_monthlyPayment = (EditText) findViewById(R.id.editText_monthlyPayment);
+
+        intent_GroupFromPrevious = getIntent();
+        intent_AccountFromPrevious = getIntent();
 
         getGroupDetailData();
         getAccountDetailData();
@@ -87,6 +96,23 @@ public class CreateDetailsActivity extends AppCompatActivity {
 
                 } else {
                     fillGroupDetailData(startDate, endDate, et_TargetAmount);
+                // TODO: 친구 초대 페이지로 이동 (수정 필요)
+                Intent intent = new Intent(CreateDetailsActivity.this, CreateFriendsActivity.class);
+                targetAmount = Integer.parseInt(et_amount.getText().toString());
+                monthlyPayment = Integer.parseInt(editText_monthlyPayment.getText().toString());
+                groupDetailData.setCreateDate(startDate);
+                groupDetailData.setEndDate(endDate);
+                groupDetailData.setTargetAmount(targetAmount);
+                groupDetailData.setMonthlyPayment(monthlyPayment);
+                groupDetailData.setName(groupDataFromPrev.getName());
+                groupDetailData.setGroupType(groupDataFromPrev.getGroupType());
+                groupDetailData.setPaymentDay(groupDataFromPrev.getPaymentDay());
+                groupDetailData.setBankName(groupDataFromPrev.getBankName());
+                groupDetailData.setAccountNumber(groupDataFromPrev.getAccountNumber());
+                // accountDetailData.setBankName(accountDataFromPrev.getBankName());
+
+                intent.putExtra("groupDetailData", groupDetailData);
+                // intent.putExtra("accountDetailData", accountDataFromPrev);
 
                     Intent intent = new Intent(CreateDetailsActivity.this, CreateFriendsActivity.class);
                     intent.putExtra("groupDetailData", groupDetailData);
@@ -113,6 +139,8 @@ public class CreateDetailsActivity extends AppCompatActivity {
         startDay = calendar.get(Calendar.DAY_OF_MONTH);
         startMonth = calendar.get(Calendar.MONTH);
         startYear = calendar.get(Calendar.YEAR);
+
+        et_StartDate.setText(startYear + "/" + (startMonth + 1) + "/" + startDay);
 
         et_StartDate.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -1,17 +1,38 @@
 <resources>
     <string name="app_name">My Application Test</string>
     <string name="kakao_app_key">3b9daf57e29d8706044bd38e85702034</string>
+    <string name="kftc_app_key">l7xx38448ff49931488e8a170895031ca6ca</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">Android Studio</string>
     <string name="nav_header_subtitle">android.studio@android.com</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
+    <string name="com_kakao_profile_birthday">Birthday</string>
+    <string name="error_message_for_service_unavailable">Unstable network connection. \nPlease try again later.</string>
 
     <string name="menu_home">Home</string>
-    <string name="menu_gallery">Gallery</string>
-    <string name="menu_slideshow">Slideshow</string>
-    <string name="menu_tools">Tools</string>
-    <string name="menu_share">Share</string>
-    <string name="menu_send">Send</string>
+    <string name="menu_bankaccount">My Bank Account</string>
+    <string name="menu_friendslist">My Friends List</string>
+    <string name="menu_calendar">Calendar</string>
+    <string name="menu_logout">Logout</string>
+    <string name="menu_unlink">Unlink</string>
+    <string name="usermgmg_signup_button">Signup</string>
+    <string name="usermgmg_birthday">Write Your Birthday</string>
+    <string name="cancel">Cancel</string>
+    <string name="ok">OK</string>
+
+    <string name="text_kakaostory">KakaoStory</string>
+    <string name="text_kakaotalk">KakaoTalk</string>
+    <string name="text_talk_story">Talk | Story</string>
+    <string name="message_type">Choose a message type</string>
+    <string-array name="message_types">
+        <item>FEED TEMPLATE</item>
+        <item>LIST TEMPLATE</item>
+        <item>DEFAULT TEMPLATE</item>
+    </string-array>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
 </resources>
