@@ -15,7 +15,7 @@
             <item>수협은행</item>
         </string-array>
 
-    <string-array name="paymentDate">
+    <string-array name="paymentDay">
         <item>5</item>
         <item>10</item>
         <item>15</item>

@@ -45,12 +45,10 @@ public class CreateAccountActivity extends AppCompatActivity {
     protected ArrayList<AccountDetailData> mArrayList;
     protected BanksAdapter mAdapter;
     private Spinner bankSpinner;
-    // private ArrayAdapter<CharSequence> bankAdapter;
     private String mJsonString;
-    private Spinner paymentDateSpinner;
+    private Spinner paymentDaySpinner;
     BankSpinnerAdapter bankAdapter;
-    // private ArrayList<String> bankList;
-    private ArrayAdapter<CharSequence> paymentDateAdapter;
+    private ArrayAdapter<CharSequence> paymentDayAdapter;
     public  final UserProfile userProfile = UserProfile.loadFromCache();
     Button btn1Prev;
     Button btn1Next;
@@ -105,20 +103,19 @@ public class CreateAccountActivity extends AppCompatActivity {
 
 
         // 2. paymentday Spinner
-        paymentDateSpinner = (Spinner)findViewById(R.id.sp_paymentDate);
-        paymentDateAdapter = ArrayAdapter.createFromResource(this, R.array.paymentDate, android.R.layout.simple_spinner_item);
+        paymentDaySpinner = (Spinner)findViewById(R.id.sp_paymentDay);
+        paymentDayAdapter = ArrayAdapter.createFromResource(this, R.array.paymentDay, android.R.layout.simple_spinner_item);
 
-        paymentDateAdapter.setDropDownViewResource(android.R.layout.select_dialog_item);
-        paymentDateSpinner.setAdapter(paymentDateAdapter);
-        paymentDateSpinner.setPrompt("매월 입금일");
+        paymentDayAdapter.setDropDownViewResource(android.R.layout.select_dialog_item);
+        paymentDaySpinner.setAdapter(paymentDayAdapter);
 
-        paymentDateSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        paymentDaySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?>  parent, View view, int position, long id) {
                 Toast.makeText(getApplicationContext(),
-                        paymentDateAdapter.getItem(position) + "을 선택했습니다.", Toast.LENGTH_LONG).show();
+                        paymentDayAdapter.getItem(position) + "을 선택했습니다.", Toast.LENGTH_LONG).show();
 
-//                // 사용자가 선택한 입금날짜로 paymentDate를 세팅한다.
-                selectedPaymentDay = Integer.parseInt(paymentDateAdapter.getItem(position).toString());
+                // 사용자가 선택한 입금날짜로 paymentDay를 세팅한다.
+                selectedPaymentDay = Integer.parseInt(paymentDayAdapter.getItem(position).toString());
                 groupDetailData.setPaymentDay(selectedPaymentDay);
             }
             public void onNothingSelected(AdapterView  parent) {

@@ -85,6 +85,13 @@ public class CreateDetailsActivity extends AppCompatActivity {
         txt_GroupName.setText(groupName);
 
         btn3Next.setOnClickListener(v -> {
+
+            if (startDate == null)
+                startDate = currentTime;
+
+            if (endDate == null)
+                endDate = currentTime;
+
             Intent intent = new Intent(CreateDetailsActivity.this, CreateFriendsActivity.class);
             targetAmount = Integer.parseInt(et_amount.getText().toString());
             monthlyPayment = Integer.parseInt(editText_monthlyPayment.getText().toString());

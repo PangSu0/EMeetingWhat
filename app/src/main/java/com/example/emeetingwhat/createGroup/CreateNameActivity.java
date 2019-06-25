@@ -83,7 +83,6 @@ public class CreateNameActivity extends AppCompatActivity {
                         finish();
                     } else if (group.isChecked()){
                         groupNameInfo.setText("");
-                        // TODO: 그룹을 선택했을 때 다른  activity로 넘겨준다. (CreateDetailsActivity 자리에 넣어줌)
                         Intent intent = new Intent(CreateNameActivity.this, CreateDetailsActivity.class);
 
                         groupNameInput = groupName.getText().toString();

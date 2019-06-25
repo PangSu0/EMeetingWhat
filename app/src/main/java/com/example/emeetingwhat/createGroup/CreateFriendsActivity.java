@@ -67,6 +67,8 @@ public class CreateFriendsActivity extends AppCompatActivity {
         groupDetailData.setTargetAmount(groupDataFromPrev.getTargetAmount());
         groupDetailData.setMonthlyPayment(groupDataFromPrev.getMonthlyPayment());
         groupDetailData.setName(groupDataFromPrev.getName());
+        groupDetailData.setCreateDate(groupDataFromPrev.getCreateDate());
+        groupDetailData.setEndDate(groupDataFromPrev.getEndDate());
         groupDetailData.setGroupType(groupDataFromPrev.getGroupType());
         groupDetailData.setPaymentDay(groupDataFromPrev.getPaymentDay());
         groupDetailData.setBankName(groupDataFromPrev.getBankName());
