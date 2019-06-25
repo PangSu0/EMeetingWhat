@@ -81,7 +81,6 @@ public class CreateNameActivity extends AppCompatActivity {
                         // intent.putExtra("accountDetailData", accountDataFromPrev);
 
                         startActivity(intent);
-                        finish();
                     } else if (individual.isChecked()){
                         groupNameInfo.setText("");
                         Intent intent = new Intent(CreateNameActivity.this, Step3_2_TargetAmountActivity.class);
@@ -91,10 +90,11 @@ public class CreateNameActivity extends AppCompatActivity {
                         groupDetailData.setName(groupNameInput);
                         groupDetailData.setGroupType(GroupType.Group.name());
                         groupDetailData.setPaymentDay(groupDataFromPrev.getPaymentDay());
-                        accountDetailData.setBankName(accountDataFromPrev.getBankName());
+                        groupDetailData.setBankName(groupDataFromPrev.getBankName());
+                        groupDetailData.setAccountNumber(groupDataFromPrev.getAccountNumber());
 
                         intent.putExtra("groupDetailData", groupDetailData);
-                        intent.putExtra("accountDetailData", accountDataFromPrev);
+                        // intent.putExtra("accountDetailData", accountDataFromPrev);
 
                         startActivity(intent);
                     } else {
