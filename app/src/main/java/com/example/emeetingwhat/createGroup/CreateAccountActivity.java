@@ -66,28 +66,26 @@ public class CreateAccountActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_account);
+
         CreateAccountActivity.GetData task = new CreateAccountActivity.GetData();
         task.execute( "http://" + IP_ADDRESS + "/selectBankList.php", Long.toString(userProfile.getId()));
+
         // 1. bankName Spinner
         bankSpinner = (Spinner)findViewById(R.id.sp_bank);
-        bankSpinner.setPrompt("은행 계좌를 선택하세요.");
 
         mArrayList = new ArrayList<>();
-
         mAdapter = new BanksAdapter(this, mArrayList);
-
         bankAdapter = new BankSpinnerAdapter(this, mArrayList);
         bankSpinner.setAdapter(bankAdapter);
 
             bankSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 public void onItemSelected(AdapterView<?>  parent, View view, int position, long id) {
-//                // 확인용
 
-
-                    // 사용자가 선택한 은행명으로 BankName을 세팅한다.
+                    // 사용자가 선택한 은행명, 계좌번호로 BankName과 AccountNumber를 세팅한다.
                     accountDetailData = (AccountDetailData) bankAdapter.getItem(position);
                     selectedBankName = accountDetailData.getBankName();
                     selectedAccountNumber = accountDetailData.getAccountNumber();
+
                     Toast.makeText(CreateAccountActivity.this,
                             selectedBankName + "의 "  + selectedAccountNumber + "을 선택했습니다.", Toast.LENGTH_LONG).show();
 
@@ -95,7 +93,6 @@ public class CreateAccountActivity extends AppCompatActivity {
                     groupDetailData.setAccountNumber(selectedAccountNumber);
                 }
                 public void onNothingSelected(AdapterView  parent) {
-                    // TODO: validation check (반드시 선택하도록 한다).
                     accountDetailData = (AccountDetailData) bankAdapter.getItem(0);
                     selectedBankName = accountDetailData.getBankName();
                     selectedAccountNumber = accountDetailData.getAccountNumber();
@@ -113,6 +110,7 @@ public class CreateAccountActivity extends AppCompatActivity {
 
         paymentDateAdapter.setDropDownViewResource(android.R.layout.select_dialog_item);
         paymentDateSpinner.setAdapter(paymentDateAdapter);
+        paymentDateSpinner.setPrompt("매월 입금일");
 
         paymentDateSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?>  parent, View view, int position, long id) {
@@ -121,12 +119,10 @@ public class CreateAccountActivity extends AppCompatActivity {
 
 //                // 사용자가 선택한 입금날짜로 paymentDate를 세팅한다.
                 selectedPaymentDay = Integer.parseInt(paymentDateAdapter.getItem(position).toString());
-
-
                 groupDetailData.setPaymentDay(selectedPaymentDay);
             }
             public void onNothingSelected(AdapterView  parent) {
-                // TODO: validation check (반드시 선택하도록 한다).
+                Toast.makeText(CreateAccountActivity.this, "입금날짜를 선택하세요.", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -136,26 +132,21 @@ public class CreateAccountActivity extends AppCompatActivity {
         btn1Prev = (Button)findViewById(R.id.btn1Prev);
 
         // Prev 버튼을 눌렀을 때
-        btn1Prev.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Intent intent = new Intent(CreateAccountActivity.this, MainActivity.class);
-                // redirect로 보내기.
-                startActivity(intent);
-            }
+        btn1Prev.setOnClickListener(v -> {
+            Intent intent = new Intent(CreateAccountActivity.this, MainActivity.class);
+            startActivity(intent);
         });
 
-        btn1Next.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Toast.makeText(getApplicationContext(),
-                        selectedBankName + "을 선택 했습니다.", Toast.LENGTH_LONG).show();
-                Intent intent = new Intent(CreateAccountActivity.this, CreateNameActivity.class);
+        btn1Next.setOnClickListener(v -> {
+            Toast.makeText(getApplicationContext(),
+                    selectedBankName + "을 선택 했습니다.", Toast.LENGTH_LONG).show();
+            Intent intent = new Intent(CreateAccountActivity.this, CreateNameActivity.class);
 
-                // Data 클래스 넘기기.
-                intent.putExtra("groupDetailData", groupDetailData);
-                intent.putExtra("accountDetailData", accountDetailData);
+            // Data 클래스 넘기기.
+            intent.putExtra("groupDetailData", groupDetailData);
+            intent.putExtra("accountDetailData", accountDetailData);
 
-                startActivity(intent);
-            }
+            startActivity(intent);
         });
     }
 

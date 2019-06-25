@@ -15,8 +15,10 @@ import com.example.emeetingwhat.Data.AccountDetailData;
 import com.example.emeetingwhat.Data.GroupDetailData;
 import com.example.emeetingwhat.R;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 public class CreateDetailsActivity extends AppCompatActivity {
 
@@ -46,13 +48,17 @@ public class CreateDetailsActivity extends AppCompatActivity {
     int monthlyPayment;
 
     GroupDetailData groupDetailData = new GroupDetailData();
-    AccountDetailData accountDetailData = new AccountDetailData();
 
     Intent intent_GroupFromPrevious;
     Intent intent_AccountFromPrevious;
 
     GroupDetailData groupDataFromPrev;
     AccountDetailData accountDataFromPrev;
+
+    // 처음 보여지는 날짜를 Korea Locale로 세팅.
+    SimpleDateFormat transFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.KOREA);
+    Date currentTime = new Date();
+    String getCurrentTime = transFormat.format(currentTime);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,90 +84,73 @@ public class CreateDetailsActivity extends AppCompatActivity {
         txt_GroupName = findViewById(R.id.txt3GroupName);
         txt_GroupName.setText(groupName);
 
-        btn3Next.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                // TODO: 친구 초대 페이지로 이동 (수정 필요)
-                Intent intent = new Intent(CreateDetailsActivity.this, CreateFriendsActivity.class);
-                targetAmount = Integer.parseInt(et_amount.getText().toString());
-                monthlyPayment = Integer.parseInt(editText_monthlyPayment.getText().toString());
-                groupDetailData.setCreateDate(startDate);
-                groupDetailData.setEndDate(endDate);
-                groupDetailData.setTargetAmount(targetAmount);
-                groupDetailData.setMonthlyPayment(monthlyPayment);
-                groupDetailData.setName(groupDataFromPrev.getName());
-                groupDetailData.setGroupType(groupDataFromPrev.getGroupType());
-                groupDetailData.setPaymentDay(groupDataFromPrev.getPaymentDay());
-                groupDetailData.setBankName(groupDataFromPrev.getBankName());
-                groupDetailData.setAccountNumber(groupDataFromPrev.getAccountNumber());
-                // accountDetailData.setBankName(accountDataFromPrev.getBankName());
+        btn3Next.setOnClickListener(v -> {
+            Intent intent = new Intent(CreateDetailsActivity.this, CreateFriendsActivity.class);
+            targetAmount = Integer.parseInt(et_amount.getText().toString());
+            monthlyPayment = Integer.parseInt(editText_monthlyPayment.getText().toString());
+            groupDetailData.setCreateDate(startDate);
+            groupDetailData.setEndDate(endDate);
+            groupDetailData.setTargetAmount(targetAmount);
+            groupDetailData.setMonthlyPayment(monthlyPayment);
+            groupDetailData.setName(groupDataFromPrev.getName());
+            groupDetailData.setGroupType(groupDataFromPrev.getGroupType());
+            groupDetailData.setPaymentDay(groupDataFromPrev.getPaymentDay());
+            groupDetailData.setBankName(groupDataFromPrev.getBankName());
+            groupDetailData.setAccountNumber(groupDataFromPrev.getAccountNumber());
 
-                intent.putExtra("groupDetailData", groupDetailData);
-                // intent.putExtra("accountDetailData", accountDataFromPrev);
+            intent.putExtra("groupDetailData", groupDetailData);
+            // intent.putExtra("accountDetailData", accountDataFromPrev);
 
-                startActivity(intent);
-            }
+            startActivity(intent);
         });
 
         // Prev 버튼을 눌렀을 때
-        btn3Prev.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Intent intent = new Intent(CreateDetailsActivity.this, CreateNameActivity.class);
-                startActivity(intent);
-            }
+        btn3Prev.setOnClickListener(v -> {
+            Intent intent = new Intent(CreateDetailsActivity.this, CreateNameActivity.class);
+            startActivity(intent);
         });
 
         // 모임 기간 세팅
         et_StartDate = (EditText) findViewById(R.id.et_StartDate);
+        et_StartDate.setText(getCurrentTime);
+
         calendar = Calendar.getInstance();
         startDay = calendar.get(Calendar.DAY_OF_MONTH);
         startMonth = calendar.get(Calendar.MONTH);
         startYear = calendar.get(Calendar.YEAR);
 
-        et_StartDate.setText(startYear + "/" + (startMonth + 1) + "/" + startDay);
-
-        et_StartDate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startDateDialog();
-            }
-        });
+        et_StartDate.setOnClickListener(v -> startDateDialog());
 
         // 모임 기간 세팅
         et_EndDate = (EditText) findViewById(R.id.et_EndDate);
+        et_EndDate.setText(getCurrentTime);
 
         endDay = calendar.get(Calendar.DAY_OF_MONTH);
         endMonth = calendar.get(Calendar.MONTH);
         endYear = calendar.get(Calendar.YEAR);
 
-        et_EndDate.setText(endYear + " /" + (endMonth + 1) + " /" + endDay);
-
-        et_EndDate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                endDateDialog();
-            }
-        });
+        et_EndDate.setOnClickListener(v -> endDateDialog());
     }
     public void startDateDialog() {
-        DatePickerDialog.OnDateSetListener listener = new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                et_StartDate.setText(year + "/" + (monthOfYear + 1) + "/" + dayOfMonth);
-                calendar.set(year, monthOfYear, dayOfMonth);
-                startDate = calendar.getTime();
-            }};
+        DatePickerDialog.OnDateSetListener listener = (view, year, monthOfYear, dayOfMonth) -> {
+            calendar.set(year, monthOfYear, dayOfMonth);
+            startDate = calendar.getTime();
+
+            String dateSelected = transFormat.format(startDate);
+            et_StartDate.setText(dateSelected);
+        };
         DatePickerDialog dpDialog = new DatePickerDialog(this, listener, startYear, startMonth, startDay);
         dpDialog.show();
     }
 
     public void endDateDialog() {
-        DatePickerDialog.OnDateSetListener listener = new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                et_EndDate.setText(year + "/" + (monthOfYear + 1) + "/" + dayOfMonth);
-                calendar.set(year, monthOfYear, dayOfMonth);
-                endDate = calendar.getTime();
-            }};
+        DatePickerDialog.OnDateSetListener listener = (view, year, monthOfYear, dayOfMonth) -> {
+            calendar.set(year, monthOfYear, dayOfMonth);
+            endDate = calendar.getTime();
+
+            String dateSelected = transFormat.format(endDate);
+            et_EndDate.setText(dateSelected);
+        };
         DatePickerDialog dpDialog = new DatePickerDialog(this, listener, endYear, endMonth, endDay);
         dpDialog.show();
     }
