@@ -79,19 +79,19 @@
         android:paddingTop="30dp">
 
         <RadioButton
-            android:id="@+id/radioIndividual"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="개별 수령"
-            android:textSize="24dp" />
-
-        <RadioButton
             android:id="@+id/radioGroup"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignStart="@+id/radioGroupType"
-            android:layout_marginTop="20dp"
             android:text="공동 사용"
+            android:textSize="24dp" />
+
+        <RadioButton
+            android:id="@+id/radioIndividual"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/radioGroup"
+            android:layout_marginTop="20dp"
+            android:text="개별 수령"
             android:textSize="24dp" />
     </RadioGroup>
 

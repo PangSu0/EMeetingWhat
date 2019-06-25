@@ -16,6 +16,7 @@ import com.example.emeetingwhat.Data.AccountDetailData;
 import com.example.emeetingwhat.Data.GroupDetailData;
 import com.example.emeetingwhat.GroupType;
 import com.example.emeetingwhat.R;
+import com.example.emeetingwhat.Step3_2_TargetAmountActivity;
 import com.example.emeetingwhat.Validator;
 
 public class CreateNameActivity extends AppCompatActivity {
@@ -82,19 +83,18 @@ public class CreateNameActivity extends AppCompatActivity {
                         startActivity(intent);
                     } else if (individual.isChecked()){
                         groupNameInfo.setText("");
-                        Intent intent = new Intent(CreateNameActivity.this, CreateDetailsActivity.class);
+                        Intent intent = new Intent(CreateNameActivity.this, Step3_2_TargetAmountActivity.class);
 
                         groupNameInput = groupName.getText().toString();
-
-                        Toast.makeText(getApplicationContext(), "공동 사용 선택",Toast.LENGTH_LONG).show();
 
                         groupDetailData.setName(groupNameInput);
                         groupDetailData.setGroupType(GroupType.Group.name());
                         groupDetailData.setPaymentDay(groupDataFromPrev.getPaymentDay());
-                        accountDetailData.setBankName(accountDataFromPrev.getBankName());
+                        groupDetailData.setBankName(groupDataFromPrev.getBankName());
+                        groupDetailData.setAccountNumber(groupDataFromPrev.getAccountNumber());
 
                         intent.putExtra("groupDetailData", groupDetailData);
-                        intent.putExtra("accountDetailData", accountDataFromPrev);
+                        // intent.putExtra("accountDetailData", accountDataFromPrev);
 
                         startActivity(intent);
                     } else {
