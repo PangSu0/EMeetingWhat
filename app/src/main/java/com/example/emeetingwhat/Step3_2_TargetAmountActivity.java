@@ -11,23 +11,20 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.emeetingwhat.Data.AccountDetailData;
 import com.example.emeetingwhat.Data.GroupDetailData;
+import com.example.emeetingwhat.createGroup.CreateDetailsActivity;
+import com.example.emeetingwhat.createGroup.CreateNameActivity;
 
 public class Step3_2_TargetAmountActivity extends AppCompatActivity {
     EditText editName;
     Intent intent_GroupFromPrevious;
-    Intent intent_AccountFromPrevious;
     GroupDetailData groupDataFromPrev;
-    AccountDetailData accountDataFromPrev;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_step3_2_target_amount);
 
         intent_GroupFromPrevious = getIntent();
-        intent_AccountFromPrevious = getIntent();
-
         groupDataFromPrev =  (GroupDetailData)intent_GroupFromPrevious.getSerializableExtra("groupDetailData");
-        accountDataFromPrev =  (AccountDetailData)intent_AccountFromPrevious.getSerializableExtra("accountDetailData");
 
         setEnterKey();
     }
@@ -51,6 +48,7 @@ public class Step3_2_TargetAmountActivity extends AppCompatActivity {
                 onBackPressed();
                 break;
             case R.id.btnStep3_2_Next:
+
                 nextPage();
                 break;
         }
@@ -59,6 +57,9 @@ public class Step3_2_TargetAmountActivity extends AppCompatActivity {
     public  void nextPage()
     {
         Intent intent = new Intent(getApplicationContext(), Step4_2_InviteMemberActivity.class);
+        editName = findViewById(R.id.editTextStep3_2_EditName);
+        groupDataFromPrev.setTargetAmount(Integer.parseInt(editName.getText().toString()));
+        intent.putExtra("groupDetailData", groupDataFromPrev);
         startActivity(intent);
     }
 }
