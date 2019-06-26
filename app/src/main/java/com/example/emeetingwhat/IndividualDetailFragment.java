@@ -67,8 +67,8 @@ public class IndividualDetailFragment extends Fragment {
     private TextView mTextViewNickname;
     private MyFriendsListAdapter adapter = null;
     private ArrayList<MyFriendsInfo> myFriendsInfo=new ArrayList<>();
-    private RecyclerView mRecyclerView;
-    private LinearLayoutManager mLinearLayoutManager;
+
+    private ArrayList<MyFriendsInfo> friendsData;
     private final UserProfile userProfile = UserProfile.loadFromCache();
     public IndividualDetailFragment() {
         // Required empty public constructor
@@ -89,25 +89,6 @@ public class IndividualDetailFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_individual_detail, container, false);
         mTextViewResult = (TextView)view.findViewById(R.id.textView_result_test);
         mTextViewResult.setMovementMethod(new ScrollingMovementMethod());
-        mRecyclerView = (RecyclerView) view.findViewById(R.id.individual_friends_list);
-        mLinearLayoutManager = new LinearLayoutManager(getActivity());
-        mLinearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
-        mRecyclerView.setLayoutManager(mLinearLayoutManager);
-        myFriendsInfo= new ArrayList<>();
-        adapter = new MyFriendsListAdapter(getActivity(), myFriendsInfo);
-        mRecyclerView.setAdapter(adapter);
-        myFriendsInfo.clear();
-        adapter.notifyDataSetChanged();
-
-        Button btn_add = (Button) view.findViewById(R.id.button_add_friends_i);
-        btn_add.setOnClickListener(new Button.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), Step4_2_InviteMemberActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
-            }
-        });
 
         IndividualDetailFragment.GetData task = new IndividualDetailFragment.GetData();
 
@@ -115,7 +96,7 @@ public class IndividualDetailFragment extends Fragment {
 
         if( getArguments() != null){
             str_groupId = getArguments().getString("groupId");
-            groupDetailData = (GroupDetailData) getArguments().getSerializable("groupDetails");
+            friendsData = (ArrayList<MyFriendsInfo>) getArguments().getSerializable("myFriendsInfoArrayList");
         }
         task.execute( "http://" + IP_ADDRESS + "/selectGroupDetails.php", str_groupId);
 //

@@ -2,18 +2,17 @@ package com.example.emeetingwhat;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
@@ -24,7 +23,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.emeetingwhat.Data.GroupDetailData;
 import com.example.emeetingwhat.common.log.Logger;
 import com.example.emeetingwhat.common.widget.KakaoToast;
-import com.example.emeetingwhat.createGroup.CreateDetailsActivity;
 import com.kakao.friends.FriendContext;
 import com.kakao.friends.FriendsService;
 import com.kakao.friends.request.FriendsRequest;
@@ -49,13 +47,13 @@ import java.util.List;
 
 import static com.example.emeetingwhat.WaitingDialog.cancelWaitingDialog;
 
-public class GroupFriendsDetailFragment extends Fragment implements View.OnClickListener, GroupFriendsListAdapter.IFriendListCallback {
+public class IndividualFriendsDetailFragment extends Fragment implements View.OnClickListener{
     private String mParam1;
     private String mParam2;
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     private MyFriendsListAdapter adapter = null;
-    private GroupFriendsListAdapter mAdapter = null;
+
     private static String IP_ADDRESS = "61.108.100.36";
     private static String TAG = "inserttest";
     private String mJsonString;
@@ -66,12 +64,12 @@ public class GroupFriendsDetailFragment extends Fragment implements View.OnClick
     private String groupId;
     protected ListView list = null;
     private final UserProfile userProfile = UserProfile.loadFromCache();
-    private final List<FriendsRequest.FriendType> friendTypeList = new ArrayList<>();
-    private FriendContext friendContext = null;
-    private GroupFriendsDetailFragment.FriendsInfo friendsInfo = null;
+
+
     private ArrayList<MyFriendsInfo> myFriendsInfo=new ArrayList<>();
     private ArrayList<Long> selectedFriends=new ArrayList<>();
-    public GroupFriendsDetailFragment() {
+    private ArrayList<MyFriendsInfo> myFriendsInfoArrayList = new ArrayList<>();
+    public IndividualFriendsDetailFragment() {
         // Required empty public constructor
     }
     @Override
@@ -98,11 +96,11 @@ public class GroupFriendsDetailFragment extends Fragment implements View.OnClick
         nextBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Fragment fragment = new GroupDetailFragment();
+                Fragment fragment = new IndividualDetailFragment();
                 FragmentTransaction ft = getFragmentManager().beginTransaction();
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("groupDetails", groupDetailData);
-                bundle.putSerializable("selectedFriends", selectedFriends);
+                bundle.putSerializable("myFriendsInfoArrayList", myFriendsInfoArrayList);
                 fragment.setArguments(bundle);
                 ft.replace(R.id.content_fragment_layout, fragment);
                 ft.commit();
@@ -123,57 +121,19 @@ public class GroupFriendsDetailFragment extends Fragment implements View.OnClick
         btn_add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showAlertDialog();
+                Intent intent = new Intent(getActivity(), Step4_2_InviteMemberActivity.class);
+                intent.putExtra("groupId", groupId);
+                intent.putExtra("myFriendsInfoArrayList", myFriendsInfoArrayList);
+                startActivity(intent);
             }
         });
-        GroupFriendsDetailFragment.GetData task = new GroupFriendsDetailFragment.GetData();
+        IndividualFriendsDetailFragment.GetData task = new IndividualFriendsDetailFragment.GetData();
         task.execute( "http://" + IP_ADDRESS + "/selectGroupDetails.php", str_groupId);
 
         // Inflate the layout for this fragment
         return view;
     }
-    private void showAlertDialog()
-    {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        LayoutInflater inflater = getLayoutInflater();
-        View view = inflater.inflate(R.layout.layout_group_friends_list, null);
-        builder.setView(view);
-        friendTypeList.add(FriendsRequest.FriendType.KAKAO_TALK);
-        friendsInfo = new GroupFriendsDetailFragment.FriendsInfo();
-        requestFriends(friendTypeList.get(0));
-        //requestFriends();
-        KakaoToast.makeToast(getActivity(), friendsInfo.getTotalCount() + " ", Toast.LENGTH_SHORT).show();
-        list = (ListView)view.findViewById(R.id.group_friends);
-        final AlertDialog dialog = builder.create();
 
-        dialog.setCancelable(true);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.show();
-        Button confirm = view.findViewById(R.id.button_confirm);
-        confirm.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ArrayList<Integer> arrayList = mAdapter.getChecked();
-                for( int i = 0 ; i <  arrayList.size() ; i++ ){
-                    FriendInfo groupFInfo = mAdapter.getItem(arrayList.get(i));
-                    groupFInfo.getProfileThumbnailImage();
-                    selectedFriends.add(groupFInfo.getId());
-                    GroupFriendsDetailFragment.InsertData task = new GroupFriendsDetailFragment.InsertData();
-                    KakaoToast.makeToast(getActivity(), userProfile.getNickname(), Toast.LENGTH_SHORT).show();
-                    task.execute("http://" + IP_ADDRESS + "/insertGroupFriends.php"
-                            , Long.toString(groupFInfo.getId())
-                            , groupId
-                            , groupFInfo.getProfileNickname()
-                            , groupFInfo.getProfileThumbnailImage()
-                            , groupFInfo.getProfileThumbnailImage()
-                    );
-
-                    dialog.dismiss();
-                }
-            }
-        });
-        view.findViewById(R.id.title_back).setOnClickListener(v -> dialog.dismiss());
-    }
     @Override
     public void onClick(View view) {
 
@@ -312,99 +272,6 @@ public class GroupFriendsDetailFragment extends Fragment implements View.OnClick
             Log.d(TAG, "showResult : ", e);
         }
 
-    }
-    private void requestFriends(FriendsRequest.FriendType type) {
-        adapter = null;
-        friendsInfo = new GroupFriendsDetailFragment.FriendsInfo();
-        friendContext = FriendContext.createContext(type, FriendsRequest.FriendFilter.NONE, FriendsRequest.FriendOrder.NICKNAME, true, 0, 100, "asc");
-        requestFriendsInner();
-    }
-
-    private void requestFriendsInner() {
-        final GroupFriendsListAdapter.IFriendListCallback callback = this;
-        FriendsService.getInstance().requestFriends(new TalkResponseCallback<FriendsResponse>() {
-            @Override
-            public void onNotKakaoTalkUser() {
-                KakaoToast.makeToast(getActivity(), "not a KakaoTalk user", Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onSessionClosed(ErrorResult errorResult) {
-            }
-
-            @Override
-            public void onNotSignedUp() {
-            }
-
-            @Override
-            public void onFailure(ErrorResult errorResult) {
-                KakaoToast.makeToast(getActivity(), errorResult.toString(), Toast.LENGTH_SHORT).show();
-                Logger.e("onFailure: " + errorResult.toString());
-            }
-
-            @Override
-            public void onSuccess(FriendsResponse result) {
-                if (result != null) {
-                    friendsInfo.merge(result);
-
-                    if (mAdapter == null) {
-                        mAdapter = new GroupFriendsListAdapter(friendsInfo.getFriendInfoList(), callback);
-                        list.setAdapter(mAdapter);
-                    } else {
-                        mAdapter.setItem(friendsInfo.getFriendInfoList());
-                        mAdapter.notifyDataSetChanged();
-                    }
-                }
-            }
-            @Override
-            public void onDidStart() {
-            }
-
-            @Override
-            public void onDidEnd() {
-                cancelWaitingDialog();
-            }
-        }, friendContext);
-    }
-
-    @Override
-    public void onItemSelected(int position, FriendInfo friendInfo) {
-        mAdapter.setChecked(position);
-        mAdapter.notifyDataSetChanged();
-    }
-
-    @Override
-    public void onPreloadNext() {
-        if (friendContext.hasNext()) {
-            requestFriendsInner();
-        }
-    }
-
-    private static class FriendsInfo {
-        private final List<FriendInfo> friendInfoList = new ArrayList<>();
-        private int totalCount;
-        private String id;
-
-        public FriendsInfo() {
-        }
-
-        public List<FriendInfo> getFriendInfoList() {
-            return friendInfoList;
-        }
-
-        public void merge(FriendsResponse response) {
-            this.id = response.getId();
-            this.totalCount = response.getTotalCount();
-            this.friendInfoList.addAll(response.getFriendInfoList());
-        }
-
-        public String getId() {
-            return id;
-        }
-
-        public int getTotalCount() {
-            return totalCount;
-        }
     }
 
     class InsertData extends AsyncTask<String, Void, String> {

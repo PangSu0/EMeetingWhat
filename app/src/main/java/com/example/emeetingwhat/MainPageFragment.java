@@ -46,7 +46,6 @@ public class MainPageFragment extends Fragment {
     private static final String ARG_PARAM2 = "param2";
     private static String IP_ADDRESS = "61.108.100.36";
     private static String TAG = "phptest";
-    private TextView mTextViewResult;
     private ArrayList<GroupDetailData> mArrayList;
     private GroupsAdapter mAdapter;
     private RecyclerView mRecyclerView;
@@ -61,12 +60,11 @@ public class MainPageFragment extends Fragment {
 
         Toast.makeText(getActivity(), " 유저 아이디 " + userProfile.getId(), Toast.LENGTH_SHORT).show();
         // 데이터베이스 테스트
-        mTextViewResult = (TextView)view.findViewById(R.id.textView_main_result);
+        // mTextViewResult = (TextView)view.findViewById(R.id.textView_main_result);
         mRecyclerView = (RecyclerView) view.findViewById(R.id.listView_main_list);
         mLinearLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
 
-        mTextViewResult.setMovementMethod(new ScrollingMovementMethod());
 
         mArrayList = new ArrayList<>();
 
@@ -102,7 +100,7 @@ public class MainPageFragment extends Fragment {
                         ft.commit();
                     }
                 }else if( groupData.getGroupType().equals("individual")){
-                    Fragment fragment = new IndividualDetailFragment();
+                    Fragment fragment = new IndividualFriendsDetailFragment();
                     if( fragment != null){
                         FragmentTransaction ft = getFragmentManager().beginTransaction();
                         Bundle bundle = new Bundle();
@@ -139,12 +137,12 @@ public class MainPageFragment extends Fragment {
             super.onPostExecute(result);
 
             progressDialog.dismiss();
-            mTextViewResult.setText(result);
+            //mTextViewResult.setText(result);
             Log.d(TAG, "response - " + result);
 
             if (result == null){
 
-                mTextViewResult.setText(errorString);
+               // mTextViewResult.setText(errorString);
             }
             else {
 
