@@ -30,6 +30,9 @@
         <activity android:name=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar"
             />
+        <activity android:name=".IndividualFriendsDetailActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            />
         <activity android:name=".MainGroupList" />
         <activity android:name=".Step3_2_TargetAmountActivity"/>
         <activity android:name=".Step4_2_InviteMemberActivity"/>
@@ -47,6 +50,7 @@
         </activity>
         <activity
             android:name=".FriendsMainActivity"
+            android:theme="@style/AppTheme.NoActionBar"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:launchMode="singleTop"
             android:windowSoftInputMode="adjustResize|stateHidden"/>
