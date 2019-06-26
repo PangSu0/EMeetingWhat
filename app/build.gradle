@@ -36,5 +36,5 @@ dependencies {
     implementation 'com.mcxiaoke.volley:library:1.0.19'
     implementation 'com.kakao.sdk:friends:1.16.0'
     implementation 'com.kakao.sdk:kakaotalk:1.16.0'
-
+    implementation 'com.squareup.okhttp3:okhttp:3.3.0'
 }
