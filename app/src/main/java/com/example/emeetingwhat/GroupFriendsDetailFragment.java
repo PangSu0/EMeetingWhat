@@ -111,7 +111,7 @@ public class GroupFriendsDetailFragment extends Fragment implements View.OnClick
         });
         mRecyclerView = (RecyclerView) view.findViewById(R.id.friends_list);
         mLinearLayoutManager = new LinearLayoutManager(getActivity());
-        mLinearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        // mLinearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
         myFriendsInfo= new ArrayList<>();
         adapter = new MyFriendsListAdapter(getActivity(), myFriendsInfo);
@@ -168,6 +168,8 @@ public class GroupFriendsDetailFragment extends Fragment implements View.OnClick
                             , groupFInfo.getProfileThumbnailImage()
                             , groupFInfo.getProfileThumbnailImage()
                     );
+
+                    dialog.dismiss();
                 }
             }
         });
