@@ -88,7 +88,7 @@ private static class FriendsInfo {
         }
 
         list = findViewById(R.id.group_friends);
-
+        list.setFocusable(false);
 
         if (friendTypeList.size() == 1) {
             friendsInfo = new FriendsInfo();
@@ -98,6 +98,7 @@ private static class FriendsInfo {
         }
         FriendsRequest.FriendType type = FriendsRequest.FriendType.KAKAO_TALK;
         requestFriends(type);
+        KakaoToast.makeToast(getApplicationContext(), friendsInfo.getTotalCount() + " ", Toast.LENGTH_SHORT).show();
         findViewById(R.id.title_back).setOnClickListener(v -> finish());
     }
 
@@ -159,98 +160,10 @@ private static class FriendsInfo {
         }, friendContext);
     }
 
-//    private ListTemplate getListTemplate() {
-//        return ListTemplate.newBuilder("WEEKLY MAGAZINE",
-//                LinkObject.newBuilder()
-//                        .setWebUrl("https://developers.kakao.com")
-//                        .setMobileWebUrl("https://developers.kakao.com")
-//                        .build())
-//                .addContent(ContentObject.newBuilder("취미의 특징, 탁구",
-//                        "http://mud-kage.kakao.co.kr/dn/bDPMIb/btqgeoTRQvd/49BuF1gNo6UXkdbKecx600/kakaolink40_original.png",
-//                        LinkObject.newBuilder()
-//                                .setWebUrl("https://developers.kakao.com")
-//                                .setMobileWebUrl("https://developers.kakao.com")
-//                                .build())
-//                        .setDescrption("스포츠")
-//                        .build())
-//                .addContent(ContentObject.newBuilder("크림으로 이해하는 커피이야기",
-//                        "http://mud-kage.kakao.co.kr/dn/QPeNt/btqgeSfSsCR/0QJIRuWTtkg4cYc57n8H80/kakaolink40_original.png",
-//                        LinkObject.newBuilder()
-//                                .setWebUrl("https://developers.kakao.com")
-//                                .setMobileWebUrl("https://developers.kakao.com")
-//                                .build())
-//                        .setDescrption("음식")
-//                        .build())
-//                .addContent(ContentObject.newBuilder("신메뉴 출시❤️ 체리블라썸라떼",
-//                        "http://mud-kage.kakao.co.kr/dn/c7MBX4/btqgeRgWhBy/ZMLnndJFAqyUAnqu4sQHS0/kakaolink40_original.png",
-//                        LinkObject.newBuilder()
-//                                .setWebUrl("https://developers.kakao.com")
-//                                .setMobileWebUrl("https://developers.kakao.com")
-//                                .build())
-//                        .setDescrption("사진").build())
-//                .addButton(new ButtonObject("웹으로 보기", LinkObject.newBuilder()
-//                        .setMobileWebUrl("https://developers.kakao.com")
-//                        .setMobileWebUrl("https://developers.kakao.com")
-//                        .build()))
-//                .addButton(new ButtonObject("앱으로 보기", LinkObject.newBuilder()
-//                        .setWebUrl("https://developers.kakao.com")
-//                        .setMobileWebUrl("https://developers.kakao.com")
-//                        .setAndroidExecutionParams("key1=value1")
-//                        .setIosExecutionParams("key1=value1")
-//                        .build()))
-//                .build();
-//    }
-
-    private TalkResponseCallback<Boolean> getTalkResponseCallback() {
-        return new TalkResponseCallback<Boolean>() {
-            @Override
-            public void onNotKakaoTalkUser() {
-                KakaoToast.makeToast(getApplicationContext(), "not a KakaoTalk user", Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onFailure(ErrorResult errorResult) {
-                KakaoToast.makeToast(getApplicationContext(), "failure : " + errorResult, Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void onSessionClosed(ErrorResult errorResult) {
-                redirectLoginActivity();
-            }
-
-            @Override
-            public void onNotSignedUp() {
-                KakaoToast.makeToast(getApplicationContext(), "onNotSignedUp : " + "User Not Registed App", Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void onSuccess(Boolean result) {
-                KakaoToast.makeToast(getApplicationContext(), "Send message success", Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void onDidStart() {
-                showWaitingDialog();
-            }
-
-            @Override
-            public void onDidEnd() {
-                cancelWaitingDialog();
-            }
-        };
-    }
-
-//    protected void requestDefaultMemo() {
-//        KakaoTalkService.getInstance().requestSendMemo(getTalkResponseCallback(), getListTemplate());
-//    }
-//
-//    protected void requestDefaultMessage(final MessageSendable friendInfo) {
-//        KakaoTalkService.getInstance().requestSendMessage(getTalkResponseCallback(), friendInfo, getListTemplate());
-//    }
-
     @Override
     public void onItemSelected(int position, FriendInfo friendInfo) {
-
+        adapter.setChecked(position);
+        adapter.notifyDataSetChanged();
     }
 
     @Override

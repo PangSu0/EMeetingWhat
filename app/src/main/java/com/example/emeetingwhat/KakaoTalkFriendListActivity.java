@@ -59,8 +59,7 @@ public class KakaoTalkFriendListActivity extends FriendsMainActivity {
         if (!friendInfo.isAllowedMsg()) {
             return;
         }
-        adapter.setChecked(position);
-        adapter.notifyDataSetChanged();
+
     }
 
 

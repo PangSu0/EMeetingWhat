@@ -159,46 +159,6 @@ public class IndividualFriendsDetailActivity extends BaseActivity implements Vie
         }, friendContext);
     }
 
-
-    private TalkResponseCallback<Boolean> getTalkResponseCallback() {
-        return new TalkResponseCallback<Boolean>() {
-            @Override
-            public void onNotKakaoTalkUser() {
-                KakaoToast.makeToast(getApplicationContext(), "not a KakaoTalk user", Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onFailure(ErrorResult errorResult) {
-                KakaoToast.makeToast(getApplicationContext(), "failure : " + errorResult, Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void onSessionClosed(ErrorResult errorResult) {
-                redirectLoginActivity();
-            }
-
-            @Override
-            public void onNotSignedUp() {
-                KakaoToast.makeToast(getApplicationContext(), "onNotSignedUp : " + "User Not Registed App", Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void onSuccess(Boolean result) {
-                KakaoToast.makeToast(getApplicationContext(), "Send message success", Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void onDidStart() {
-                showWaitingDialog();
-            }
-
-            @Override
-            public void onDidEnd() {
-                cancelWaitingDialog();
-            }
-        };
-    }
-
     @Override
     public void onItemSelected(int position, FriendInfo friendInfo) {
 
