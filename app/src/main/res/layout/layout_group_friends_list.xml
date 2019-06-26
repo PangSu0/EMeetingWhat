@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:background="@color/color5"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include
+        android:id="@+id/title"
+        android:layout_width="fill_parent"
+        android:layout_height="56dp"
+        layout="@layout/view_sample_title" />
+
+    <ListView
+        android:id="@+id/group_friends"
+        android:layout_width="match_parent"
+        android:layout_height="364dp"
+        android:layout_marginTop="10dp"
+        android:divider="@color/color2"
+        >
+
+    </ListView>
+
+    <Button
+        android:id="@+id/button_confirm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="추가"
+        android:textAlignment="center"
+        android:layout_gravity="right"/>
+
+</LinearLayout>

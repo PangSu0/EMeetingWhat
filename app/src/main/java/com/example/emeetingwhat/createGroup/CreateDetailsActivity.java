@@ -1,28 +1,51 @@
 package com.example.emeetingwhat.createGroup;
 
 import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.emeetingwhat.Data.AccountDetailData;
 import com.example.emeetingwhat.Data.GroupDetailData;
+import com.example.emeetingwhat.MainActivity;
 import com.example.emeetingwhat.R;
 import com.example.emeetingwhat.Validator;
 
+import com.example.emeetingwhat.common.widget.KakaoToast;
+import com.kakao.usermgmt.response.model.UserProfile;
+
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
-public class CreateDetailsActivity extends AppCompatActivity {
+import kong.unirest.Unirest;
 
+public class CreateDetailsActivity extends AppCompatActivity {
+    private static String IP_ADDRESS = "61.108.100.36";
+    private static String TAG = "inserttest";
+    AccountDetailData accountDetailData = new AccountDetailData();
+    private final UserProfile userProfile = UserProfile.loadFromCache();
+    Intent intent_GroupFromPrevious;
+    Intent intent_AccountFromPrevious;
+
+    private Button btn_friendsList;
     private Button btn3Next;
     private Button btn3Prev;
     private EditText et_amount;
@@ -49,10 +72,6 @@ public class CreateDetailsActivity extends AppCompatActivity {
     int monthlyPayment;
 
     GroupDetailData groupDetailData = new GroupDetailData();
-
-    Intent intent_GroupFromPrevious;
-    Intent intent_AccountFromPrevious;
-
     GroupDetailData groupDataFromPrev;
     AccountDetailData accountDataFromPrev;
 
@@ -78,7 +97,7 @@ public class CreateDetailsActivity extends AppCompatActivity {
 
         intent_GroupFromPrevious = getIntent();
         intent_AccountFromPrevious = getIntent();
-
+    // Unirest.get();
         groupDataFromPrev =  (GroupDetailData)intent_GroupFromPrevious.getSerializableExtra("groupDetailData");
         accountDataFromPrev =  (AccountDetailData)intent_AccountFromPrevious.getSerializableExtra("accountDetailData");
 
@@ -92,23 +111,28 @@ public class CreateDetailsActivity extends AppCompatActivity {
 
             if (endDate == null)
                 endDate = currentTime;
+            CreateDetailsActivity.InsertData task = new CreateDetailsActivity.InsertData();
+            SimpleDateFormat transFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Date currentTime = new Date();
+            String createDate = transFormat.format(startDate);
+            String strendDate = transFormat.format(endDate);
+            KakaoToast.makeToast(getApplicationContext(), userProfile.getNickname(), Toast.LENGTH_SHORT).show();
+            task.execute("http://" + IP_ADDRESS + "/insertGroupGroupMode.php"
+                    , groupDataFromPrev.getName()
+                    , createDate
+                    , strendDate
+                    , et_amount.getText().toString()
+                    , editText_monthlyPayment.getText().toString()
+                    , Long.toString(userProfile.getId())
+                    , Integer.toString(groupDataFromPrev.getPaymentDay())
+                    , groupDataFromPrev.getBankName()
+                    , groupDataFromPrev.getAccountNumber()
+                    , userProfile.getNickname()
+                    , userProfile.getThumbnailImagePath()
+                    , userProfile.getProfileImagePath()
+            );
 
-            Intent intent = new Intent(CreateDetailsActivity.this, CreateFriendsActivity.class);
-            targetAmount = Integer.parseInt(et_amount.getText().toString());
-            monthlyPayment = Integer.parseInt(editText_monthlyPayment.getText().toString());
-            groupDetailData.setCreateDate(startDate);
-            groupDetailData.setEndDate(endDate);
-            groupDetailData.setTargetAmount(targetAmount);
-            groupDetailData.setMonthlyPayment(monthlyPayment);
-            groupDetailData.setName(groupDataFromPrev.getName());
-            groupDetailData.setGroupType(groupDataFromPrev.getGroupType());
-            groupDetailData.setPaymentDay(groupDataFromPrev.getPaymentDay());
-            groupDetailData.setBankName(groupDataFromPrev.getBankName());
-            groupDetailData.setAccountNumber(groupDataFromPrev.getAccountNumber());
-
-            intent.putExtra("groupDetailData", groupDetailData);
-            // intent.putExtra("accountDetailData", accountDataFromPrev);
-
+            Intent intent = new Intent(CreateDetailsActivity.this, MainActivity.class);
             startActivity(intent);
             btn3Next.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
@@ -207,4 +231,102 @@ public class CreateDetailsActivity extends AppCompatActivity {
         DatePickerDialog dpDialog = new DatePickerDialog(this, listener, startYear, startMonth, startDay);
         dpDialog.show();
     }
+    class InsertData extends AsyncTask<String, Void, String> {
+        ProgressDialog progressDialog;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            progressDialog = ProgressDialog.show(CreateDetailsActivity.this,
+                    "Please Wait", null, true, true);
+        }
+
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+
+            progressDialog.dismiss();
+            // mTextViewResult.setText(result);
+            KakaoToast.makeToast(getApplicationContext(), result, Toast.LENGTH_SHORT).show();
+            Log.d(TAG, "POST response  - " + result);
+        }
+
+
+        @Override
+        protected String doInBackground(String... params) {
+            String name = (String)params[1];
+            String createDate = (String)params[2];
+            String endDate = (String)params[3];
+            String targetAmount = (String)params[4];
+            String monthlyPayment = (String)params[5];
+            int accountholderId = Integer.parseInt((String)params[6]);
+            int paymentDay = Integer.parseInt((String)params[7]);
+            String bankName = (String)params[8];
+            String accountNumber = (String)params[9];
+            String nickname = (String)params[10];
+            String thumbnailPath = (String)params[11];
+            String profilePath = (String)params[12];
+            try {
+                String serverURL = (String)params[0];
+                String postParameters = "name=" + name + "&createDate=" + createDate + "&endDate=" + endDate + "&targetAmount=" +targetAmount +
+                        "&monthlyPayment=" +monthlyPayment + "&accountHolderId=" +accountholderId + "&paymentDay=" + paymentDay +
+                        "&bankName=" +bankName + "&accountNumber=" +accountNumber + "&nickName=" +nickname +
+                        "&thumbnailImagePath=" +thumbnailPath+ "&profileImagePath=" +profilePath;
+                URL url = new URL(serverURL);
+                HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+
+
+                httpURLConnection.setReadTimeout(5000);
+                httpURLConnection.setConnectTimeout(5000);
+                httpURLConnection.setRequestMethod("POST");
+                httpURLConnection.connect();
+
+
+                OutputStream outputStream = httpURLConnection.getOutputStream();
+                outputStream.write(postParameters.getBytes("UTF-8"));
+                outputStream.flush();
+                outputStream.close();
+
+
+                int responseStatusCode = httpURLConnection.getResponseCode();
+                Log.d(TAG, "POST response code - " + responseStatusCode);
+
+                InputStream inputStream;
+                if(responseStatusCode == HttpURLConnection.HTTP_OK) {
+                    inputStream = httpURLConnection.getInputStream();
+                }
+                else{
+                    inputStream = httpURLConnection.getErrorStream();
+                }
+
+
+                InputStreamReader inputStreamReader = new InputStreamReader(inputStream, "UTF-8");
+                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+
+                StringBuilder sb = new StringBuilder();
+                String line = null;
+
+                while((line = bufferedReader.readLine()) != null){
+                    sb.append(line);
+                }
+
+
+                bufferedReader.close();
+
+
+                return sb.toString();
+
+
+            }  catch (Exception e) {
+
+                Log.d(TAG, "InsertData: Error ", e);
+
+                return new String("Error: " + e.getMessage());
+            }
+
+        }
+    }
 }
+
