@@ -85,6 +85,7 @@ public class GroupDetailFragment extends Fragment implements View.OnClickListene
     private TextView mTextViewPaymentDay;
     private TextView mTextViewAccountHolderId;
     private TextView mTextViewNickname;
+    private TextView mTextViewAccountNumber;
     protected ListView list = null;
     private final UserProfile userProfile = UserProfile.loadFromCache();
     private final List<FriendsRequest.FriendType> friendTypeList = new ArrayList<>();
@@ -132,10 +133,16 @@ public class GroupDetailFragment extends Fragment implements View.OnClickListene
 
         mTextViewPaymentDay = (TextView)view.findViewById(R.id.textView_groupdetails_paymentday);
         mTextViewPaymentDay.setText(groupDetailData.getName());
+
         mTextViewNickname = (TextView)view.findViewById(R.id.textView_groupdetails_nickname);
         mTextViewNickname.setText(userProfile.getNickname());
-        mTextViewAccountHolderId = (TextView)view.findViewById(R.id.textView_groupdetails_accountholderid);
-        mTextViewAccountHolderId.setText(Integer.toString(groupDetailData.getAccountHolderId()));
+
+        mTextViewAccountHolderId = (TextView)view.findViewById(R.id.textView_groupdetails_bankName);
+        mTextViewAccountHolderId.setText((groupDetailData.getBankName()));
+
+        mTextViewAccountNumber = (TextView)view.findViewById(R.id.textView_groupdetails_accountNumber);
+        mTextViewAccountHolderId.setText(groupDetailData.getAccountNumber());
+
         // Inflate the layout for this fragment
         return view;
     }
