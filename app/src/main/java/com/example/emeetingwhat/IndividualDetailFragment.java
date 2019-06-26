@@ -64,6 +64,7 @@ public class IndividualDetailFragment extends Fragment {
     private TextView mTextViewTargetAmount;
     private TextView mTextViewPaymentDay;
     private TextView mTextViewAccountHolderId;
+    private TextView mTextViewAccountNumber;
     private TextView mTextViewNickname;
     private MyFriendsListAdapter adapter = null;
     private ArrayList<MyFriendsInfo> myFriendsInfo=new ArrayList<>();
@@ -109,11 +110,17 @@ public class IndividualDetailFragment extends Fragment {
         mTextViewTargetAmount.setText(Integer.toString(groupDetailData.getTargetAmount()));
 
         mTextViewPaymentDay = (TextView)view.findViewById(R.id.textView_individualdetails_paymentday);
-        mTextViewPaymentDay.setText(groupDetailData.getName());
+        mTextViewPaymentDay.setText("이번달 " + Integer.toString(groupDetailData.getPaymentDay()) + "일");
+
         mTextViewNickname = (TextView)view.findViewById(R.id.textView_individualdetails_nickname);
         mTextViewNickname.setText(userProfile.getNickname());
-        mTextViewAccountHolderId = (TextView)view.findViewById(R.id.textView_individualdetails_accountholderid);
-        mTextViewAccountHolderId.setText(Integer.toString(groupDetailData.getAccountHolderId()));
+
+        mTextViewAccountHolderId = (TextView)view.findViewById(R.id.textView_individualdetails_bankName);
+        mTextViewAccountHolderId.setText(groupDetailData.getBankName());
+
+        mTextViewAccountNumber = (TextView)view.findViewById(R.id.textView_individualdetails_accountNumber);
+        mTextViewAccountHolderId.setText(groupDetailData.getAccountNumber());
+
         // Inflate the layout for this fragment
         return view;
     }

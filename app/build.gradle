@@ -11,6 +11,12 @@ android {
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
+    lintOptions {
+        checkReleaseBuilds false
+        // Or, if you prefer, you can continue to check for errors in release builds,
+        // but continue the build even when errors are found:
+        abortOnError false
+    }
     buildTypes {
         release {
             minifyEnabled false
@@ -42,4 +48,7 @@ dependencies {
     implementation 'com.kakao.sdk:kakaotalk:1.16.0'
     implementation 'me.relex:circleindicator:1.2.2@aar'
     implementation group: 'com.konghq', name: 'unirest-java', version: '2.3.08'
+    implementation 'com.github.prolificinteractive:material-calendarview:2.0.0'
+    implementation 'com.jakewharton.threetenabp:threetenabp:1.2.0'
+    implementation 'sun.bob:mcalendarview:1.0.0'
 }
