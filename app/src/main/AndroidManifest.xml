@@ -16,14 +16,13 @@
         android:theme="@style/AppTheme">
 
 
-        <activity android:name=".SplashActivity">
-            <!--
+        <activity android:name=".SplashActivity"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-            -->
         </activity>
 
         <activity android:name=".LoginActivity" />
@@ -56,14 +55,9 @@
         <activity android:name=".createGroup.CreateFriendsActivity" />
         <activity android:name=".createGroup.CreateDetailsActivity" />
         <activity android:name=".TestActivity"/>
+        <activity android:name=".TestActivity2"/>
         <activity android:name=".TestActivity3"/>
-        <activity android:name=".TestActivity2">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+        <activity android:name=".TestActivity4"/>
         <meta-data
             android:name="com.kakao.sdk.AppKey"
             android:value="@string/kakao_app_key" />

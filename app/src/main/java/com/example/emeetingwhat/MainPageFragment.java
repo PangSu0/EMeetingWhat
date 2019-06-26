@@ -19,6 +19,7 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager.widget.ViewPager;
 
 import com.example.emeetingwhat.Data.GroupDetailData;
 import com.kakao.usermgmt.response.model.UserProfile;
@@ -37,6 +38,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+
+import me.relex.circleindicator.CircleIndicator;
 
 public class MainPageFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
@@ -88,11 +91,12 @@ public class MainPageFragment extends Fragment {
                 GroupDetailData groupData = mArrayList.get(position);
                 Toast.makeText(getActivity(), "  "+groupData.getGroupId(), Toast.LENGTH_SHORT).show();
                 if( groupData.getGroupType().equals("group")){
-                    Fragment fragment = new GroupDetailFragment();
+                    Fragment fragment = new GroupFriendsDetailFragment();
                     if( fragment != null){
                         FragmentTransaction ft = getFragmentManager().beginTransaction();
                         Bundle bundle = new Bundle();
                         bundle.putString("groupId", Integer.toString(groupData.getGroupId()));
+                        bundle.putSerializable("groupDetails", groupData);
                         fragment.setArguments(bundle);
                         ft.replace(R.id.content_fragment_layout, fragment);
                         ft.commit();
@@ -103,6 +107,7 @@ public class MainPageFragment extends Fragment {
                         FragmentTransaction ft = getFragmentManager().beginTransaction();
                         Bundle bundle = new Bundle();
                         bundle.putString("groupId", Integer.toString(groupData.getGroupId()));
+                        bundle.putSerializable("groupDetails", groupData);
                         fragment.setArguments(bundle);
                         ft.replace(R.id.content_fragment_layout, fragment);
                         ft.commit();

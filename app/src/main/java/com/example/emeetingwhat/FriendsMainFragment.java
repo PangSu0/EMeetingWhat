@@ -95,11 +95,7 @@ public class FriendsMainFragment extends Fragment implements View.OnClickListene
     @Override
     public void onClick(View v) {
         FriendsRequest.FriendType type = FriendsRequest.FriendType.KAKAO_TALK;
-        switch (v.getId()) {
-            case R.id.all_talk_friends:
-                type = FriendsRequest.FriendType.KAKAO_TALK;
-                break;
-        }
+
         requestFriends(type);
     }
 
