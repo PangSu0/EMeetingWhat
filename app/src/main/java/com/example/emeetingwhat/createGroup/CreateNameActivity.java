@@ -77,6 +77,7 @@ public class CreateNameActivity extends AppCompatActivity {
                         groupDetailData.setAccountNumber(groupDataFromPrev.getAccountNumber());
                         // accountDetailData.setBankName(accountDataFromPrev.getBankName());
 
+                        intent = new Intent(CreateNameActivity.this, CreateDetailsActivity.class);
                         intent.putExtra("groupDetailData", groupDetailData);
                         // intent.putExtra("accountDetailData", accountDataFromPrev);
 
@@ -93,6 +94,7 @@ public class CreateNameActivity extends AppCompatActivity {
                         groupDetailData.setBankName(groupDataFromPrev.getBankName());
                         groupDetailData.setAccountNumber(groupDataFromPrev.getAccountNumber());
 
+                        intent = new Intent(CreateNameActivity.this, CreateDetailsActivity.class);
                         intent.putExtra("groupDetailData", groupDetailData);
                         // intent.putExtra("accountDetailData", accountDataFromPrev);
 
