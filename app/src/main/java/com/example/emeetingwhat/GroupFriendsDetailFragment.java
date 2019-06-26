@@ -2,47 +2,35 @@ package com.example.emeetingwhat;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.viewpager.widget.ViewPager;
-
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.emeetingwhat.Data.GroupDetailData;
 import com.example.emeetingwhat.common.log.Logger;
 import com.example.emeetingwhat.common.widget.KakaoToast;
-import com.kakao.auth.common.MessageSendable;
+import com.example.emeetingwhat.createGroup.CreateDetailsActivity;
 import com.kakao.friends.FriendContext;
 import com.kakao.friends.FriendsService;
 import com.kakao.friends.request.FriendsRequest;
 import com.kakao.friends.response.FriendsResponse;
 import com.kakao.friends.response.model.FriendInfo;
 import com.kakao.kakaotalk.callback.TalkResponseCallback;
-import com.kakao.kakaotalk.v2.KakaoTalkService;
-import com.kakao.message.template.ButtonObject;
-import com.kakao.message.template.ContentObject;
-import com.kakao.message.template.LinkObject;
-import com.kakao.message.template.ListTemplate;
 import com.kakao.network.ErrorResult;
 import com.kakao.usermgmt.response.model.UserProfile;
 
@@ -56,18 +44,12 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
-import me.relex.circleindicator.CircleIndicator;
-
 import static com.example.emeetingwhat.WaitingDialog.cancelWaitingDialog;
-import static com.example.emeetingwhat.WaitingDialog.showWaitingDialog;
 
-public class GroupDetailFragment extends Fragment implements View.OnClickListener, GroupFriendsListAdapter.IFriendListCallback {
+public class GroupFriendsDetailFragment extends Fragment implements View.OnClickListener, GroupFriendsListAdapter.IFriendListCallback {
     private String mParam1;
     private String mParam2;
     private static final String ARG_PARAM1 = "param1";
@@ -75,24 +57,21 @@ public class GroupDetailFragment extends Fragment implements View.OnClickListene
     private MyFriendsListAdapter adapter = null;
     private GroupFriendsListAdapter mAdapter = null;
     private static String IP_ADDRESS = "61.108.100.36";
-    private static String TAG = "dbtest";
+    private static String TAG = "inserttest";
     private String mJsonString;
     private GroupDetailData groupDetailData = new GroupDetailData();
-
-    private TextView mTextViewResult;
-    private TextView mTextViewName;
-    private TextView mTextViewTargetAmount;
-    private TextView mTextViewPaymentDay;
-    private TextView mTextViewAccountHolderId;
-    private TextView mTextViewNickname;
+    private Button nextBtn;
+    private RecyclerView mRecyclerView;
+    private LinearLayoutManager mLinearLayoutManager;
+    private String groupId;
     protected ListView list = null;
     private final UserProfile userProfile = UserProfile.loadFromCache();
     private final List<FriendsRequest.FriendType> friendTypeList = new ArrayList<>();
     private FriendContext friendContext = null;
-    private GroupDetailFragment.FriendsInfo friendsInfo = null;
+    private GroupFriendsDetailFragment.FriendsInfo friendsInfo = null;
     private ArrayList<MyFriendsInfo> myFriendsInfo=new ArrayList<>();
     private ArrayList<Long> selectedFriends=new ArrayList<>();
-    public GroupDetailFragment() {
+    public GroupFriendsDetailFragment() {
         // Required empty public constructor
     }
 
@@ -108,34 +87,49 @@ public class GroupDetailFragment extends Fragment implements View.OnClickListene
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_group_detail, container, false);
-        mTextViewResult = (TextView)view.findViewById(R.id.textView_result_test);
-        mTextViewResult.setMovementMethod(new ScrollingMovementMethod());
-
-        GroupDetailFragment.GetData task = new GroupDetailFragment.GetData();
+        View view = inflater.inflate(R.layout.fragment_group_friends_detail, container, false);
+        nextBtn = (Button) view.findViewById(R.id.button_next);
         String str_groupId = "";
 
         if( getArguments() != null){
             str_groupId = getArguments().getString("groupId");
+            groupId= str_groupId;
             groupDetailData = (GroupDetailData) getArguments().getSerializable("groupDetails");
         }
+        nextBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Fragment fragment = new GroupDetailFragment();
+                FragmentTransaction ft = getFragmentManager().beginTransaction();
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("groupDetails", groupDetailData);
+                bundle.putSerializable("selectedFriends", selectedFriends);
+                fragment.setArguments(bundle);
+                ft.replace(R.id.content_fragment_layout, fragment);
+                ft.commit();
+            }
+        });
+        mRecyclerView = (RecyclerView) view.findViewById(R.id.friends_list);
+        mLinearLayoutManager = new LinearLayoutManager(getActivity());
+        mLinearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        mRecyclerView.setLayoutManager(mLinearLayoutManager);
+        myFriendsInfo= new ArrayList<>();
+        adapter = new MyFriendsListAdapter(getActivity(), myFriendsInfo);
+        mRecyclerView.setAdapter(adapter);
+        myFriendsInfo.clear();
+        adapter.notifyDataSetChanged();
 
+
+        Button btn_add = (Button) view.findViewById(R.id.button_add_friends);
+        btn_add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showAlertDialog();
+            }
+        });
+        GroupFriendsDetailFragment.GetData task = new GroupFriendsDetailFragment.GetData();
         task.execute( "http://" + IP_ADDRESS + "/selectGroupDetails.php", str_groupId);
-//
-//        GroupDetailFragment.GetData task2 = new GroupDetailFragment.GetData();
-//        task.execute( "http://" + IP_ADDRESS + "/selectGroupComponent.php", str_groupId);
-        mTextViewName = (TextView)view.findViewById(R.id.textView_groupdetails_name);
-        mTextViewName.setText(groupDetailData.getName());
 
-        mTextViewTargetAmount = (TextView)view.findViewById(R.id.textView_groupdetails_targetamount);
-        mTextViewTargetAmount.setText(Integer.toString(groupDetailData.getTargetAmount()));
-
-        mTextViewPaymentDay = (TextView)view.findViewById(R.id.textView_groupdetails_paymentday);
-        mTextViewPaymentDay.setText(groupDetailData.getName());
-        mTextViewNickname = (TextView)view.findViewById(R.id.textView_groupdetails_nickname);
-        mTextViewNickname.setText(userProfile.getNickname());
-        mTextViewAccountHolderId = (TextView)view.findViewById(R.id.textView_groupdetails_accountholderid);
-        mTextViewAccountHolderId.setText(Integer.toString(groupDetailData.getAccountHolderId()));
         // Inflate the layout for this fragment
         return view;
     }
@@ -146,7 +140,7 @@ public class GroupDetailFragment extends Fragment implements View.OnClickListene
         View view = inflater.inflate(R.layout.layout_group_friends_list, null);
         builder.setView(view);
         friendTypeList.add(FriendsRequest.FriendType.KAKAO_TALK);
-        friendsInfo = new GroupDetailFragment.FriendsInfo();
+        friendsInfo = new GroupFriendsDetailFragment.FriendsInfo();
         requestFriends(friendTypeList.get(0));
         //requestFriends();
         KakaoToast.makeToast(getActivity(), friendsInfo.getTotalCount() + " ", Toast.LENGTH_SHORT).show();
@@ -163,8 +157,17 @@ public class GroupDetailFragment extends Fragment implements View.OnClickListene
                 ArrayList<Integer> arrayList = mAdapter.getChecked();
                 for( int i = 0 ; i <  arrayList.size() ; i++ ){
                     FriendInfo groupFInfo = mAdapter.getItem(arrayList.get(i));
+                    groupFInfo.getProfileThumbnailImage();
                     selectedFriends.add(groupFInfo.getId());
-
+                    GroupFriendsDetailFragment.InsertData task = new GroupFriendsDetailFragment.InsertData();
+                    KakaoToast.makeToast(getActivity(), userProfile.getNickname(), Toast.LENGTH_SHORT).show();
+                    task.execute("http://" + IP_ADDRESS + "/insertGroupFriends.php"
+                            , Long.toString(groupFInfo.getId())
+                            , groupId
+                            , groupFInfo.getProfileNickname()
+                            , groupFInfo.getProfileThumbnailImage()
+                            , groupFInfo.getProfileThumbnailImage()
+                    );
                 }
             }
         });
@@ -193,12 +196,12 @@ public class GroupDetailFragment extends Fragment implements View.OnClickListene
             super.onPostExecute(result);
 
             progressDialog.dismiss();
-            mTextViewResult.setText(result);
+            // mTextViewResult.setText(result);
             Log.d(TAG, "response - " + result);
 
             if (result == null){
 
-                mTextViewResult.setText(errorString);
+                // mTextViewResult.setText(errorString);
             }
             else {
                 mJsonString = result;
@@ -311,7 +314,7 @@ public class GroupDetailFragment extends Fragment implements View.OnClickListene
     }
     private void requestFriends(FriendsRequest.FriendType type) {
         adapter = null;
-        friendsInfo = new GroupDetailFragment.FriendsInfo();
+        friendsInfo = new GroupFriendsDetailFragment.FriendsInfo();
         friendContext = FriendContext.createContext(type, FriendsRequest.FriendFilter.NONE, FriendsRequest.FriendOrder.NICKNAME, true, 0, 100, "asc");
         requestFriendsInner();
     }
@@ -400,6 +403,94 @@ public class GroupDetailFragment extends Fragment implements View.OnClickListene
 
         public int getTotalCount() {
             return totalCount;
+        }
+    }
+
+    class InsertData extends AsyncTask<String, Void, String> {
+        ProgressDialog progressDialog;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            progressDialog = ProgressDialog.show(getActivity(),
+                    "Please Wait", null, true, true);
+        }
+
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+
+            progressDialog.dismiss();
+            // mTextViewResult.setText(result);
+            KakaoToast.makeToast(getActivity(), result, Toast.LENGTH_SHORT).show();
+            Log.d(TAG, "POST response  - " + result);
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            String userId = (String)params[1];
+            String groupId = (String)params[2];
+            String nickname = (String)params[3];
+            String thumbnailPath = (String)params[4];
+            String profilePath = (String)params[5];
+            try {
+                String serverURL = (String)params[0];
+                String postParameters = "userId=" + userId + "&groupId=" + groupId + "&nickName=" +nickname +
+                        "&thumbnailImagePath=" +thumbnailPath+ "&profileImagePath=" +profilePath;
+                URL url = new URL(serverURL);
+                HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+
+
+                httpURLConnection.setReadTimeout(5000);
+                httpURLConnection.setConnectTimeout(5000);
+                httpURLConnection.setRequestMethod("POST");
+                httpURLConnection.connect();
+
+
+                OutputStream outputStream = httpURLConnection.getOutputStream();
+                outputStream.write(postParameters.getBytes("UTF-8"));
+                outputStream.flush();
+                outputStream.close();
+
+
+                int responseStatusCode = httpURLConnection.getResponseCode();
+                Log.d(TAG, "POST response code - " + responseStatusCode);
+
+                InputStream inputStream;
+                if(responseStatusCode == HttpURLConnection.HTTP_OK) {
+                    inputStream = httpURLConnection.getInputStream();
+                }
+                else{
+                    inputStream = httpURLConnection.getErrorStream();
+                }
+
+
+                InputStreamReader inputStreamReader = new InputStreamReader(inputStream, "UTF-8");
+                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+
+                StringBuilder sb = new StringBuilder();
+                String line = null;
+
+                while((line = bufferedReader.readLine()) != null){
+                    sb.append(line);
+                }
+
+
+                bufferedReader.close();
+
+
+                return sb.toString();
+
+
+            }  catch (Exception e) {
+
+                Log.d(TAG, "InsertData: Error ", e);
+
+                return new String("Error: " + e.getMessage());
+            }
+
         }
     }
 }

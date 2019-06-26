@@ -21,6 +21,10 @@ android {
         sourceCompatibility = '1.8'
         targetCompatibility = '1.8'
     }
+
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES'
+    }
 }
 
 dependencies {
@@ -38,5 +42,4 @@ dependencies {
     implementation 'com.kakao.sdk:kakaotalk:1.16.0'
     implementation 'me.relex:circleindicator:1.2.2@aar'
     implementation group: 'com.konghq', name: 'unirest-java', version: '2.3.08'
-
 }

@@ -1,6 +1,7 @@
 package com.example.emeetingwhat;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
@@ -8,10 +9,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.emeetingwhat.Data.GroupDetailData;
 import com.kakao.usermgmt.response.model.UserProfile;
@@ -28,6 +32,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 public class IndividualDetailFragment extends Fragment {
@@ -60,7 +65,10 @@ public class IndividualDetailFragment extends Fragment {
     private TextView mTextViewPaymentDay;
     private TextView mTextViewAccountHolderId;
     private TextView mTextViewNickname;
-
+    private MyFriendsListAdapter adapter = null;
+    private ArrayList<MyFriendsInfo> myFriendsInfo=new ArrayList<>();
+    private RecyclerView mRecyclerView;
+    private LinearLayoutManager mLinearLayoutManager;
     private final UserProfile userProfile = UserProfile.loadFromCache();
     public IndividualDetailFragment() {
         // Required empty public constructor
@@ -81,16 +89,35 @@ public class IndividualDetailFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_individual_detail, container, false);
         mTextViewResult = (TextView)view.findViewById(R.id.textView_result_test);
         mTextViewResult.setMovementMethod(new ScrollingMovementMethod());
+        mRecyclerView = (RecyclerView) view.findViewById(R.id.individual_friends_list);
+        mLinearLayoutManager = new LinearLayoutManager(getActivity());
+        mLinearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        mRecyclerView.setLayoutManager(mLinearLayoutManager);
+        myFriendsInfo= new ArrayList<>();
+        adapter = new MyFriendsListAdapter(getActivity(), myFriendsInfo);
+        mRecyclerView.setAdapter(adapter);
+        myFriendsInfo.clear();
+        adapter.notifyDataSetChanged();
 
+        Button btn_add = (Button) view.findViewById(R.id.button_add_friends_i);
+        btn_add.setOnClickListener(new Button.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), Step4_2_InviteMemberActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+            }
+        });
 
         IndividualDetailFragment.GetData task = new IndividualDetailFragment.GetData();
+
         String str_groupId = "";
 
         if( getArguments() != null){
             str_groupId = getArguments().getString("groupId");
+            groupDetailData = (GroupDetailData) getArguments().getSerializable("groupDetails");
         }
-
-        task.execute( "http://" + IP_ADDRESS + "/selectIndividualDetail.php", str_groupId, Long.toString(userProfile.getId()));
+        task.execute( "http://" + IP_ADDRESS + "/selectGroupDetails.php", str_groupId);
 //
 //        IndividualDetailFragment.GetData task2 = new IndividualDetailFragment.GetData();
 //        task2.execute( "http://" + IP_ADDRESS + "/selectGroupComponent.php", str_groupId);
@@ -147,9 +174,6 @@ public class IndividualDetailFragment extends Fragment {
 
             String serverURL = params[0];
             String postParameters = "GroupId=" + params[1];
-            if(params[2] != null){
-                postParameters +="&UserId="+params[2];
-            }
             try {
 
                 URL url = new URL(serverURL);
@@ -208,7 +232,14 @@ public class IndividualDetailFragment extends Fragment {
     }
 
     private void showResult() {
-
+        String TAG_JSON = "groupDetails";
+        String TAG_GROUPID = "GroupId";
+        String TAG_USERID = "UserId";
+        String TAG_ORDERNUMBER = "OrderNumber";
+        String TAG_ACCOUNTNUMBER = "AccountNumber";
+        String TAG_NICKNAME = "NickName";
+        String TAG_THUNMBNAILIMAGEPATH = "ThumbnailImagePath";
+        String TAG_PROFILEIMAGEPATH = "ProfileImagePath";
         try {
             JSONObject jsonObject = new JSONObject(mJsonString);
             JSONArray jsonArray = jsonObject.getJSONArray(TAG_JSON);
@@ -216,50 +247,25 @@ public class IndividualDetailFragment extends Fragment {
             for (int i = 0; i < jsonArray.length(); i++) {
 
                 JSONObject item = jsonArray.getJSONObject(i);
-
                 int groupId = item.getInt(TAG_GROUPID);
-                String name = item.getString(TAG_NAME);
-                String s_createDate = item.getString(TAG_CREATEDATE);
-                String s_endDate = item.getString(TAG_ENDDATE);
-                int targetAmount = item.getInt(TAG_TARGETAMOUNT);
-                int monthlyPayment = item.getInt(TAG_MONTHLYPAYMENT);
-                String groupType = item.getString(TAG_GROUPTYPE);
-                int accountHolderId = item.getInt(TAG_ACCOUNTHOLDERID);
-                int paymentDay = item.getInt(TAG_PAYMENTDAY);
+                int userId = item.getInt(TAG_USERID);
                 int orderNumber = item.getInt(TAG_ORDERNUMBER);
-
-                SimpleDateFormat transFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                Date createDate = null;
-                Date endDate = null;
-                Date paymentDate = null;
-                try {
-                    createDate = transFormat.parse(s_createDate);
-                    endDate = transFormat.parse(s_endDate);
-
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-
-                groupDetailData.setGroupId(groupId);
-                groupDetailData.setName(name);
-                groupDetailData.setCreateDate(createDate);
-                groupDetailData.setEndDate(endDate);
-                groupDetailData.setTargetAmount(targetAmount);
-                groupDetailData.setMonthlyPayment(monthlyPayment);
-                groupDetailData.setGroupType(groupType);
-                groupDetailData.setAccountHolderId(accountHolderId);
-                groupDetailData.setPaymentDay(paymentDay);
-                groupDetailData.setOrderNumber(orderNumber);
-                Toast.makeText(getActivity(), groupDetailData.getName(), Toast.LENGTH_SHORT).show();
-
-                // mArrayList.add(groupDetailData);
-                // mAdapter.notifyDataSetChanged();
+                String nickName = item.getString(TAG_NICKNAME);
+                String thumbnail = item.getString(TAG_THUNMBNAILIMAGEPATH);
+                String profile = item.getString(TAG_PROFILEIMAGEPATH);
+                MyFriendsInfo info = new MyFriendsInfo();
+                info.setNickName(nickName);
+                info.setUserId(userId);
+                info.setThumbnailImagePath(thumbnail);
+                info.setProfileImagePath(profile);
+                myFriendsInfo.add(info);
+                adapter.notifyDataSetChanged();
             }
-
-
         } catch (JSONException e) {
 
             Log.d(TAG, "showResult : ", e);
         }
+
     }
+
 }

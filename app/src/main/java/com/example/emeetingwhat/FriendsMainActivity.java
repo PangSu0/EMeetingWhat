@@ -111,18 +111,7 @@ private static class FriendsInfo {
         }
 
         list = findViewById(R.id.friend_list);
-        Button talkButton = findViewById(R.id.all_talk_friends);
 
-        talkButton.setVisibility(View.GONE);
-
-        for(FriendsRequest.FriendType friendType : friendTypeList) {
-            switch (friendType) {
-                case KAKAO_TALK:
-                    talkButton.setVisibility(View.VISIBLE);
-                    talkButton.setOnClickListener(this);
-                    break;
-            }
-        }
 
         if (friendTypeList.size() == 1) {
             friendsInfo = new FriendsInfo();
@@ -137,11 +126,7 @@ private static class FriendsInfo {
     @Override
     public void onClick(View v) {
         FriendsRequest.FriendType type = FriendsRequest.FriendType.KAKAO_TALK;
-        switch (v.getId()) {
-            case R.id.all_talk_friends:
-                type = FriendsRequest.FriendType.KAKAO_TALK;
-                break;
-        }
+
         requestFriends(type);
     }
 
@@ -293,6 +278,7 @@ private static class FriendsInfo {
 
     @Override
     public void onItemSelected(int position, FriendInfo friendInfo) {
+
     }
 
     @Override

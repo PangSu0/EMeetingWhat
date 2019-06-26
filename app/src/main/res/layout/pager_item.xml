@@ -2,16 +2,17 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
     <com.android.volley.toolbox.NetworkImageView
         android:id="@+id/pager_profile_image"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="113dp"
+        android:layout_height="109dp"
         android:layout_gravity="center"
         android:layout_margin="5dp"
         android:background="@color/color6"
-        android:src="@drawable/thumb_story" />
+        app:srcCompat="@drawable/kakao_default_profile_image" />
 
     <TextView
         android:id="@+id/pager_nickname"

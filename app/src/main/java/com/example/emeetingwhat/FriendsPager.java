@@ -19,8 +19,9 @@ import java.util.List;
 public class FriendsPager extends PagerAdapter {
 
     private Context context;
-    public FriendsPager(Context context) {
+    public FriendsPager(Context context, List<MyFriendsInfo> list) {
         this.context = context;
+        this.items = list;
     }
 
     private List<MyFriendsInfo> items = null;
@@ -35,7 +36,7 @@ public class FriendsPager extends PagerAdapter {
     }
     @Override
     public int getCount() {
-        return items.size();
+        return 3;
     }
     /*
     This callback is responsible for creating a page. We inflate the layout and set the drawable
@@ -46,31 +47,23 @@ public class FriendsPager extends PagerAdapter {
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
         View view = LayoutInflater.from(context).inflate(R.layout.pager_item, null);
-        if (position == getCount() - 5) {
-//            if (listener != null) {
-//                listener.onPreloadNext();
-//            }
-        }
-
         FriendsPager.ViewHolder holder;
         holder = new FriendsPager.ViewHolder();
-        holder.profileView = view.findViewById(R.id.profile_image);
+        holder.profileView = view.findViewById(R.id.pager_profile_image);
         holder.profileView.setDefaultImageResId(R.drawable.thumb_story);
         holder.profileView.setErrorImageResId(R.drawable.thumb_story);
-        holder.nickName = view.findViewById(R.id.nickname);
+        holder.nickName = view.findViewById(R.id.pager_nickname);
         view.setTag(holder);
 
-
-        final MyFriendsInfo info = getItem(position);
         Application app  = GlobalApplication.getGlobalApplicationContext();
-        String profileUrl = info.getProfileImagePath();
+        String profileUrl = items.get(position).getProfileImagePath();
         if (profileUrl != null && profileUrl.length() > 0) {
             holder.profileView.setImageUrl(profileUrl, ((GlobalApplication) app).getImageLoader());
         } else {
             holder.profileView.setImageResource(R.drawable.thumb_story);
         }
 
-        String nickName = String.valueOf(position) + " " + info.getNickName();
+        String nickName = String.valueOf(position) + " " + items.get(position).getNickName();
         if (nickName.length() > 0) {
             holder.nickName.setVisibility(View.VISIBLE);
             holder.nickName.setText(nickName);
@@ -83,7 +76,6 @@ public class FriendsPager extends PagerAdapter {
 //                listener.onItemSelected(position, info);
 //            }
         });
-
         return view;
     }
 
@@ -95,10 +87,11 @@ public class FriendsPager extends PagerAdapter {
     public void destroyItem(ViewGroup container, int position, Object view) {
         container.removeView((View) view);
     }
-
-    public MyFriendsInfo getItem(int position) {
-        return items.get(position);
-    }
+//
+//    public MyFriendsInfo getItem(int position) {
+//
+//        return items.get(position);
+//    }
 
     /*
     Used to determine whether the page view is associated with object key returned by instantiateItem.
@@ -108,9 +101,4 @@ public class FriendsPager extends PagerAdapter {
     public boolean isViewFromObject(View view, Object object) {
         return object == view;
     }
-
-    private int getImageAt(int position) {
-        return position;
-    }
-
 }

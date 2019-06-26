@@ -12,39 +12,6 @@
         android:layout_height="match_parent"
         android:layout_margin="20dp">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="133dp">
-
-            <androidx.viewpager.widget.ViewPager
-                android:id="@+id/view_pager"
-                android:layout_width="382dp"
-                android:layout_height="78dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.545"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.0" />
-
-            <me.relex.circleindicator.CircleIndicator
-                android:id="@+id/circle"
-                android:layout_width="113dp"
-                android:layout_height="39dp"
-                android:layout_alignBottom="@id/view_pager"
-                android:layout_centerHorizontal="true"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="100dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginBottom="15dp"
-                android:padding="16dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="1.0" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
         <TextView
             android:id="@+id/textView_groupdetails_name"
             android:layout_width="match_parent"
@@ -54,6 +21,15 @@
             android:textAlignment="center"
             android:textColor="#3F51B5"
             android:textSize="30sp" />
+
+        <TextView
+            android:id="@+id/textView_result_test"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:text="TextView"
+            app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
             android:id="@+id/textView2"
@@ -125,10 +101,5 @@
             android:layout_height="wrap_content"
             android:text="입금한 사람 리스트" />
 
-        <TextView
-            android:id="@+id/textView_result_test"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="TextView" />
     </LinearLayout>
 </FrameLayout>

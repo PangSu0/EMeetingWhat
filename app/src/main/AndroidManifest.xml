@@ -16,7 +16,8 @@
         android:theme="@style/AppTheme">
 
 
-        <activity android:name=".SplashActivity">
+        <activity android:name=".SplashActivity"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -51,7 +52,6 @@
             android:windowSoftInputMode="adjustResize|stateHidden"/>
         <activity android:name=".createGroup.CreateAccountActivity" />
         <activity android:name=".createGroup.CreateNameActivity" />
-        <activity android:name=".createGroup.CreateFriendsActivity" />
         <activity android:name=".createGroup.CreateDetailsActivity" />
 
         <meta-data
