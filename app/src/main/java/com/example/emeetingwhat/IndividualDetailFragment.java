@@ -110,7 +110,7 @@ public class IndividualDetailFragment extends Fragment {
         mTextViewTargetAmount.setText(Integer.toString(groupDetailData.getTargetAmount()));
 
         mTextViewPaymentDay = (TextView)view.findViewById(R.id.textView_individualdetails_paymentday);
-        mTextViewPaymentDay.setText("이번달 " + Integer.toString(groupDetailData.getPaymentDay()) + "일");
+        mTextViewPaymentDay.setText(groupDetailData.getPaymentDay() + "일");
 
         mTextViewNickname = (TextView)view.findViewById(R.id.textView_individualdetails_nickname);
         mTextViewNickname.setText(userProfile.getNickname());
@@ -119,7 +119,7 @@ public class IndividualDetailFragment extends Fragment {
         mTextViewAccountHolderId.setText(groupDetailData.getBankName());
 
         mTextViewAccountNumber = (TextView)view.findViewById(R.id.textView_individualdetails_accountNumber);
-        mTextViewAccountHolderId.setText(groupDetailData.getAccountNumber());
+        mTextViewAccountNumber.setText(groupDetailData.getAccountNumber());
 
         // Inflate the layout for this fragment
         return view;
