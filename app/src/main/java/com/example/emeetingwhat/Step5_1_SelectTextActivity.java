@@ -142,13 +142,16 @@ public class Step5_1_SelectTextActivity extends AppCompatActivity {
     {
         if(mNameTable.mNameList.length > 1)
             Toast.makeText(getApplicationContext(), "순서를 모두 설정해 주십시오.",Toast.LENGTH_SHORT).show();
-        else
-            Toast.makeText(getApplicationContext(), "다음 페이지로",Toast.LENGTH_SHORT).show();
-        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-        intent.putExtra("groupId", str_groupId);
-        intent.putExtra("groupDetailData", groupDataFromPrev);
-        intent.putExtra("selectedFriends", selectedFriends);
-        startActivity(intent);
+        else {
+            ArrayList<MyFriendsInfo> myFriendsInfoArrayList = new ArrayList<>();
+            for(int i=0;i< selectedFriends.size();i++)
+                myFriendsInfoArrayList.add(selectedFriends.get(mNameTable.indexList[i+1])); // todo : 여기 넣었어요
+            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+            intent.putExtra("groupId", str_groupId);
+            intent.putExtra("groupDetailData", groupDataFromPrev);
+            intent.putExtra("selectedFriends", selectedFriends);
+            startActivity(intent);
+        }
 
     }
     // ListView 를 초기화

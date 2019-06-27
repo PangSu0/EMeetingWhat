@@ -435,8 +435,18 @@ public class Step5_2_RandomLadderActivity extends AppCompatActivity {
 
     // 게임 완료 이벤트 함수
     public void onGameCompleted() {
+        ArrayList<MyFriendsInfo> myFriendsInfoArrayList = new ArrayList<>();    //todo:여기에 넣었어요
+        for(int i = 0; i < mPeopleMax; i++) {
+            int index = 0;
+            for(int j = 0; j < mPeopleMax; j++) {
+                index = j;
+                if (mArPeople.get(j).mPosition.x == i)
+                    break;
+            }
+            myFriendsInfoArrayList.add(selectedFriends.get(index));
+        }
+
         Intent intent = new Intent(getApplicationContext(), ResultActivity.class);
-        // Intent 에 인원수를 입력
         intent.putExtra("PeopleMax", mPeopleMax);
 
         // Intent 에 사람-벌칙 매칭 정보를 입력
@@ -444,12 +454,6 @@ public class Step5_2_RandomLadderActivity extends AppCompatActivity {
             intent.putExtra("Result" + mArPeople.get(i).mPosition.x, mArPeople.get(i).mName);
             //mArPeople.get(i).mPosition.x
         }
-
-        /*
-        for(int i=0; i < mPeopleMax; i++) {
-            intent.putExtra("Result" + i, mArPeople.get(i).mName + " - " + mArPresent.get( mArPeople.get(i).mPosition.x ));
-        }
-        */
 
 
         startActivity(intent);
