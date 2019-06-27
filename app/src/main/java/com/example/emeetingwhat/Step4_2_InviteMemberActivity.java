@@ -55,9 +55,14 @@ public class Step4_2_InviteMemberActivity extends AppCompatActivity implements G
         str_groupId = intent_GroupFromPrevious.getStringExtra("groupId");
         groupDataFromPrev =  (GroupDetailData)intent_GroupFromPrevious.getSerializableExtra("groupDetailData");
         myFriendsInfoArrayList = (ArrayList<MyFriendsInfo>) intent_GroupFromPrevious.getSerializableExtra("myFriendsInfoArrayList");
-
+        Toast.makeText(getApplicationContext(), groupDataFromPrev.getAccountHolderId() + " ", Toast.LENGTH_SHORT).show();
         setContentView(R.layout.activity_step4_2_invite_member);
-
+        String str = "";
+        EditText ed_friends = findViewById(R.id.editName2);
+        for( int i = 0 ; i < selectedFriends.size() ; i ++ ){
+            str += " " + selectedFriends.get(i).getNickName();
+        }
+        ed_friends.setText(str);
     }
 
     public void onClick(View v)
@@ -100,7 +105,7 @@ public class Step4_2_InviteMemberActivity extends AppCompatActivity implements G
             Toast.makeText(getApplicationContext(), "수령 순서를 결정해 주세요.",Toast.LENGTH_LONG).show();
             return;
         }
-        Toast.makeText(getApplicationContext(), selectedFriends.size() + "명이 선택", Toast.LENGTH_SHORT).show();
+        // Toast.makeText(getApplicationContext(), selectedFriends.size() + "명이 선택", Toast.LENGTH_SHORT).show();
         intent.putExtra("groupId", str_groupId);
         intent.putExtra("groupDetailData", groupDataFromPrev);
         intent.putExtra("selectedFriends", selectedFriends);

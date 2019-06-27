@@ -1,5 +1,6 @@
 package com.example.emeetingwhat;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Canvas;
@@ -7,9 +8,11 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.Rect;
+import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Message;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
@@ -17,11 +20,20 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.emeetingwhat.Data.GroupDetailData;
+import com.example.emeetingwhat.common.widget.KakaoToast;
 import com.kakao.usermgmt.response.model.UserProfile;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 
 public class Step5_2_RandomLadderActivity extends AppCompatActivity {
+    private static String IP_ADDRESS = "61.108.100.36";
+    private static String TAG = "inserttest";
     int mPeopleMax;
     ArrayList<PeopleInfo> mArPeople = null;         // 사람 정보 배열
     ArrayList<Point> mArHBar = null;            // 수평 사다리 정보 배열
@@ -458,5 +470,6 @@ public class Step5_2_RandomLadderActivity extends AppCompatActivity {
 
         startActivity(intent);
     }
+
 
 }

@@ -110,8 +110,7 @@ public class GroupDetailFragment extends Fragment implements View.OnClickListene
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_group_detail, container, false);
-        mTextViewResult = (TextView)view.findViewById(R.id.textView_result_test);
-        mTextViewResult.setMovementMethod(new ScrollingMovementMethod());
+
 
         GroupDetailFragment.GetData task = new GroupDetailFragment.GetData();
         String str_groupId = "";
@@ -132,7 +131,7 @@ public class GroupDetailFragment extends Fragment implements View.OnClickListene
         mTextViewTargetAmount.setText(Integer.toString(groupDetailData.getTargetAmount()));
 
         mTextViewPaymentDay = (TextView)view.findViewById(R.id.textView_groupdetails_paymentday);
-        mTextViewPaymentDay.setText(groupDetailData.getName());
+        mTextViewPaymentDay.setText(groupDetailData.getPaymentDay() + "일 까지 ");
 
         mTextViewNickname = (TextView)view.findViewById(R.id.textView_groupdetails_nickname);
         mTextViewNickname.setText(userProfile.getNickname());
@@ -141,7 +140,7 @@ public class GroupDetailFragment extends Fragment implements View.OnClickListene
         mTextViewAccountHolderId.setText((groupDetailData.getBankName()));
 
         mTextViewAccountNumber = (TextView)view.findViewById(R.id.textView_groupdetails_accountNumber);
-        mTextViewAccountHolderId.setText(groupDetailData.getAccountNumber());
+        mTextViewAccountNumber.setText(groupDetailData.getAccountNumber());
 
         // Inflate the layout for this fragment
         return view;
@@ -200,12 +199,12 @@ public class GroupDetailFragment extends Fragment implements View.OnClickListene
             super.onPostExecute(result);
 
             progressDialog.dismiss();
-            mTextViewResult.setText(result);
+           //  mTextViewResult.setText(result);
             Log.d(TAG, "response - " + result);
 
             if (result == null){
 
-                mTextViewResult.setText(errorString);
+            //     mTextViewResult.setText(errorString);
             }
             else {
                 mJsonString = result;

@@ -123,6 +123,7 @@ public class IndividualFriendsDetailFragment extends Fragment implements View.On
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), Step4_2_InviteMemberActivity.class);
                 intent.putExtra("groupId", groupId);
+                intent.putExtra("groupDetailData", groupDetailData);
                 intent.putExtra("myFriendsInfoArrayList", myFriendsInfoArrayList);
                 startActivity(intent);
             }
