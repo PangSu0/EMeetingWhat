@@ -16,6 +16,9 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.emeetingwhat.Data.GroupDetailData;
+import com.kakao.usermgmt.response.model.UserProfile;
+
 import java.util.ArrayList;
 
 public class Step5_2_RandomLadderActivity extends AppCompatActivity {
@@ -27,7 +30,11 @@ public class Step5_2_RandomLadderActivity extends AppCompatActivity {
     int mCanvasH;         // 캔버스 높이
     int mMoveUnitH = 10;        // 수평 이동 단위
     int mMoveUnitV = 10;        // 수직 이동 단위
-
+    GroupDetailData groupDataFromPrev;
+    private final UserProfile userProfile = UserProfile.loadFromCache();
+    private ArrayList<MyFriendsInfo> selectedFriends = new ArrayList<>();
+    MyFriendsInfo myInfo= new MyFriendsInfo();
+    String str_groupId = "";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,24 +43,36 @@ public class Step5_2_RandomLadderActivity extends AppCompatActivity {
         mainView = new MainView(this);
         RelativeLayout layoutCanvas = (RelativeLayout)findViewById(R.id.layoutCanvas);
         layoutCanvas.addView(mainView);
-
+        Intent intent_GroupFromPrevious = getIntent();
+        str_groupId = intent_GroupFromPrevious.getStringExtra("groupId");
+        groupDataFromPrev =  (GroupDetailData)intent_GroupFromPrevious.getSerializableExtra("groupDetailData");
+        selectedFriends = (ArrayList<MyFriendsInfo>) intent_GroupFromPrevious.getSerializableExtra("selectedFriends");
+        myInfo.setUserId(userProfile.getId());
+        myInfo.setNickName(userProfile.getNickname());
+        myInfo.setProfileImagePath(userProfile.getProfileImagePath());
+        myInfo.setThumbnailImagePath(userProfile.getThumbnailImagePath());
+        selectedFriends.add(myInfo);
         // Intent 에서 데이터를 읽는다
-        readIntent(getIntent());
+        readIntent(selectedFriends);
 
     }
-    public ArrayList<String> setInitName() {
+    public ArrayList<String> setInitName(ArrayList<MyFriendsInfo> info) {
         ArrayList<String> mTempName = new ArrayList<>();
-        mTempName.add("은지");
-        mTempName.add("수미");
-        mTempName.add("창수");
-        for (int i = 0; i < 7; i++) {
-            mTempName.add("사람" + (i + 1));
+        for( int i = 0 ; i < info.size() ; i ++ ){
+
+            mTempName.add(info.get(i).getNickName());
+
         }
+//        mTempName.add("수미");
+//        mTempName.add("창수");
+//        for (int i = 0; i < 7; i++) {
+//            mTempName.add("사람" + (i + 1));
+//        }
         return mTempName;
     }
     // Intent 에서 데이터를 읽는다
-    public void readIntent(Intent intent) {
-        ArrayList<String> mTempName = setInitName();
+    public void readIntent(ArrayList<MyFriendsInfo> info) {
+        ArrayList<String> mTempName = setInitName(info);
 
         mArPeople = new ArrayList<>();
 
@@ -61,7 +80,7 @@ public class Step5_2_RandomLadderActivity extends AppCompatActivity {
         mPeopleMax = mTempName.size();
 
         // '이름' 목록 추출
-        for(int i=0; i < mPeopleMax; i++) {
+        for(int i=0; i < info.size(); i++) {
             PeopleInfo pi = new PeopleInfo(mTempName.get(i), i);
             mArPeople.add(pi);
             //mArPeople.add(strName);
@@ -72,6 +91,10 @@ public class Step5_2_RandomLadderActivity extends AppCompatActivity {
     public void onClick(View v) {
         if(v.getId() == R.id.btnGameStart)
             startLadder();
+        else if(v.getId() == R.id.btnStep5_1_Next5){
+            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+            startActivity(intent);
+        }
     }
 
     // 캔버스용 뷰 클래스

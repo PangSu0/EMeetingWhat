@@ -2,10 +2,11 @@ package com.example.emeetingwhat;
 
 import com.kakao.friends.response.model.FriendInfo;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MyFriendsInfo {
+public class MyFriendsInfo implements Serializable {
     private long userId;
     private String nickName;
     private String thumbnailImagePath;

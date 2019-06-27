@@ -10,7 +10,9 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -42,16 +44,20 @@ public class Step4_2_InviteMemberActivity extends AppCompatActivity implements G
     private final List<FriendsRequest.FriendType> friendTypeList = new ArrayList<>();
     private GroupFriendsListAdapter mAdapter = null;
     private FriendContext friendContext = null;
+    private ArrayList<MyFriendsInfo> selectedFriends = new ArrayList<>();
     Button btn_add;
+    String str_groupId = "";
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         intent_GroupFromPrevious = getIntent();
+        str_groupId = intent_GroupFromPrevious.getStringExtra("groupId");
         groupDataFromPrev =  (GroupDetailData)intent_GroupFromPrevious.getSerializableExtra("groupDetailData");
         myFriendsInfoArrayList = (ArrayList<MyFriendsInfo>) intent_GroupFromPrevious.getSerializableExtra("myFriendsInfoArrayList");
 
         setContentView(R.layout.activity_step4_2_invite_member);
+
     }
 
     public void onClick(View v)
@@ -71,11 +77,10 @@ public class Step4_2_InviteMemberActivity extends AppCompatActivity implements G
                 mSelectRadioButton = 2;
                 break;
             case R.id.btnStep4_2_AddMember:
-                showTalkFriendListActivity();
-
+                //showTalkFriendListActivity();
+                showAlertDialog();
                 break;
             case R.id.button_confirm:
-                arrayListAdd();
                 break;
             case R.id.title_back:
                 finish();
@@ -83,14 +88,6 @@ public class Step4_2_InviteMemberActivity extends AppCompatActivity implements G
         }
     }
 
-
-    private void showTalkFriendListActivity() {
-        Intent intent = new Intent(this, KakaoTalkFriendListActivity.class);
-
-        String[] friendType = {FriendsRequest.FriendType.KAKAO_TALK.name()};
-        intent.putExtra(FriendsMainActivity.EXTRA_KEY_SERVICE_TYPE, friendType);
-        startActivity(intent);
-    }
     public void nextPage()
     {
         Intent intent;
@@ -103,28 +100,14 @@ public class Step4_2_InviteMemberActivity extends AppCompatActivity implements G
             Toast.makeText(getApplicationContext(), "수령 순서를 결정해 주세요.",Toast.LENGTH_LONG).show();
             return;
         }
+        Toast.makeText(getApplicationContext(), selectedFriends.size() + "명이 선택", Toast.LENGTH_SHORT).show();
+        intent.putExtra("groupId", str_groupId);
         intent.putExtra("groupDetailData", groupDataFromPrev);
+        intent.putExtra("selectedFriends", selectedFriends);
+        intent.putExtra("myFriendsInfoArrayList", myFriendsInfoArrayList);
         startActivity(intent);
     }
-    @Override
 
-    protected Dialog onCreateDialog(int id) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());
-        LayoutInflater inflater = getLayoutInflater();
-        View view = inflater.inflate(R.layout.layout_group_friends_list, null);
-        builder.setView(view);
-        friendTypeList.add(FriendsRequest.FriendType.KAKAO_TALK);
-        friendsInfo = new Step4_2_InviteMemberActivity.FriendsInfo();
-        requestFriends(friendTypeList.get(0));
-        //requestFriends();
-        list = (ListView)view.findViewById(R.id.group_friends);
-        final AlertDialog dialog = builder.create();
-        dialog.setCancelable(true);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.create();
-        return dialog;
-
-    }
     private void showAlertDialog()
     {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -135,35 +118,36 @@ public class Step4_2_InviteMemberActivity extends AppCompatActivity implements G
         friendsInfo = new Step4_2_InviteMemberActivity.FriendsInfo();
         requestFriends(friendTypeList.get(0));
         //requestFriends();
+        KakaoToast.makeToast(getApplicationContext(), friendsInfo.getTotalCount() + " ", Toast.LENGTH_SHORT).show();
         list = (ListView)view.findViewById(R.id.group_friends);
         final AlertDialog dialog = builder.create();
+
         dialog.setCancelable(true);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.create();
+        dialog.show();
+        Button confirm = view.findViewById(R.id.button_confirm);
+        confirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ArrayList<Integer> arrayList = mAdapter.getChecked();
+                for( int i = 0 ; i <  arrayList.size() ; i++ ){
+                    FriendInfo groupFInfo = mAdapter.getItem(arrayList.get(i));
+                    MyFriendsInfo myFriendsInfo = new MyFriendsInfo();
+                    myFriendsInfo.setUserId(groupFInfo.getId());
+                    myFriendsInfo.setNickName(groupFInfo.getProfileNickname());
+                    myFriendsInfo.setProfileImagePath(groupFInfo.getProfileThumbnailImage());
+                    myFriendsInfo.setThumbnailImagePath(groupFInfo.getProfileThumbnailImage());
+                    selectedFriends.add(myFriendsInfo);
+                    // Toast.makeText(getApplicationContext(), myFriendsInfo.getNickName(), Toast.LENGTH_SHORT).show();
+                }
+
+                dialog.dismiss();
+            }
+        });
+
+        view.findViewById(R.id.title_back).setOnClickListener(v -> dialog.dismiss());
     }
-    private void arrayListAdd() {
-        ArrayList<Integer> arrayList = mAdapter.getChecked();
-        for( int i = 0 ; i <  arrayList.size() ; i++ ) {
-            FriendInfo groupFInfo = mAdapter.getItem(arrayList.get(i));
-            MyFriendsInfo fInformation = new MyFriendsInfo();
-            fInformation.setUserId(groupFInfo.getId());
-            fInformation.setNickName(groupFInfo.getProfileNickname());
-            fInformation.setThumbnailImagePath(groupFInfo.getProfileThumbnailImage());
-            fInformation.setProfileImagePath(groupFInfo.getProfileThumbnailImage());
-            myFriendsInfoArrayList.add(fInformation);
-            // selectedFriends.add(groupFInfo.getId());
-//                    IndividualFriendsDetailFragment.InsertData task = new IndividualFriendsDetailFragment.InsertData();
-            // KakaoToast.makeToast(getActivity(), userProfile.getNickname(), Toast.LENGTH_SHORT).show();
-//                    task.execute("http://" + IP_ADDRESS + "/insertIndividualFriends.php"
-//                            , Long.toString(groupFInfo.getId())
-//                            , groupId
-//                            , groupFInfo.getProfileNickname()
-//                            , groupFInfo.getProfileThumbnailImage()
-//                            , groupFInfo.getProfileThumbnailImage()
-//                    );
-        }
-        finish();
-    }
+
     private void requestFriends(FriendsRequest.FriendType type) {
         // adapter = null;
         friendsInfo = new Step4_2_InviteMemberActivity.FriendsInfo();

@@ -54,6 +54,11 @@ public class ResultActivity extends AppCompatActivity {
 
     // 버튼 클릭 이벤트 함수
     public void onClick(View v) {
-        finish();
+        if(v.getId() == R.id.buttonClose){
+            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+            startActivity(intent);
+            finish();
+        }
+
     }
 }
