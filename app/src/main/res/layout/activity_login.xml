@@ -14,10 +14,6 @@
         android:layout_height="wrap_content"
         android:text="Login with Kakao Account" />
 
-    <!--<com.kakao.usermgmt.LoginButton-->
-        <!--android:id="@+id/com_kakao_login"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content" />-->
 
 
 </LinearLayout>

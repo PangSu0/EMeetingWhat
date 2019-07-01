@@ -42,6 +42,8 @@
 
 
         <Spinner
+            android:prompt="@string/prompt_bankNameNAccountNumber"
+            android:spinnerMode="dialog"
             android:id="@+id/sp_bank"
             android:layout_width="match_parent"
             android:layout_height="80dp"
@@ -54,12 +56,14 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/sp_bank"
             android:paddingTop="20dp"
-            android:text="입금 날짜를 선택하세요."
+            android:text="입금 날짜를 선택"
             android:textSize="28dp"
             android:textStyle="bold" />
 
 
         <Spinner
+            android:prompt="@string/prompt_paymentDay"
+            android:spinnerMode="dialog"
             android:id="@+id/sp_paymentDay"
             android:layout_width="match_parent"
             android:layout_height="40dp"
