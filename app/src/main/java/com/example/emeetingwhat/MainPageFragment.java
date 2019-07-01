@@ -76,9 +76,9 @@ public class MainPageFragment extends Fragment {
         MainPageFragment.GetData task = new MainPageFragment.GetData();
         task.execute( "http://" + IP_ADDRESS + "/selectGroupList.php", Long.toString(userProfile.getId()));
         // RecyclerView의 줄(row) 사이에 수평선을 넣기위해 사용됩니다.
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(mRecyclerView.getContext(),
-                mLinearLayoutManager.getOrientation());
-        mRecyclerView.addItemDecoration(dividerItemDecoration);
+//        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(mRecyclerView.getContext(),
+//                mLinearLayoutManager.getOrientation());
+//        mRecyclerView.addItemDecoration(dividerItemDecoration);
         mRecyclerView.addOnItemTouchListener(new MainPageFragment.RecyclerTouchListener(getActivity()
                 , mRecyclerView, new MainPageFragment.ClickListener()
         {
@@ -339,5 +339,6 @@ public class MainPageFragment extends Fragment {
         fragment.setArguments(args);
         return fragment;
     }
+
 
 }

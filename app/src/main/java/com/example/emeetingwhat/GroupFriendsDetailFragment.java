@@ -170,6 +170,7 @@ public class GroupFriendsDetailFragment extends Fragment implements View.OnClick
 
                     dialog.dismiss();
                 }
+
             }
         });
         view.findViewById(R.id.title_back).setOnClickListener(v -> dialog.dismiss());
@@ -494,4 +495,5 @@ public class GroupFriendsDetailFragment extends Fragment implements View.OnClick
 
         }
     }
+
 }

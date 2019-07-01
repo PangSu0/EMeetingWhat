@@ -10,6 +10,8 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -381,7 +383,6 @@ public class GroupDetailFragment extends Fragment implements View.OnClickListene
             requestFriendsInner();
         }
     }
-
     private static class FriendsInfo {
         private final List<FriendInfo> friendInfoList = new ArrayList<>();
         private int totalCount;
