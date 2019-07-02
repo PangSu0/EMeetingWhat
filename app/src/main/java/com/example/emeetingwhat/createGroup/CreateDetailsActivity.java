@@ -142,7 +142,7 @@ public class CreateDetailsActivity extends AppCompatActivity {
                         et_amount.setText("목표금액을 입력하세요");
 
                     } else {
-                        Intent intent = new Intent(CreateDetailsActivity.this, CreateFriendsActivity.class);
+                        Intent intent = new Intent(CreateDetailsActivity.this, MainActivity.class);
                         targetAmount = Integer.parseInt(et_amount.getText().toString());
                         monthlyPayment = Integer.parseInt(editText_monthlyPayment.getText().toString());
                         groupDetailData.setCreateDate(startDate);
@@ -158,7 +158,7 @@ public class CreateDetailsActivity extends AppCompatActivity {
                         intent.putExtra("groupDetailData", groupDetailData);
                         // intent.putExtra("accountDetailData", accountDataFromPrev);
 
-                        intent = new Intent(CreateDetailsActivity.this, CreateFriendsActivity.class);
+                        intent = new Intent(CreateDetailsActivity.this, MainActivity.class);
                         intent.putExtra("groupDetailData", groupDetailData);
                         intent.putExtra("accountDetailData", accountDataFromPrev);
                         startActivity(intent);
