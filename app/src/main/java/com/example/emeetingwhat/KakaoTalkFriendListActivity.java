@@ -1,7 +1,9 @@
 package com.example.emeetingwhat;
 import android.app.Application;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -15,36 +17,41 @@ import com.kakao.kakaotalk.callback.TalkResponseCallback;
 import com.kakao.network.ErrorResult;
 import com.kakao.usermgmt.response.model.UserProfile;
 
+import java.util.ArrayList;
+
 public class KakaoTalkFriendListActivity extends FriendsMainActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Button confirm = findViewById(R.id.button_confirm);
+        confirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+                public void onClick(View v) {
+                ArrayList<Integer> arrayList = adapter.getChecked();
+                for( int i = 0 ; i <  arrayList.size() ; i++ ){
+                    FriendInfo groupFInfo = adapter.getItem(arrayList.get(i));
+                    /*
+                      groupFInfo.getProfileThumbnailImage();
+                      selectedFriends.add(groupFInfo.getId());
+                      GroupFriendsDetailFragment.InsertData task = new GroupFriendsDetailFragment.InsertData();
+                      KakaoToast.makeToast(getActivity(), userProfile.getNickname(), Toast.LENGTH_SHORT).show();
+                      task.execute("http://" + IP_ADDRESS + "/insertGroupFriends.php"
+                         , Long.toString(groupFInfo.getId())
+                         , groupId
+                         , groupFInfo.getProfileNickname()
+                         , groupFInfo.getProfileThumbnailImage()
+                         , groupFInfo.getProfileThumbnailImage()
+                    );
+                    */
 
-        final UserProfile userProfile = UserProfile.loadFromCache();
-        if (userProfile != null) {
-            View headerView = getLayoutInflater().inflate(R.layout.view_friend_item, list, false);
-
-            NetworkImageView profileView = headerView.findViewById(R.id.profile_image);
-            profileView.setDefaultImageResId(R.drawable.thumb_story);
-            profileView.setErrorImageResId(R.drawable.thumb_story);
-            TextView nickNameView = headerView.findViewById(R.id.nickname);
-
-            String profileUrl = userProfile.getThumbnailImagePath();
-            Application app  = GlobalApplication.getGlobalApplicationContext();
-            if (profileUrl != null && profileUrl.length() > 0) {
-                profileView.setImageUrl(profileUrl, ((GlobalApplication) app).getImageLoader());
-            } else {
-                profileView.setImageResource(R.drawable.thumb_story);
+                    Intent intent = new Intent(getApplicationContext(), Step4_2_InviteMemberActivity.class);
+                    startActivity(intent);
+                }
             }
-
-            String nickName = " " + userProfile.getNickname();
-            nickNameView.setText(nickName);
-
-            list.addHeaderView(headerView);
-
-
-        }
+        });
+        findViewById(R.id.title_back).setOnClickListener(v -> finish());
+        final UserProfile userProfile = UserProfile.loadFromCache();
     }
 
     @Override

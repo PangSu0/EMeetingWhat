@@ -22,6 +22,9 @@
     <string name="cancel">Cancel</string>
     <string name="ok">OK</string>
 
+    <string name="prompt_bankNameNAccountNumber">은행 및 계좌 선택</string>
+    <string name="prompt_paymentDay">매월 입금일 선택</string>
+
     <string name="text_kakaostory">KakaoStory</string>
     <string name="text_kakaotalk">KakaoTalk</string>
     <string name="text_talk_story">Talk | Story</string>

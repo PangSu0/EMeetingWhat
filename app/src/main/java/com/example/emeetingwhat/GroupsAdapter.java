@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -28,6 +29,7 @@ class GroupsAdapter extends RecyclerView.Adapter<GroupsAdapter.CustomViewHolder>
         protected TextView tv_groupId;
         protected TextView tv_name;
         protected TextView tv_createDate;
+        protected ImageView iv_bgImage;
 
 
         public CustomViewHolder(View view) {
@@ -35,6 +37,7 @@ class GroupsAdapter extends RecyclerView.Adapter<GroupsAdapter.CustomViewHolder>
             this.tv_groupId = (TextView) view.findViewById(R.id.textView_list_groupId);
             this.tv_name = (TextView) view.findViewById(R.id.textView_list_name);
             this.tv_createDate = (TextView) view.findViewById(R.id.textView_list_createDate);
+            this.iv_bgImage = (ImageView) view.findViewById(R.id.group_thumbnail_imageView);
         }
     }
 
@@ -52,11 +55,27 @@ class GroupsAdapter extends RecyclerView.Adapter<GroupsAdapter.CustomViewHolder>
         viewholder.tv_groupId.setText(" " + mList.get(position).getGroupId());
         viewholder.tv_name.setText(" " + mList.get(position).getName());
         viewholder.tv_createDate.setText(" " + mList.get(position).getCreateDate());
+        int id =  (int) (Math.random() * 2) + 1;
+        viewholder.iv_bgImage.setImageResource(getImageResourceId(id));
     }
 
     @Override
     public int getItemCount() {
         return (null != mList ? mList.size() : 0);
+    }
+
+    public int getImageResourceId(int i){
+        switch (i){
+            case 1:
+                return R.drawable.bg_1;
+            case 2:
+                return R.drawable.bg_2;
+            case 3:
+                return R.drawable.bg_2;
+                default:
+                    return R.drawable.bg_3;
+        }
+
     }
 
 }

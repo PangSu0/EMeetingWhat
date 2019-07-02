@@ -28,25 +28,13 @@
             android:paddingTop="10dp"
             android:layout_below="@+id/txtHeader3"/>
 
-
-        <TextView
-            android:id="@+id/txt3GroupName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="모임명"
-            android:textSize="28dp"
-            android:textStyle="bold"
-            android:paddingTop="50dp"
-            android:layout_below="@id/txt3Detail"/>
-
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="모임 기간"
             android:textSize="24dp"
-            android:paddingTop="20dp"
-            android:layout_below="@id/txt3GroupName"/>
-
+            android:paddingTop="40dp"
+            android:layout_below="@id/txt3Detail"/>
     </RelativeLayout>
 
     <RelativeLayout
@@ -92,7 +80,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:layout_marginTop="40dp">
 
         <TextView
             android:layout_width="wrap_content"
@@ -117,15 +106,21 @@
             android:id="@+id/textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="35dp"
+            android:layout_marginTop="20dp"
+            android:textSize="24dp"
             android:text="월별 입금금액" />
 
         <EditText
             android:id="@+id/editText_monthlyPayment"
-            android:layout_width="match_parent"
+            android:layout_width="319dp"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="35dp"
             android:ems="10"
-            android:hint="월별 입금 금액을 설정하세요 (원)"
-            android:inputType="number" />
+            android:hint="월별 입금액을 설정하세요(원)"
+            android:inputType="number"
+            android:paddingTop="20dp"
+            android:textSize="24dp" />
 
 
     <Button

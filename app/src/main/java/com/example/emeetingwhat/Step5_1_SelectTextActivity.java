@@ -1,8 +1,11 @@
 package com.example.emeetingwhat;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +19,17 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.emeetingwhat.Data.GroupDetailData;
+import com.example.emeetingwhat.common.widget.KakaoToast;
+import com.kakao.usermgmt.response.model.UserProfile;
+
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.Serializable;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 
 public class Step5_1_SelectTextActivity extends AppCompatActivity {
@@ -26,15 +39,43 @@ public class Step5_1_SelectTextActivity extends AppCompatActivity {
     int mPeopleMax; //가상 데이터베이스 개체 수
     ListView mListMember;
     MyListAdapter MyAdapter;
+    private final UserProfile userProfile = UserProfile.loadFromCache();
+    MyFriendsInfo myInfo= new MyFriendsInfo();
+    GroupDetailData groupDataFromPrev;
+    private ArrayList<MyFriendsInfo> selectedFriends = new ArrayList<>();
+    String str_groupId = "";
+    private static String IP_ADDRESS = "61.108.100.36";
+    private static String TAG = "inserttest";
+    private String mJsonString;
+    ArrayList<MyFriendsInfo> myFriendsInfoArrayList = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_step5_1_select_text);
-
-        initNameList();
+        Intent intent_GroupFromPrevious = getIntent();
+        str_groupId = intent_GroupFromPrevious.getStringExtra("groupId");
+        groupDataFromPrev =  (GroupDetailData)intent_GroupFromPrevious.getSerializableExtra("groupDetailData");
+        selectedFriends = (ArrayList<MyFriendsInfo>) intent_GroupFromPrevious.getSerializableExtra("selectedFriends");
+        // Toast.makeText(getApplicationContext(), groupDataFromPrev.getAccountHolderId() + " ", Toast.LENGTH_SHORT).show();
+        myInfo.setUserId(userProfile.getId());
+        myInfo.setNickName(userProfile.getNickname());
+        myInfo.setProfileImagePath(userProfile.getProfileImagePath());
+        myInfo.setThumbnailImagePath(userProfile.getThumbnailImagePath());
+        selectedFriends.add(myInfo);
+        initNameList(selectedFriends);
 
         initListView();
         // ListView 위젯에 10개의 텍스트 항목을 추가
+
+       /* GroupFriendsDetailFragment.InsertData task = new GroupFriendsDetailFragment.InsertData();
+        KakaoToast.makeToast(getActivity(), userProfile.getNickname(), Toast.LENGTH_SHORT).show();
+        task.execute("http://" + IP_ADDRESS + "/insertGroupFriends.php"
+                , Long.toString(groupFInfo.getId())
+                , groupId
+                , groupFInfo.getProfileNickname()
+                , groupFInfo.getProfileThumbnailImage()
+                , groupFInfo.getProfileThumbnailImage()
+        );*/
 
     }
     public class MyItem{
@@ -49,11 +90,9 @@ public class Step5_1_SelectTextActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Toast.makeText(getApplicationContext(),   " 실행 "   ,Toast.LENGTH_SHORT).show();
         if(resultCode==1234) {
             int index = data.getIntExtra("index", -1);
             int selectIndex = data.getIntExtra("selectIndex", -1);
-            Toast.makeText(getApplicationContext(), index + " " + selectIndex ,Toast.LENGTH_SHORT).show();
             if(selectIndex >= 0)
             {
                 MyItem mi = mMyItem.get(index);
@@ -70,7 +109,6 @@ public class Step5_1_SelectTextActivity extends AppCompatActivity {
                     mMyItem.get(index).textView.setText(mDatabase.get(mi.mIndex));
                 else
                     mMyItem.get(index).textView.setText("");
-                Toast.makeText(getApplicationContext(), mMyItem.get(index).textView.getText().toString() ,Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -88,8 +126,7 @@ public class Step5_1_SelectTextActivity extends AppCompatActivity {
                 break;
             case R.id.btnItem:
                 int position = Integer.parseInt(v.getTag().toString());
-                Toast.makeText(getApplicationContext(), " " + position ,Toast.LENGTH_SHORT).show();
-                Intent intent =  new Intent(getApplicationContext(), Step5_1_SubListViewActivity.class);
+                Intent intent =  new Intent(this, Step5_1_SubListViewActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("mNameTable",mNameTable);
                 intent.putExtras(bundle);
@@ -101,29 +138,60 @@ public class Step5_1_SelectTextActivity extends AppCompatActivity {
     {
         if(mNameTable.mNameList.length > 1)
             Toast.makeText(getApplicationContext(), "순서를 모두 설정해 주십시오.",Toast.LENGTH_SHORT).show();
-        else
-            Toast.makeText(getApplicationContext(), "다음 페이지로",Toast.LENGTH_SHORT).show();
-        /*
-        Intent intent = new Intent(getApplicationContext(), XXXXXXXXX.class);
-        startActivity(intent);
-        */
+        else {
+            for(int i=0;i< selectedFriends.size();i++) {
+                int index = 0;
+                for(int j = 0; j < selectedFriends.size(); j++) {
+                    index = j;
+                    if (mMyItem.get(j).mIndex == i)
+                        break;
+                }
+                myFriendsInfoArrayList.add(selectedFriends.get(index)); // todo : 여기 넣었어요
+                // Toast.makeText(getApplicationContext(), myFriendsInfoArrayList.get(i).getNickName()+ " 성공", Toast.LENGTH_SHORT).show();
+                if( myFriendsInfoArrayList.get(i).getUserId() == groupDataFromPrev.getAccountHolderId()){
+                    Step5_1_SelectTextActivity.UpdateData task = new Step5_1_SelectTextActivity.UpdateData();
+                    // KakaoToast.makeToast(getActivity(), userProfile.getNickname(), Toast.LENGTH_SHORT).show();
+                    task.execute("http://" + IP_ADDRESS + "/updateAccountHolderOrderNumber.php"
+                            , Integer.toString(i+1)
+                            , Long.toString(myFriendsInfoArrayList.get(i).getUserId())
+                            , str_groupId
+                    );
+                }else{
+                    Step5_1_SelectTextActivity.InsertData task = new Step5_1_SelectTextActivity.InsertData();
+                    // KakaoToast.makeToast(getActivity(), userProfile.getNickname(), Toast.LENGTH_SHORT).show();
+                    task.execute("http://" + IP_ADDRESS + "/insertIndividualFriends.php"
+                            , Long.toString(myFriendsInfoArrayList.get(i).getUserId())
+                            , str_groupId
+                            , Integer.toString(i+1)
+                            , myFriendsInfoArrayList.get(i).getNickName()
+                            , myFriendsInfoArrayList.get(i).getThumbnailImagePath()
+                            , myFriendsInfoArrayList.get(i).getThumbnailImagePath()
+                    );
+                }
+
+            }
+            Intent intent = new Intent(this, MainActivity.class);
+
+            intent.putExtra("groupId", str_groupId);
+            intent.putExtra("groupDetailData", groupDataFromPrev);
+            intent.putExtra("selectedFriends", selectedFriends);
+            startActivity(intent);
+        }
+
     }
     // ListView 를 초기화
-    public void initNameList() {
+    public void initNameList(ArrayList<MyFriendsInfo> info) {
         if (mDatabase != null) {
             mDatabase.clear();
             mDatabase = null;
         }
         mDatabase = new ArrayList<>();
-        mDatabase.add("은지");
-        mDatabase.add("수미");
-        mDatabase.add("팡수");
-        for (int i = 0; i < 10; i++) {
-            mDatabase.add("태엽" + (i + 1));
+        for( int i = 0 ; i < info.size() ; i ++ ){
+            mDatabase.add(info.get(i).getNickName());
         }
         mPeopleMax = mDatabase.size();
         mMyItem = new ArrayList<>();
-        for(int i = 0 ; i < mPeopleMax ; i++)
+        for(int i = 0 ; i < info.size() ; i++)
             mMyItem.add(new MyItem());
         //////가상 데이터 세팅//////
 
@@ -191,6 +259,181 @@ public class Step5_1_SelectTextActivity extends AppCompatActivity {
             convertView.findViewById(R.id.btnItem).setTag(position);
 
             return convertView;
+        }
+    }
+
+    class InsertData extends AsyncTask<String, Void, String> {
+        ProgressDialog progressDialog;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            // progressDialog = ProgressDialog.show(getApplicationContext(),
+            //        "Please Wait", null, true, true);
+        }
+
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+
+            // progressDialog.dismiss();
+            // mTextViewResult.setText(result);
+            // KakaoToast.makeToast(getApplicationContext(), result, Toast.LENGTH_SHORT).show();
+            Log.d(TAG, "POST response  - " + result);
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            String userId = (String)params[1];
+            String groupId = (String)params[2];
+            String orderNumber = (String) params[3];
+            String nickname = (String)params[4];
+            String thumbnailPath = (String)params[5];
+            String profilePath = (String)params[6];
+            try {
+                String serverURL = (String)params[0];
+                String postParameters = "userId=" + userId + "&groupId=" + groupId + "&orderNumber=" + orderNumber+  "&nickName=" +nickname +
+                        "&thumbnailImagePath=" +thumbnailPath+ "&profileImagePath=" +profilePath;
+                URL url = new URL(serverURL);
+                HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+
+
+                httpURLConnection.setReadTimeout(5000);
+                httpURLConnection.setConnectTimeout(5000);
+                httpURLConnection.setRequestMethod("POST");
+                httpURLConnection.connect();
+
+
+                OutputStream outputStream = httpURLConnection.getOutputStream();
+                outputStream.write(postParameters.getBytes("UTF-8"));
+                outputStream.flush();
+                outputStream.close();
+
+
+                int responseStatusCode = httpURLConnection.getResponseCode();
+                Log.d(TAG, "POST response code - " + responseStatusCode);
+
+                InputStream inputStream;
+                if(responseStatusCode == HttpURLConnection.HTTP_OK) {
+                    inputStream = httpURLConnection.getInputStream();
+                }
+                else{
+                    inputStream = httpURLConnection.getErrorStream();
+                }
+
+
+                InputStreamReader inputStreamReader = new InputStreamReader(inputStream, "UTF-8");
+                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+
+                StringBuilder sb = new StringBuilder();
+                String line = null;
+
+                while((line = bufferedReader.readLine()) != null){
+                    sb.append(line);
+                }
+
+
+                bufferedReader.close();
+
+
+                return sb.toString();
+
+
+            }  catch (Exception e) {
+
+                Log.d(TAG, "InsertData: Error ", e);
+
+                return new String("Error: " + e.getMessage());
+            }
+
+        }
+    }
+
+    class UpdateData extends AsyncTask<String, Void, String> {
+        ProgressDialog progressDialog;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+//            progressDialog = ProgressDialog.show(getApplicationContext(),
+//                    "Please Wait", null, true, true);
+        }
+
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+
+           //  progressDialog.dismiss();
+            // mTextViewResult.setText(result);
+            KakaoToast.makeToast(getApplicationContext(), result, Toast.LENGTH_SHORT).show();
+            Log.d(TAG, "POST response  - " + result);
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+
+            String orderNumber = (String) params[1];
+            String userId = (String)params[2];
+            String groupId = (String)params[3];
+            try {
+                String serverURL = (String)params[0];
+                String postParameters = "orderNumber=" + orderNumber + "&userId=" + userId + "&groupId=" + groupId;
+                URL url = new URL(serverURL);
+                HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+
+
+                httpURLConnection.setReadTimeout(5000);
+                httpURLConnection.setConnectTimeout(5000);
+                httpURLConnection.setRequestMethod("POST");
+                httpURLConnection.connect();
+
+
+                OutputStream outputStream = httpURLConnection.getOutputStream();
+                outputStream.write(postParameters.getBytes("UTF-8"));
+                outputStream.flush();
+                outputStream.close();
+
+
+                int responseStatusCode = httpURLConnection.getResponseCode();
+                Log.d(TAG, "POST response code - " + responseStatusCode);
+
+                InputStream inputStream;
+                if(responseStatusCode == HttpURLConnection.HTTP_OK) {
+                    inputStream = httpURLConnection.getInputStream();
+                }
+                else{
+                    inputStream = httpURLConnection.getErrorStream();
+                }
+
+
+                InputStreamReader inputStreamReader = new InputStreamReader(inputStream, "UTF-8");
+                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+
+                StringBuilder sb = new StringBuilder();
+                String line = null;
+
+                while((line = bufferedReader.readLine()) != null){
+                    sb.append(line);
+                }
+
+
+                bufferedReader.close();
+
+
+                return sb.toString();
+
+
+            }  catch (Exception e) {
+
+                Log.d(TAG, "InsertData: Error ", e);
+
+                return new String("Error: " + e.getMessage());
+            }
+
         }
     }
 }

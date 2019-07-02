@@ -66,11 +66,6 @@ public class CreateDetailsActivity extends AppCompatActivity {
     private Date startDate;
     private Date endDate;
 
-    TextView txt_GroupName;
-    String groupName;
-    int targetAmount;
-    int monthlyPayment;
-
     GroupDetailData groupDetailData = new GroupDetailData();
     GroupDetailData groupDataFromPrev;
     AccountDetailData accountDataFromPrev;
@@ -100,9 +95,6 @@ public class CreateDetailsActivity extends AppCompatActivity {
     // Unirest.get();
         groupDataFromPrev =  (GroupDetailData)intent_GroupFromPrevious.getSerializableExtra("groupDetailData");
         accountDataFromPrev =  (AccountDetailData)intent_AccountFromPrevious.getSerializableExtra("accountDetailData");
-
-        txt_GroupName = findViewById(R.id.txt3GroupName);
-        txt_GroupName.setText(groupName);
 
         btn3Next.setOnClickListener(v -> {
 

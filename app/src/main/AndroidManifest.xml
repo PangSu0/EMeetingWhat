@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.emeetingwhat">
 
-    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
@@ -25,35 +25,60 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".LoginActivity" />
+        <activity android:name=".LoginActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
 
         <activity android:name=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar"
             />
-        <activity android:name=".MainGroupList" />
-        <activity android:name=".Step3_2_TargetAmountActivity"/>
-        <activity android:name=".Step4_2_InviteMemberActivity"/>
-        <activity android:name=".Step5_1_SelectTextActivity"/>
-        <activity android:name=".Step5_2_RandomLadderActivity"/>
-        <activity android:name=".Step5_1_SubListViewActivity"/>
-        <activity android:name=".RandomSelectActivity"/>
-        <activity android:name=".ResultActivity"/>
+        <activity android:name=".IndividualFriendsDetailActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            />
+        <activity android:name=".MainGroupList"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".Step3_2_TargetAmountActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".Step4_2_InviteMemberActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".Step5_1_SelectTextActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".Step5_2_RandomLadderActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".Step5_1_SubListViewActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".RandomSelectActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".ResultActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
 
         <activity
             android:name=".KakaoTalkFriendListActivity"
             android:configChanges="screenSize|orientation"
             android:launchMode="singleTop"
-            android:windowSoftInputMode="adjustResize">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustResize"
+            >
         </activity>
         <activity
             android:name=".FriendsMainActivity"
+            android:theme="@style/AppTheme.NoActionBar"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:launchMode="singleTop"
             android:windowSoftInputMode="adjustResize|stateHidden"/>
-        <activity android:name=".createGroup.CreateAccountActivity" />
-        <activity android:name=".createGroup.CreateNameActivity" />
-        <activity android:name=".createGroup.CreateDetailsActivity" />
-
+        <activity android:name=".createGroup.CreateAccountActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".createGroup.CreateNameActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".createGroup.CreateDetailsActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".TestActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".TestActivity2"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".TestActivity3"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".TestActivity4"
+            android:theme="@style/AppTheme.NoActionBar"/>
         <meta-data
             android:name="com.kakao.sdk.AppKey"
             android:value="@string/kakao_app_key" />

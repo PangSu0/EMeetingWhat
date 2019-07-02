@@ -10,6 +10,8 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -85,6 +87,7 @@ public class GroupDetailFragment extends Fragment implements View.OnClickListene
     private TextView mTextViewPaymentDay;
     private TextView mTextViewAccountHolderId;
     private TextView mTextViewNickname;
+    private TextView mTextViewAccountNumber;
     protected ListView list = null;
     private final UserProfile userProfile = UserProfile.loadFromCache();
     private final List<FriendsRequest.FriendType> friendTypeList = new ArrayList<>();
@@ -109,8 +112,7 @@ public class GroupDetailFragment extends Fragment implements View.OnClickListene
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_group_detail, container, false);
-        mTextViewResult = (TextView)view.findViewById(R.id.textView_result_test);
-        mTextViewResult.setMovementMethod(new ScrollingMovementMethod());
+
 
         GroupDetailFragment.GetData task = new GroupDetailFragment.GetData();
         String str_groupId = "";
@@ -131,11 +133,17 @@ public class GroupDetailFragment extends Fragment implements View.OnClickListene
         mTextViewTargetAmount.setText(Integer.toString(groupDetailData.getTargetAmount()));
 
         mTextViewPaymentDay = (TextView)view.findViewById(R.id.textView_groupdetails_paymentday);
-        mTextViewPaymentDay.setText(groupDetailData.getName());
+        mTextViewPaymentDay.setText(groupDetailData.getPaymentDay() + "일 까지 ");
+
         mTextViewNickname = (TextView)view.findViewById(R.id.textView_groupdetails_nickname);
         mTextViewNickname.setText(userProfile.getNickname());
-        mTextViewAccountHolderId = (TextView)view.findViewById(R.id.textView_groupdetails_accountholderid);
-        mTextViewAccountHolderId.setText(Integer.toString(groupDetailData.getAccountHolderId()));
+
+        mTextViewAccountHolderId = (TextView)view.findViewById(R.id.textView_groupdetails_bankName);
+        mTextViewAccountHolderId.setText((groupDetailData.getBankName()));
+
+        mTextViewAccountNumber = (TextView)view.findViewById(R.id.textView_groupdetails_accountNumber);
+        mTextViewAccountNumber.setText(groupDetailData.getAccountNumber());
+
         // Inflate the layout for this fragment
         return view;
     }
@@ -193,12 +201,12 @@ public class GroupDetailFragment extends Fragment implements View.OnClickListene
             super.onPostExecute(result);
 
             progressDialog.dismiss();
-            mTextViewResult.setText(result);
+           //  mTextViewResult.setText(result);
             Log.d(TAG, "response - " + result);
 
             if (result == null){
 
-                mTextViewResult.setText(errorString);
+            //     mTextViewResult.setText(errorString);
             }
             else {
                 mJsonString = result;
@@ -375,7 +383,6 @@ public class GroupDetailFragment extends Fragment implements View.OnClickListene
             requestFriendsInner();
         }
     }
-
     private static class FriendsInfo {
         private final List<FriendInfo> friendInfoList = new ArrayList<>();
         private int totalCount;
